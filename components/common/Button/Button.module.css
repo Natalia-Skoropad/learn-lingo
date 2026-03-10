@@ -3,9 +3,9 @@
   align-items: center;
   justify-content: center;
 
-  min-width: 166px;
+  min-width: 267px;
   min-height: 60px;
-  padding: 16px 32px;
+  padding: 16px;
 
   border: none;
   border-radius: 12px;
@@ -17,17 +17,7 @@
   text-decoration: none;
 
   cursor: pointer;
-  transition: background-color 200ms ease, color 200ms ease, opacity 200ms ease,
-    transform 200ms ease;
-}
-
-.button:hover,
-.button:focus-visible {
-  transform: translateY(-1px);
-}
-
-.button:focus-visible {
-  outline: none;
+  transition: background-color 200ms ease, opacity 200ms ease;
 }
 
 /* Common */
@@ -43,7 +33,7 @@
 
 /* Registration */
 .registration {
-  background-color: #0b0f19;
+  background-color: var(--text-main);
   color: var(--background);
 }
 
@@ -65,15 +55,4 @@
   cursor: not-allowed;
   pointer-events: none;
   transform: none;
-}
-
-.button:disabled.common,
-.button:disabled.disabled {
-  background-color: #f1d27b;
-  color: var(--text-main);
-}
-
-.button:disabled.registration {
-  background-color: #2b2f3a;
-  color: rgba(255, 255, 255, 0.7);
 }

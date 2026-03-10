@@ -1,13 +1,32 @@
 .section {
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
 .statsBox {
-  border: 1.5px dashed var(--main);
-  border-radius: 30px;
-  padding: 24px 20px;
+  position: relative;
+  padding: 40px 20px;
   background-color: transparent;
+}
+
+.statsBox::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: repeating-linear-gradient(
+        90deg,
+        var(--main) 0 14px,
+        transparent 14px 26px
+      )
+      top / calc(100% - 28px) 1.5px no-repeat,
+    repeating-linear-gradient(90deg, var(--main) 0 14px, transparent 14px 26px)
+      bottom / calc(100% - 28px) 1.5px no-repeat,
+    repeating-linear-gradient(180deg, var(--main) 0 14px, transparent 14px 26px)
+      left / 1.5px calc(100% - 28px) no-repeat,
+    repeating-linear-gradient(180deg, var(--main) 0 14px, transparent 14px 26px)
+      right / 1.5px calc(100% - 28px) no-repeat;
 }
 
 .statsList {
@@ -23,29 +42,27 @@
 }
 
 .value {
+  font-family: var(--font-family);
   font-size: 28px;
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-medium);
   line-height: 1.14;
   color: var(--text-main);
+  letter-spacing: -0.02em;
 }
 
 .label {
+  font-family: var(--font-family);
   max-width: 160px;
   font-size: 14px;
   font-weight: var(--fw-regular);
+  letter-spacing: -0.02em;
   line-height: 1.29;
   color: rgba(18, 20, 23, 0.7);
 }
 
 @media only screen and (min-width: 768px) {
-  .section {
-    padding-top: 64px;
-    padding-bottom: 64px;
-  }
-
   .statsBox {
-    padding: 32px;
-    border-radius: 30px;
+    padding: 40px;
   }
 
   .statsItem {
@@ -53,25 +70,9 @@
     align-items: center;
     gap: 16px;
   }
-
-  .value {
-    font-size: 32px;
-    line-height: 1.12;
-    flex-shrink: 0;
-  }
-
-  .label {
-    max-width: 120px;
-    font-size: 14px;
-    line-height: 1.29;
-  }
 }
 
 @media only screen and (min-width: 1440px) {
-  .statsBox {
-    padding: 40px 48px;
-  }
-
   .statsList {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -83,12 +84,7 @@
     justify-content: center;
   }
 
-  .value {
-    font-size: 36px;
-    line-height: 1.06;
-  }
-
   .label {
-    max-width: 100px;
+    max-width: 90px;
   }
 }

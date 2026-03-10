@@ -30,6 +30,7 @@ export const metadata: Metadata = {
         alt: 'Curly red-haired girl sitting at the computer and sticking out her tongue',
       },
     ],
+
     type: 'website',
   },
 
@@ -54,7 +55,7 @@ function Home() {
           <div className={css.heroWrapper}>
             <div className={css.content}>
               <h1 id="home-title" className={css.title}>
-                Unlock your potential with the best{' '}
+                Unlock your potential with the best
                 <span className={css.accent}>language</span> tutors
               </h1>
 
