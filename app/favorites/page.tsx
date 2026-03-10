@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: 'LearnLingo',
     images: [
       {
-        url: '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her tongue.jpg',
+        url: '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
         width: 1200,
         height: 630,
         alt: '',
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: '',
     description: '',
     images: [
-      '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her tongue.jpg',
+      '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
     ],
   },
 };

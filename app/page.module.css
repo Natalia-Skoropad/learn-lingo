@@ -1,0 +1,157 @@
+.page {
+  padding-top: 8px;
+  padding-bottom: 32px;
+}
+
+.hero {
+  padding-bottom: 24px;
+}
+
+.heroWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.content {
+  padding: 40px 20px;
+  border-radius: 24px;
+  background-color: #f8f8f8;
+}
+
+.title {
+  margin-bottom: 24px;
+
+  font-size: 38px;
+  font-weight: var(--fw-bold);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.accent {
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 8px;
+
+  font-style: italic;
+  font-weight: var(--fw-regular);
+  background-color: var(--accent);
+}
+
+.text {
+  max-width: 100%;
+  margin-bottom: 32px;
+
+  font-size: 16px;
+  font-weight: var(--fw-regular);
+  line-height: 1.5;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}
+
+.heroButton {
+  width: 100%;
+  max-width: 220px;
+}
+
+.imageBox {
+  position: relative;
+  min-height: 320px;
+  border-radius: 24px;
+  overflow: hidden;
+  background-color: #fbe9ba;
+}
+
+.image {
+  object-fit: cover;
+}
+
+/* Tablet */
+@media only screen and (min-width: 768px) {
+  .page {
+    padding-top: 16px;
+    padding-bottom: 48px;
+  }
+
+  .hero {
+    padding-bottom: 32px;
+  }
+
+  .heroWrapper {
+    gap: 32px;
+  }
+
+  .content {
+    padding: 48px 32px;
+    border-radius: 30px;
+  }
+
+  .title {
+    max-width: 520px;
+    margin-bottom: 32px;
+
+    font-size: 48px;
+    line-height: 1.15;
+  }
+
+  .text {
+    max-width: 471px;
+    margin-bottom: 32px;
+  }
+
+  .heroButton {
+    max-width: 220px;
+  }
+
+  .imageBox {
+    min-height: 420px;
+    border-radius: 30px;
+  }
+}
+
+/* Desktop */
+@media only screen and (min-width: 1440px) {
+  .page {
+    padding-top: 20px;
+    padding-bottom: 32px;
+  }
+
+  .hero {
+    padding-bottom: 24px;
+  }
+
+  .heroWrapper {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 568px;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .content {
+    padding: 98px 64px;
+    border-radius: 30px;
+  }
+
+  .title {
+    max-width: 548px;
+    margin-bottom: 32px;
+
+    font-size: 56px;
+    line-height: 1.07;
+  }
+
+  .text {
+    max-width: 471px;
+    margin-bottom: 64px;
+  }
+
+  .heroButton {
+    max-width: 267px;
+  }
+
+  .imageBox {
+    min-height: 530px;
+    border-radius: 30px;
+  }
+}
