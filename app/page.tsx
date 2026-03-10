@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     siteName: 'LearnLingo',
     images: [
       {
-        url: '/background-picture.jpg',
+        url: '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her tongue.jpg',
         width: 1200,
         height: 630,
         alt: '',
@@ -32,7 +32,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: '',
     description: '',
-    images: ['/background-picture.jpg'],
+    images: [
+      '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her tongue.jpg',
+    ],
   },
 };
 
@@ -41,15 +43,6 @@ export const metadata: Metadata = {
 function Home() {
   return (
     <main className={css.page}>
-      <Image
-        src="/background-picture.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className={css.bgImage}
-      />
-
       <div className="container">
         <h1 className={css.title}>
           Unlock your potential with the best language tutors
@@ -59,6 +52,15 @@ function Home() {
           Elevate your language proficiency to new heights by connecting with
           highly qualified and experienced tutors.
         </p>
+
+        <Image
+          src="/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her tongue.jpg"
+          alt="Curly red-haired girl sitting at the computer and sticking out her tongue"
+          fill
+          priority
+          sizes="100vw"
+          className={css.bgImage}
+        />
       </div>
     </main>
   );
