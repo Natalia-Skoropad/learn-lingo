@@ -6,32 +6,57 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 32px;
+  gap: 24px;
+}
+
+.menuItem {
+  display: flex;
 }
 
 .link {
-  font-weight: 500;
+  position: relative;
+  display: inline-block;
+
+  padding: 4px 0;
+
   font-size: 20px;
-  color: var(--main);
-  padding: 8px 0;
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
+  color: var(--text-main);
+
   transition: color 200ms ease;
 }
 
-.link:hover,
-.link:focus-visible {
-  color: var(--button-hover);
+.link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+
+  width: 100%;
+  height: 2px;
+  background-color: var(--main);
+
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 250ms ease;
 }
 
-.active {
-  color: var(--button);
+.link:hover::after,
+.link:focus-visible::after,
+.active::after {
+  transform: scaleX(1);
+}
+
+.link:focus-visible {
+  outline: none;
 }
 
 @media only screen and (min-width: 768px) {
   .menuList {
-    display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 32px;
+    gap: 28px;
   }
 
   .link {

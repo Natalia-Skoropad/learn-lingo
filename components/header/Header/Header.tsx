@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 
+import Button from '@/components/common/Button/Button';
 import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
+import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
 import MobileOffcanvas from '@/components/header/MobileOffcanvas/MobileOffcanvas';
 
@@ -40,7 +42,7 @@ function Header() {
         <button
           type="button"
           onClick={openMenu}
-          aria-label="Open navigation"
+          aria-label="Open navigation menu"
           className={css.menuToggle}
         >
           <Menu className={css.menuIcon} />
@@ -48,6 +50,13 @@ function Header() {
 
         <div className={css.desktopNav}>
           <MenuNav />
+        </div>
+
+        <div className={css.desktopActions}>
+          <LoginButton />
+          <Button variant="registration" className={css.registrationBtn}>
+            Registration
+          </Button>
         </div>
 
         <MobileOffcanvas isOpen={isMobileMenuOpen} onClose={closeMenu} />

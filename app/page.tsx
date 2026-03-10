@@ -53,14 +53,14 @@ function Home() {
           highly qualified and experienced tutors.
         </p>
 
-        <Image
+        {/*<Image
           src="/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her tongue.jpg"
           alt="Curly red-haired girl sitting at the computer and sticking out her tongue"
           fill
           priority
           sizes="100vw"
           className={css.bgImage}
-        />
+        />*/}
       </div>
     </main>
   );

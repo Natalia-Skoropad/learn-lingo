@@ -1,6 +1,6 @@
 'use client';
 
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import clsx from 'clsx';
 
 import css from './Button.module.css';
@@ -8,45 +8,37 @@ import css from './Button.module.css';
 //===============================================================
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?:
-    | 'primary'
-    | 'outline'
-    | 'outlineRed'
-    | 'secondary'
-    | 'reset'
-    | 'filter';
-  iconLeft?: ReactNode;
-  iconRight?: ReactNode;
+  variant?: 'common' | 'registration' | 'disabled';
 };
 
 //===============================================================
 
 function Button({
-  variant = 'primary',
+  variant = 'common',
   className,
   type = 'button',
-  iconLeft,
-  iconRight,
   children,
+  disabled,
   ...props
 }: Props) {
+  const isDisabled = disabled || variant === 'disabled';
+
   return (
     <button
       type={type}
+      disabled={isDisabled}
       className={clsx(
         css.button,
-        variant === 'outline' && css.outline,
-        variant === 'outlineRed' && css.outlineRed,
-        variant === 'secondary' && css.secondary,
-        variant === 'reset' && css.reset,
-        variant === 'filter' && css.filter,
+        {
+          [css.common]: variant === 'common',
+          [css.registration]: variant === 'registration',
+          [css.disabled]: variant === 'disabled',
+        },
         className
       )}
       {...props}
     >
-      {iconLeft && <span className={css.icon}>{iconLeft}</span>}
-      <span className={css.label}>{children}</span>
-      {iconRight && <span className={css.icon}>{iconRight}</span>}
+      {children}
     </button>
   );
 }

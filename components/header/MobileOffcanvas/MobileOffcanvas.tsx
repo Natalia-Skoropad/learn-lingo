@@ -3,9 +3,11 @@
 import { useCallback, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
+import Button from '@/components/common/Button/Button';
+import CloseButton from '@/components/common/CloseButton/CloseButton';
+import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
-import CloseButton from '@/components/common/CloseButton/CloseButton';
 
 import css from './MobileOffcanvas.module.css';
 
@@ -60,7 +62,16 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
           <CloseButton onClick={onClose} />
         </div>
 
-        <MenuNav />
+        <div className={css.content}>
+          <MenuNav />
+
+          <div className={css.actions}>
+            <LoginButton className={css.loginButton} />
+            <Button variant="registration" className={css.registrationButton}>
+              Registration
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
