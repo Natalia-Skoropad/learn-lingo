@@ -1,0 +1,92 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.text {
+  margin-bottom: 24px;
+  font-size: 16px;
+  line-height: 1.38;
+  color: #6b6b6b;
+}
+
+.teacher {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.teacherLabel {
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #8a8a89;
+}
+
+.teacherName {
+  font-size: 16px;
+  font-weight: 500;
+  color: #121417;
+}
+
+.fieldset {
+  margin: 0 0 32px;
+  padding: 0;
+  border: none;
+}
+
+.legend {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.33;
+  color: #121417;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.radioInput {
+  width: 20px;
+  height: 20px;
+}
+
+.radioError {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-top: 10px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 12px;
+  color: #f66;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.submitBtn {
+  width: 100%;
+}

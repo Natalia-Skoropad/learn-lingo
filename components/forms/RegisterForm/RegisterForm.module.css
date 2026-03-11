@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.text {
+  margin-bottom: 40px;
+  font-size: 16px;
+  line-height: 1.38;
+  color: #6b6b6b;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.submitBtn {
+  width: 100%;
+}
