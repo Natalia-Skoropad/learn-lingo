@@ -1,7 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
-import SvgIcon from '@/components/common/SvgIcon/SvgIcon';
+import { Heart } from 'lucide-react';
+
 import css from './FavoriteButton.module.css';
 
 //===============================================================
@@ -24,7 +25,7 @@ function FavoriteButton({ isActive, onToggle, className, size = 'lg' }: Props) {
       aria-label={isActive ? 'Remove from favorites' : 'Add to favorites'}
       onClick={onToggle}
     >
-      <SvgIcon name="icon-heart" className={css.icon} />
+      <Heart className={css.icon} />
     </button>
   );
 }

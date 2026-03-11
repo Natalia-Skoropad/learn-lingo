@@ -1,44 +1,37 @@
-import { teachersService } from '@/lib/services/teachers.service';
-
-export default async function TeachersPage() {
-  const teachers = await teachersService.getAll();
-
-  return (
-    <div>
-      {teachers.map((teacher) => (
-        <div key={teacher.id}>
-          {teacher.name} {teacher.surname}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/*
 import type { Metadata } from 'next';
+
+import TeacherCard from '@/components/teachers/TeacherCard/TeacherCard';
+import { teachersService } from '@/lib/services/teachers.service';
 
 import css from './page.module.css';
 
 //===========================================================================
 
 const SITE_URL = 'https://learn-lingo.vercel.app';
+const PAGE_URL = `${SITE_URL}/teachers`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: '',
-  description: '',
+  title: 'Teachers | LearnLingo',
+  description:
+    'Browse language teachers on LearnLingo. Find tutors by language, level, rating, lessons completed, and price per hour.',
+
+  alternates: {
+    canonical: PAGE_URL,
+  },
 
   openGraph: {
-    title: '',
-    description: '',
-    url: SITE_URL,
+    title: 'Teachers | LearnLingo',
+    description:
+      'Browse language teachers on LearnLingo. Find tutors by language, level, rating, lessons completed, and price per hour.',
+    url: PAGE_URL,
     siteName: 'LearnLingo',
     images: [
       {
         url: '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
         width: 1200,
         height: 630,
-        alt: '',
+        alt: 'LearnLingo teachers page preview',
       },
     ],
     type: 'website',
@@ -46,8 +39,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: '',
-    description: '',
+    title: 'Teachers | LearnLingo',
+    description:
+      'Browse language teachers on LearnLingo. Find tutors by language, level, rating, lessons completed, and price per hour.',
     images: [
       '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
     ],
@@ -56,20 +50,26 @@ export const metadata: Metadata = {
 
 //===========================================================================
 
-function TeachersPage() {
+async function TeachersPage() {
+  const teachers = await teachersService.getAll();
+
   return (
-    <main className={css.page}>
-      <div className="container">
-        <h1 className={css.title}>Favorites</h1>
-        <p className={css.text}>
-          Embark on an Exciting Language Journey with Expert Language Tutors:
-          Elevate your language proficiency to new heights by connecting with
-          highly qualified and experienced tutors.
-        </p>
-      </div>
+    <main>
+      <section className={css.section}>
+        <div className="container">
+          <h1 className="visually-hidden">Teachers</h1>
+
+          <ul className={css.list}>
+            {teachers.map((teacher) => (
+              <li key={teacher.id} className={css.item}>
+                <TeacherCard teacher={teacher} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
     </main>
   );
 }
 
 export default TeachersPage;
-*/
