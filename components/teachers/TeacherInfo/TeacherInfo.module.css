@@ -1,0 +1,28 @@
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.text {
+  font-family: var(--font-family);
+  color: var(--text-main);
+  font-weight: var(--fw-regular);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.infoLabel {
+  font-family: var(--font-family);
+  color: var(--text-muted);
+  font-weight: var(--fw-medium);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.underlined {
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

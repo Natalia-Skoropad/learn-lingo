@@ -1,0 +1,23 @@
+.levelsList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.levelItem {
+  padding: 8px 12px;
+  border: 1px solid rgba(18, 20, 23, 0.2);
+  border-radius: 35px;
+  background-color: var(--background);
+
+  font-family: var(--font-family);
+  font-weight: var(--fw-medium);
+  font-size: 14px;
+  line-height: 1.1;
+  color: var(--text-main);
+}
+
+.levelItemAccent {
+  border-color: var(--main);
+  background-color: var(--main);
+}

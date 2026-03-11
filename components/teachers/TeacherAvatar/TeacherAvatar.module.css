@@ -1,0 +1,35 @@
+.avatarWrap {
+  position: relative;
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.avatarBorder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  padding: 12px;
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+}
+
+.avatar {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.statusDot {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 15px;
+  height: 15px;
+  background-color: var(--green);
+  border: 3px solid var(--background);
+  border-radius: 50%;
+}

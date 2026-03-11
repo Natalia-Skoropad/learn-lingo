@@ -1,0 +1,100 @@
+.metaWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.metaList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  font-family: var(--font-family);
+  font-weight: var(--fw-medium);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.metaIconBook {
+  flex-shrink: 0;
+}
+
+.metaIconDefault {
+  flex-shrink: 0;
+  color: var(--text-main);
+  stroke-width: 2;
+}
+
+.metaIconStar {
+  flex-shrink: 0;
+  fill: #ffc531;
+  color: #ffc531;
+  stroke-width: 1.75;
+}
+
+.metaIconPrice {
+  flex-shrink: 0;
+  color: #38cd3e;
+  stroke-width: 2;
+}
+
+.metaLabel {
+  font-weight: var(--fw-medium);
+}
+
+.price {
+  font-weight: var(--fw-medium);
+}
+
+.favoriteBtn {
+  flex-shrink: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .metaList {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5;
+  }
+
+  .metaItem {
+    position: relative;
+    padding-right: 16px;
+    margin-right: 16px;
+  }
+
+  .metaItem:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: 1px;
+    height: 16px;
+    background-color: rgba(18, 20, 23, 0.2);
+    transform: translateY(-50%);
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .metaWrap {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 24px;
+    flex: 1;
+  }
+
+  .metaList {
+    justify-content: flex-end;
+    gap: 0;
+  }
+}

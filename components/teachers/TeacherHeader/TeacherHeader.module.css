@@ -1,0 +1,20 @@
+.titleWrap {
+  min-width: 0;
+}
+
+.label {
+  font-family: var(--font-family);
+  font-weight: var(--fw-medium);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.name {
+  font-family: var(--font-family);
+  font-weight: var(--fw-medium);
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text-main);
+}
