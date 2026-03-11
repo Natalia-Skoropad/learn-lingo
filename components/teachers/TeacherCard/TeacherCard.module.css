@@ -29,6 +29,13 @@
   margin-bottom: 32px;
 }
 
+.experience {
+  margin-bottom: 32px;
+  color: #121417;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 .readMoreBtn {
   display: inline-block;
   margin-bottom: 32px;
@@ -42,6 +49,26 @@
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
+}
+
+.bookBtn {
+  min-width: 232px;
+  margin-top: 32px;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 12px;
+  background-color: #f4c550;
+  color: #121417;
+  font-size: 18px;
+  line-height: 1.56;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 200ms ease;
+}
+
+.bookBtn:hover,
+.bookBtn:focus-visible {
+  background-color: #ffdc86;
 }
 
 @media only screen and (min-width: 768px) {
