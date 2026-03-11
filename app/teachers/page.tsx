@@ -1,3 +1,20 @@
+import { teachersService } from '@/lib/services/teachers.service';
+
+export default async function TeachersPage() {
+  const teachers = await teachersService.getAll();
+
+  return (
+    <div>
+      {teachers.map((teacher) => (
+        <div key={teacher.id}>
+          {teacher.name} {teacher.surname}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/*
 import type { Metadata } from 'next';
 
 import css from './page.module.css';
@@ -55,3 +72,4 @@ function TeachersPage() {
 }
 
 export default TeachersPage;
+*/
