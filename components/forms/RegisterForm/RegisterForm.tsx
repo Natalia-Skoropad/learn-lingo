@@ -3,12 +3,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { FirebaseError } from 'firebase/app';
 
 import type { RegisterFormValues } from '@/types/forms';
+import { registerSchema } from '@/lib/validations/registerSchema';
+import { useAuth } from '@/hooks/useAuth';
 
 import Button from '@/components/common/Button/Button';
 import FormField from '@/components/forms/FormField/FormField';
-import { registerSchema } from '@/lib/validations/registerSchema';
 
 import css from './RegisterForm.module.css';
 
@@ -54,16 +56,37 @@ function RegisterForm({ onSuccess }: Props) {
     defaultValue: '',
   });
 
+  const { register: registerUser } = useAuth();
+
   const onSubmit = async (values: RegisterFormValues) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
-      console.log('Register:', values);
+      await registerUser(values);
 
       toast.success('Registration successful!');
       onSuccess();
     } catch (error) {
       console.error(error);
+
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            toast.error('This email is already in use.');
+            return;
+          case 'auth/invalid-email':
+            toast.error('Invalid email address.');
+            return;
+          case 'auth/weak-password':
+            toast.error('Password is too weak.');
+            return;
+          case 'auth/configuration-not-found':
+            toast.error('Firebase Authentication is not configured yet.');
+            return;
+          default:
+            toast.error('Registration failed. Please try again.');
+            return;
+        }
+      }
+
       toast.error('Registration failed. Please try again.');
     }
   };

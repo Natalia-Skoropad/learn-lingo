@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 
-import ToastProvider from '@/providers/ToastProvider';
-import ModalRoot from '@/components/modals/ModalRoot/ModalRoot';
-
-import Header from '@/components/header/Header/Header';
+import AuthProvider from '@/providers/AuthProvider';
 import TanStackProvider from '@/providers/TanStackProvider';
+import ToastProvider from '@/providers/ToastProvider';
+
+import ModalRoot from '@/components/modals/ModalRoot/ModalRoot';
+import Header from '@/components/header/Header/Header';
 
 import './globals.css';
 
@@ -69,12 +70,14 @@ function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.variable}>
-        <TanStackProvider>
-          <Header />
-          <ToastProvider />
-          <ModalRoot />
-          {children}
-        </TanStackProvider>
+        <AuthProvider>
+          <TanStackProvider>
+            <Header />
+            <ToastProvider />
+            <ModalRoot />
+            {children}
+          </TanStackProvider>
+        </AuthProvider>
       </body>
     </html>
   );

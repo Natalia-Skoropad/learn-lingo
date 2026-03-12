@@ -2,13 +2,17 @@
 
 import { useCallback, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+
+import { useModal } from '@/hooks/useModal';
+import { useAuth } from '@/hooks/useAuth';
 
 import Button from '@/components/common/Button/Button';
 import CloseButton from '@/components/common/CloseButton/CloseButton';
 import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
-import { useModal } from '@/hooks/useModal';
+import LogoutButton from '@/components/header/AuthActionButton/LogoutButton';
 
 import css from './MobileOffcanvas.module.css';
 
@@ -24,6 +28,18 @@ interface MobileOffcanvasProps {
 function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
   const pathname = usePathname();
   const { openModal } = useModal();
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      onClose();
+      toast.success('Logged out successfully!');
+    } catch (error) {
+      console.error(error);
+      toast.error('Logout failed. Please try again.');
+    }
+  };
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -78,18 +94,36 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
           <MenuNav />
 
           <div className={css.actions}>
-            <LoginButton
-              className={css.loginButton}
-              onClick={handleOpenLoginModal}
-            />
+            {isAuthenticated ? (
+              <>
+                <div className={css.userBox}>
+                  <div className={css.avatar} aria-hidden="true">
+                    {user?.name?.trim()?.charAt(0)?.toUpperCase() || 'U'}
+                  </div>
+                  <span className={css.userName}>{user?.name}</span>
+                </div>
 
-            <Button
-              variant="registration"
-              className={css.registrationButton}
-              onClick={handleOpenRegisterModal}
-            >
-              Registration
-            </Button>
+                <LogoutButton
+                  className={css.loginButton}
+                  onClick={handleLogout}
+                />
+              </>
+            ) : (
+              <>
+                <LoginButton
+                  className={css.loginButton}
+                  onClick={handleOpenLoginModal}
+                />
+
+                <Button
+                  variant="registration"
+                  className={css.registrationButton}
+                  onClick={handleOpenRegisterModal}
+                >
+                  Registration
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

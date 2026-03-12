@@ -3,12 +3,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
+import { FirebaseError } from 'firebase/app';
 
 import type { LoginFormValues } from '@/types/forms';
+import { loginSchema } from '@/lib/validations/loginSchema';
+import { useAuth } from '@/hooks/useAuth';
 
 import Button from '@/components/common/Button/Button';
 import FormField from '@/components/forms/FormField/FormField';
-import { loginSchema } from '@/lib/validations/loginSchema';
 
 import css from './LoginForm.module.css';
 
@@ -47,16 +49,30 @@ function LoginForm({ onSuccess }: Props) {
     defaultValue: '',
   });
 
+  const { login } = useAuth();
+
   const onSubmit = async (values: LoginFormValues) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
-      console.log('Login:', values);
+      await login(values);
 
       toast.success('Logged in successfully!');
       onSuccess();
     } catch (error) {
       console.error(error);
+
+      if (error instanceof FirebaseError) {
+        switch (error.code) {
+          case 'auth/invalid-credential':
+          case 'auth/wrong-password':
+          case 'auth/user-not-found':
+            toast.error('Invalid email or password.');
+            return;
+          default:
+            toast.error('Login failed. Please try again.');
+            return;
+        }
+      }
+
       toast.error('Login failed. Please try again.');
     }
   };

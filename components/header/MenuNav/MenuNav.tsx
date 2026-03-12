@@ -4,15 +4,9 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { useAuth } from '@/hooks/useAuth';
+
 import css from './MenuNav.module.css';
-
-//===============================================================
-
-const navItems = [
-  { href: '/', label: 'Home' },
-  { href: '/teachers', label: 'Teachers' },
-  { href: '/favorites', label: 'Favorites' },
-];
 
 //===============================================================
 
@@ -25,6 +19,18 @@ function isActive(pathname: string, href: string) {
 
 function MenuNav() {
   const pathname = usePathname();
+  const { isAuthenticated } = useAuth();
+
+  const navItems = isAuthenticated
+    ? [
+        { href: '/', label: 'Home' },
+        { href: '/teachers', label: 'Teachers' },
+        { href: '/favorites', label: 'Favorites' },
+      ]
+    : [
+        { href: '/', label: 'Home' },
+        { href: '/teachers', label: 'Teachers' },
+      ];
 
   return (
     <nav className={css.menuNav} aria-label="Primary navigation">
