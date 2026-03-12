@@ -79,6 +79,12 @@
   color: var(--text-main);
 }
 
+.actionsPlaceholder {
+  width: 260px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
 @media only screen and (min-width: 768px) {
   .inner {
     display: grid;

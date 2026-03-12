@@ -72,6 +72,7 @@ export async function registerUser({
     uid: credentials.user.uid,
     name: fullName,
     email,
+    favorites: [],
     createdAt: serverTimestamp(),
   });
 

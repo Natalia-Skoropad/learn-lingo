@@ -19,9 +19,14 @@ function isActive(pathname: string, href: string) {
 
 function MenuNav() {
   const pathname = usePathname();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isAuthReady } = useAuth();
 
-  const navItems = isAuthenticated
+  const navItems = !isAuthReady
+    ? [
+        { href: '/', label: 'Home' },
+        { href: '/teachers', label: 'Teachers' },
+      ]
+    : isAuthenticated
     ? [
         { href: '/', label: 'Home' },
         { href: '/teachers', label: 'Teachers' },

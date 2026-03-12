@@ -1,9 +1,4 @@
 .toast {
-  position: fixed;
-  right: 20px;
-  top: 20px;
-  z-index: 9999;
-
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -13,10 +8,10 @@
 
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(18, 20, 23, 0.08);
   background: #fff;
 
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 26px rgba(18, 20, 23, 0.08);
   animation: pop 160ms ease;
 }
 
@@ -42,22 +37,22 @@
   margin: 0;
   font-size: 14px;
   line-height: 1.35;
-  color: rgba(16, 24, 40, 0.9);
+  color: var(--text-main);
   flex: 1 1 auto;
 }
 
 .success .dot {
-  background: #16a34a;
+  background: var(--green);
 }
 
 .error .dot {
-  background: #dc2626;
+  background: var(--error);
 }
 
 .success {
-  border-color: rgba(22, 163, 74, 0.18);
+  border-color: rgba(56, 205, 62, 0.22);
 }
 
 .error {
-  border-color: rgba(220, 38, 38, 0.18);
+  border-color: rgba(246, 102, 102, 0.22);
 }

@@ -1,8 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 import type { Teacher } from '@/types/teacher';
+import { useModal } from '@/hooks/useModal';
+import { useAuth } from '@/hooks/useAuth';
+import { useFavorites } from '@/hooks/useFavorites';
 
 import FavoriteButton from '@/components/teachers/FavoriteButton/FavoriteButton';
 import TeacherAvatar from '@/components/teachers/TeacherAvatar/TeacherAvatar';
@@ -12,7 +16,6 @@ import TeacherLevels from '@/components/teachers/TeacherLevels/TeacherLevels';
 import TeacherMeta from '@/components/teachers/TeacherMeta/TeacherMeta';
 import TeacherReviews from '@/components/teachers/TeacherReviews/TeacherReviews';
 import BookLessonModal from '@/components/modals/BookLessonModal/BookLessonModal';
-import { useModal } from '@/hooks/useModal';
 
 import css from './TeacherCard.module.css';
 
@@ -28,8 +31,12 @@ function TeacherCard({ teacher }: Props) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const { openModal, isBookLessonOpen, payload } = useModal();
+  const { isAuthenticated, isAuthReady } = useAuth();
+  const { isFavorite, isUpdating, toggleFavorite } = useFavorites();
 
   const fullName = `${teacher.name} ${teacher.surname}`;
+  const favoriteActive = isFavorite(teacher.id);
+  const favoriteUpdating = isUpdating(teacher.id);
 
   const handleToggleExpand = () => {
     setIsExpanded((prev) => !prev);
@@ -39,6 +46,29 @@ function TeacherCard({ teacher }: Props) {
     openModal('bookLesson', { teacher });
   };
 
+  const handleToggleFavorite = async () => {
+    if (!isAuthReady) return;
+
+    if (!isAuthenticated) {
+      toast.error('This feature is available only for authorized users.');
+      openModal('login');
+      return;
+    }
+
+    try {
+      const result = await toggleFavorite(teacher.id);
+
+      if (result === 'added') {
+        toast.success('Teacher added to favorites.');
+      } else {
+        toast.success('Teacher removed from favorites.');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to update favorites. Please try again.');
+    }
+  };
+
   const isCurrentTeacherModalOpen =
     isBookLessonOpen && payload?.teacher?.id === teacher.id;
 
@@ -46,8 +76,9 @@ function TeacherCard({ teacher }: Props) {
     <>
       <article className={css.card}>
         <FavoriteButton
-          isActive={false}
-          onToggle={() => {}}
+          isActive={favoriteActive}
+          onToggle={handleToggleFavorite}
+          disabled={favoriteUpdating}
           className={css.favoriteBtn}
           size="lg"
         />

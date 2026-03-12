@@ -13,6 +13,7 @@ import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
 import LogoutButton from '@/components/header/AuthActionButton/LogoutButton';
+import UserBadge from '@/components/header/UserBadge/UserBadge';
 
 import css from './MobileOffcanvas.module.css';
 
@@ -28,7 +29,7 @@ interface MobileOffcanvasProps {
 function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
   const pathname = usePathname();
   const { openModal } = useModal();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isAuthReady, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -94,14 +95,12 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
           <MenuNav />
 
           <div className={css.actions}>
-            {isAuthenticated ? (
+            {!isAuthReady ? null : isAuthenticated ? (
               <>
-                <div className={css.userBox}>
-                  <div className={css.avatar} aria-hidden="true">
-                    {user?.name?.trim()?.charAt(0)?.toUpperCase() || 'U'}
-                  </div>
-                  <span className={css.userName}>{user?.name}</span>
-                </div>
+                <UserBadge
+                  name={user?.name ?? 'User'}
+                  className={css.userBadge}
+                />
 
                 <LogoutButton
                   className={css.loginButton}

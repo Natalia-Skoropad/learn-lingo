@@ -48,3 +48,7 @@
 .registrationButton {
   width: 100%;
 }
+
+.userBadge {
+  align-self: flex-start;
+}

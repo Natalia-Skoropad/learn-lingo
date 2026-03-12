@@ -1,13 +1,31 @@
 'use client';
 
-import { Toaster } from 'react-hot-toast';
+import { Toaster, ToastBar, type Toast as HotToast } from 'react-hot-toast';
+
+import Toast from '@/components/common/Toast/Toast';
 
 //===============================================================
 
 function ToastProvider() {
-  return <Toaster position="top-right" />;
+  return (
+    <Toaster
+      position="top-right"
+      gutter={12}
+      containerStyle={{
+        top: 20,
+        right: 20,
+      }}
+    >
+      {(t: HotToast) => (
+        <Toast
+          message={typeof t.message === 'string' ? t.message : ''}
+          type={t.type === 'error' ? 'error' : 'success'}
+          duration={t.duration}
+          onClose={() => (t.visible ? undefined : undefined)}
+        />
+      )}
+    </Toaster>
+  );
 }
-
-//===============================================================
 
 export default ToastProvider;

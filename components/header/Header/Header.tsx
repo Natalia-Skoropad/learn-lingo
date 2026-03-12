@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -13,6 +13,7 @@ import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import LogoutButton from '@/components/header/AuthActionButton/LogoutButton';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
 import MobileOffcanvas from '@/components/header/MobileOffcanvas/MobileOffcanvas';
+import UserBadge from '@/components/header/UserBadge/UserBadge';
 
 import css from './Header.module.css';
 
@@ -22,7 +23,7 @@ function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { openModal } = useModal();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isAuthReady, logout } = useAuth();
 
   const openMenu = () => setIsMobileMenuOpen(true);
   const closeMenu = () => setIsMobileMenuOpen(false);
@@ -44,10 +45,6 @@ function Header() {
       toast.error('Logout failed. Please try again.');
     }
   };
-
-  const userInitial = useMemo(() => {
-    return user?.name?.trim()?.charAt(0)?.toUpperCase() || 'U';
-  }, [user]);
 
   useEffect(() => {
     if (!isMobileMenuOpen) return;
@@ -83,15 +80,11 @@ function Header() {
         </div>
 
         <div className={css.desktopActions}>
-          {isAuthenticated ? (
+          {!isAuthReady ? (
+            <div className={css.actionsPlaceholder} aria-hidden="true" />
+          ) : isAuthenticated ? (
             <>
-              <div className={css.userBox}>
-                <div className={css.avatar} aria-hidden="true">
-                  {userInitial}
-                </div>
-                <span className={css.userName}>{user?.name}</span>
-              </div>
-
+              <UserBadge name={user?.name ?? 'User'} />
               <LogoutButton onClick={handleLogout} />
             </>
           ) : (
