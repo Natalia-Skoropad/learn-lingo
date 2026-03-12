@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import TeacherCard from '@/components/teachers/TeacherCard/TeacherCard';
+import TeachersList from '@/components/teachers/TeachersList/TeachersList';
 import { teachersService } from '@/lib/services/teachers.service';
 
 import css from './page.module.css';
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
 //===========================================================================
 
 async function TeachersPage() {
-  const teachers = await teachersService.getAll();
+  const { teachers, lastId, hasMore } = await teachersService.getPage();
 
   return (
     <main>
@@ -59,13 +59,11 @@ async function TeachersPage() {
         <div className="container">
           <h1 className="visually-hidden">Teachers</h1>
 
-          <ul className={css.list}>
-            {teachers.map((teacher) => (
-              <li key={teacher.id} className={css.item}>
-                <TeacherCard teacher={teacher} />
-              </li>
-            ))}
-          </ul>
+          <TeachersList
+            initialTeachers={teachers}
+            initialLastId={lastId}
+            initialHasMore={hasMore}
+          />
         </div>
       </section>
     </main>

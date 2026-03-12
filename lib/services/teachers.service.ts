@@ -1,7 +1,7 @@
-import { getTeachers } from '@/lib/firebase/teachers';
+import { getTeachersPage } from '@/lib/firebase/teachers';
 
 //===============================================================
 
 export const teachersService = {
-  getAll: getTeachers,
+  getPage: getTeachersPage,
 };
