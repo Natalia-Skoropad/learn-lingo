@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import TeachersList from '@/components/teachers/TeachersList/TeachersList';
 import { teachersService } from '@/lib/services/teachers.service';
+import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
 
 import css from './page.module.css';
 
@@ -51,7 +52,9 @@ export const metadata: Metadata = {
 //===========================================================================
 
 async function TeachersPage() {
-  const { teachers, lastId, hasMore } = await teachersService.getPage();
+  const { teachers, lastId, hasMore, total } = await teachersService.getPage(
+    DEFAULT_TEACHER_FILTERS
+  );
 
   return (
     <main>
@@ -63,6 +66,7 @@ async function TeachersPage() {
             initialTeachers={teachers}
             initialLastId={lastId}
             initialHasMore={hasMore}
+            initialTotal={total}
           />
         </div>
       </section>

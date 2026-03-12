@@ -1,16 +1,20 @@
 import {
   collection,
   documentId,
+  getCountFromServer,
   getDocs,
   limit,
   orderBy,
   query,
   startAfter,
   where,
+  type QueryConstraint,
 } from 'firebase/firestore';
 
 import { db } from './config';
+
 import type { Teacher } from '@/types/teacher';
+import type { TeacherFilters } from '@/types/filters';
 
 //===============================================================
 
@@ -23,23 +27,56 @@ export type TeachersPageResult = {
   teachers: Teacher[];
   lastId: string | null;
   hasMore: boolean;
+  total: number;
 };
 
 //===============================================================
 
+function buildTeachersConstraints(filters: TeacherFilters): QueryConstraint[] {
+  const constraints: QueryConstraint[] = [];
+
+  if (filters.language !== 'All') {
+    constraints.push(where('languages', 'array-contains', filters.language));
+  }
+
+  if (filters.level !== 'All') {
+    constraints.push(where('levels', 'array-contains', filters.level));
+  }
+
+  if (filters.price !== 'All') {
+    constraints.push(where('price_per_hour', '==', Number(filters.price)));
+  }
+
+  return constraints;
+}
+
+//===============================================================
+
 export async function getTeachersPage(
+  filters: TeacherFilters,
   lastVisibleId?: string | null
 ): Promise<TeachersPageResult> {
   const teachersRef = collection(db, 'teachers');
+  const filterConstraints = buildTeachersConstraints(filters);
+
+  const countQuery = query(teachersRef, ...filterConstraints);
+  const countSnapshot = await getCountFromServer(countQuery);
+  const total = countSnapshot.data().count;
 
   const teachersQuery = lastVisibleId
     ? query(
         teachersRef,
+        ...filterConstraints,
         orderBy(documentId()),
         startAfter(lastVisibleId),
         limit(TEACHERS_PER_PAGE)
       )
-    : query(teachersRef, orderBy(documentId()), limit(TEACHERS_PER_PAGE));
+    : query(
+        teachersRef,
+        ...filterConstraints,
+        orderBy(documentId()),
+        limit(TEACHERS_PER_PAGE)
+      );
 
   const snapshot = await getDocs(teachersQuery);
 
@@ -56,6 +93,7 @@ export async function getTeachersPage(
     teachers,
     lastId,
     hasMore: snapshot.docs.length === TEACHERS_PER_PAGE,
+    total,
   };
 }
 
