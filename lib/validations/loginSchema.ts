@@ -10,4 +10,5 @@ export const loginSchema: yup.ObjectSchema<LoginFormValues> = yup
     email: emailSchema,
     password: passwordSchema,
   })
+
   .required();

@@ -8,6 +8,7 @@ import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
 import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
 import MobileOffcanvas from '@/components/header/MobileOffcanvas/MobileOffcanvas';
+import { useModal } from '@/hooks/useModal';
 
 import css from './Header.module.css';
 
@@ -15,9 +16,18 @@ import css from './Header.module.css';
 
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { openModal } = useModal();
 
   const openMenu = () => setIsMobileMenuOpen(true);
   const closeMenu = () => setIsMobileMenuOpen(false);
+
+  const handleOpenLoginModal = () => {
+    openModal('login');
+  };
+
+  const handleOpenRegisterModal = () => {
+    openModal('register');
+  };
 
   useEffect(() => {
     if (!isMobileMenuOpen) return;
@@ -53,8 +63,13 @@ function Header() {
         </div>
 
         <div className={css.desktopActions}>
-          <LoginButton />
-          <Button variant="registration" className={css.registrationBtn}>
+          <LoginButton onClick={handleOpenLoginModal} />
+
+          <Button
+            variant="registration"
+            className={css.registrationBtn}
+            onClick={handleOpenRegisterModal}
+          >
             Registration
           </Button>
         </div>

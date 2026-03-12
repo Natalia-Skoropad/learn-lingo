@@ -8,6 +8,7 @@ import CloseButton from '@/components/common/CloseButton/CloseButton';
 import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
+import { useModal } from '@/hooks/useModal';
 
 import css from './MobileOffcanvas.module.css';
 
@@ -22,6 +23,7 @@ interface MobileOffcanvasProps {
 
 function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
   const pathname = usePathname();
+  const { openModal } = useModal();
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -29,6 +31,16 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
     },
     [onClose]
   );
+
+  const handleOpenLoginModal = () => {
+    onClose();
+    openModal('login');
+  };
+
+  const handleOpenRegisterModal = () => {
+    onClose();
+    openModal('register');
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -66,8 +78,16 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
           <MenuNav />
 
           <div className={css.actions}>
-            <LoginButton className={css.loginButton} />
-            <Button variant="registration" className={css.registrationButton}>
+            <LoginButton
+              className={css.loginButton}
+              onClick={handleOpenLoginModal}
+            />
+
+            <Button
+              variant="registration"
+              className={css.registrationButton}
+              onClick={handleOpenRegisterModal}
+            >
               Registration
             </Button>
           </div>

@@ -1,15 +1,15 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import type { Teacher } from '@/types/teacher';
 import type { BookLessonFormValues } from '@/types/forms';
+import { bookLessonSchema } from '@/lib/validations/bookLessonSchema';
 
 import Button from '@/components/common/Button/Button';
 import FormField from '@/components/forms/FormField/FormField';
-import { bookLessonSchema } from '@/lib/validations/bookLessonSchema';
 
 import css from './BookLessonForm.module.css';
 
@@ -36,8 +36,8 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
   const fullTeacherName = `${teacher.name} ${teacher.surname}`;
 
   const {
+    control,
     register,
-    watch,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
   } = useForm<BookLessonFormValues>({
@@ -51,9 +51,23 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
     },
   });
 
-  const fullNameValue = watch('fullName');
-  const emailValue = watch('email');
-  const phoneValue = watch('phone');
+  const fullNameValue = useWatch({
+    control,
+    name: 'fullName',
+    defaultValue: '',
+  });
+
+  const emailValue = useWatch({
+    control,
+    name: 'email',
+    defaultValue: '',
+  });
+
+  const phoneValue = useWatch({
+    control,
+    name: 'phone',
+    defaultValue: '',
+  });
 
   const onSubmit = async (values: BookLessonFormValues) => {
     try {
@@ -80,6 +94,7 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
       </p>
 
       <div className={css.teacher}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={teacher.avatar_url}
           alt={fullTeacherName}
@@ -110,15 +125,12 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
             </label>
           ))}
         </div>
-
-        <span className={css.radioError}>{errors.reason?.message || ' '}</span>
       </fieldset>
 
       <div className={css.fields}>
         <FormField
-          label="Full Name"
           type="text"
-          requiredMark
+          placeholder="Full Name*"
           maxLength={20}
           count={fullNameValue.length}
           error={errors.fullName?.message}
@@ -126,9 +138,8 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
         />
 
         <FormField
-          label="Email"
           type="email"
-          requiredMark
+          placeholder="Email*"
           maxLength={64}
           count={emailValue.length}
           error={errors.email?.message}
@@ -136,8 +147,8 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
         />
 
         <FormField
-          label="Phone number"
           type="tel"
+          placeholder="Phone number*"
           maxLength={20}
           count={phoneValue.length}
           error={errors.phone?.message}

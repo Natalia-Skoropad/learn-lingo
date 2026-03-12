@@ -1,7 +1,7 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import type { LoginFormValues } from '@/types/forms';
@@ -22,8 +22,8 @@ type Props = {
 
 function LoginForm({ onSuccess }: Props) {
   const {
+    control,
     register,
-    watch,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
   } = useForm<LoginFormValues>({
@@ -35,8 +35,17 @@ function LoginForm({ onSuccess }: Props) {
     },
   });
 
-  const emailValue = watch('email');
-  const passwordValue = watch('password');
+  const emailValue = useWatch({
+    control,
+    name: 'email',
+    defaultValue: '',
+  });
+
+  const passwordValue = useWatch({
+    control,
+    name: 'password',
+    defaultValue: '',
+  });
 
   const onSubmit = async (values: LoginFormValues) => {
     try {
@@ -61,9 +70,8 @@ function LoginForm({ onSuccess }: Props) {
 
       <div className={css.fields}>
         <FormField
-          label="Email"
           type="email"
-          requiredMark
+          placeholder="Email*"
           maxLength={64}
           count={emailValue.length}
           error={errors.email?.message}
@@ -71,8 +79,8 @@ function LoginForm({ onSuccess }: Props) {
         />
 
         <FormField
-          label="Password"
           type="password"
+          placeholder="Password*"
           maxLength={20}
           count={passwordValue.length}
           error={errors.password?.message}

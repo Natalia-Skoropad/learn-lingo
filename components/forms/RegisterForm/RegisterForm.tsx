@@ -1,7 +1,7 @@
 'use client';
 
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 
 import type { RegisterFormValues } from '@/types/forms';
@@ -22,8 +22,8 @@ type Props = {
 
 function RegisterForm({ onSuccess }: Props) {
   const {
+    control,
     register,
-    watch,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
   } = useForm<RegisterFormValues>({
@@ -36,9 +36,23 @@ function RegisterForm({ onSuccess }: Props) {
     },
   });
 
-  const fullNameValue = watch('fullName');
-  const emailValue = watch('email');
-  const passwordValue = watch('password');
+  const fullNameValue = useWatch({
+    control,
+    name: 'fullName',
+    defaultValue: '',
+  });
+
+  const emailValue = useWatch({
+    control,
+    name: 'email',
+    defaultValue: '',
+  });
+
+  const passwordValue = useWatch({
+    control,
+    name: 'password',
+    defaultValue: '',
+  });
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
@@ -63,9 +77,8 @@ function RegisterForm({ onSuccess }: Props) {
 
       <div className={css.fields}>
         <FormField
-          label="Full Name"
           type="text"
-          requiredMark
+          placeholder="Full Name*"
           maxLength={20}
           count={fullNameValue.length}
           error={errors.fullName?.message}
@@ -73,9 +86,8 @@ function RegisterForm({ onSuccess }: Props) {
         />
 
         <FormField
-          label="Email"
           type="email"
-          requiredMark
+          placeholder="Email*"
           maxLength={64}
           count={emailValue.length}
           error={errors.email?.message}
@@ -83,8 +95,8 @@ function RegisterForm({ onSuccess }: Props) {
         />
 
         <FormField
-          label="Password"
           type="password"
+          placeholder="Password*"
           maxLength={20}
           count={passwordValue.length}
           error={errors.password?.message}

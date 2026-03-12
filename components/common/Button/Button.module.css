@@ -47,12 +47,10 @@
   background-color: #f1d27b;
   color: var(--text-main);
   cursor: not-allowed;
-  pointer-events: none;
   transform: none;
 }
 
 .button:disabled {
   cursor: not-allowed;
-  pointer-events: none;
   transform: none;
 }

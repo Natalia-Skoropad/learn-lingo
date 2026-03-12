@@ -4,10 +4,12 @@
 }
 
 .text {
-  margin-bottom: 24px;
+  font-family: var(--font-family);
   font-size: 16px;
+  font-weight: var(--fw-regular);
   line-height: 1.38;
-  color: #6b6b6b;
+  color: var(--text-main);
+  margin-bottom: 20px;
 }
 
 .teacher {
@@ -25,15 +27,20 @@
 }
 
 .teacherLabel {
-  margin-bottom: 4px;
+  font-family: var(--font-family);
   font-size: 12px;
-  color: #8a8a89;
+  font-weight: var(--fw-medium);
+  line-height: 1.33;
+  color: var(--text-muted);
+  margin-bottom: 4px;
 }
 
 .teacherName {
+  font-family: var(--font-family);
   font-size: 16px;
-  font-weight: 500;
-  color: #121417;
+  font-weight: var(--fw-medium);
+  line-height: 1.5;
+  color: var(--text-main);
 }
 
 .fieldset {
@@ -44,10 +51,12 @@
 
 .legend {
   margin-bottom: 20px;
+
+  font-family: var(--font-family);
   font-size: 24px;
-  font-weight: 500;
+  font-weight: var(--fw-medium);
   line-height: 1.33;
-  color: #121417;
+  color: var(--text-main);
 }
 
 .radioGroup {
@@ -61,30 +70,64 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+
+  font-family: var(--font-family);
+  font-size: 16px;
+  font-weight: var(--fw-regular);
+  line-height: 1.38;
+  color: var(--text-main);
 }
 
 .radioInput {
-  width: 20px;
-  height: 20px;
+  position: relative;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  border: 2px solid rgba(18, 20, 23, 0.2);
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+  transition: border-color 200ms ease, background-color 200ms ease;
 }
 
-.radioError {
-  display: inline-flex;
-  align-items: center;
-  min-height: 20px;
-  margin-top: 10px;
-  padding: 0 8px;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  font-size: 12px;
-  color: #f66;
+.radioInput::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--main);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 200ms ease;
+}
+
+.radioInput:checked {
+  border-color: var(--main);
+}
+
+.radioInput:checked::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.radioInput:hover,
+.radioInput:focus-visible {
+  border-color: var(--main);
+  outline: none;
 }
 
 .fields {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 40px;
+  gap: 0;
+  margin-bottom: 10px;
 }
 
 .submitBtn {

@@ -13,6 +13,7 @@ export const emailSchema = yup
   .string()
   .trim()
   .email('Enter a valid email')
+  .max(64, 'Must be at most 64 characters')
   .required('Required');
 
 export const passwordSchema = yup

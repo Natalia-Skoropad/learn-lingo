@@ -12,10 +12,12 @@ type ModalPayload = {
 type ModalStore = {
   modalType: ModalType;
   payload: ModalPayload | null;
+
   openModal: (
     type: Exclude<ModalType, null>,
     payload?: ModalPayload | null
   ) => void;
+
   closeModal: () => void;
 };
 

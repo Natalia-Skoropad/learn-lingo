@@ -8,11 +8,9 @@ import css from './FormField.module.css';
 //===============================================================
 
 type BaseProps = {
-  label: string;
   error?: string;
   count?: number;
   maxLength?: number;
-  requiredMark?: boolean;
   className?: string;
 };
 
@@ -31,41 +29,32 @@ type Props = InputProps | TextareaProps;
 //===============================================================
 
 function FormField(props: Props) {
-  const {
-    label,
-    error,
-    count,
-    maxLength,
-    requiredMark = false,
-    className,
-  } = props;
+  const hasCounter =
+    typeof props.count === 'number' && typeof props.maxLength === 'number';
 
-  const hasCounter = typeof count === 'number' && typeof maxLength === 'number';
+  const fieldBoxClassName = clsx(
+    css.fieldBox,
+    props.error && css.fieldBoxError,
+    props.className
+  );
 
   return (
     <div className={css.wrapper}>
-      <div
-        className={clsx(css.fieldBox, error && css.fieldBoxError, className)}
-      >
-        <label className={css.label}>
-          {label}
-          {requiredMark ? <span className={css.required}>*</span> : null}
-        </label>
-
-        {'as' in props && props.as === 'textarea' ? (
-          <textarea {...props} className={css.textarea} placeholder=" " />
+      <div className={fieldBoxClassName}>
+        {props.as === 'textarea' ? (
+          <textarea {...props} className={css.textarea} />
         ) : (
-          <input {...props} className={css.input} placeholder=" " />
+          <input {...props} className={css.input} />
         )}
 
         {hasCounter ? (
           <span className={css.counter}>
-            {count}/{maxLength}
+            {props.count}/{props.maxLength}
           </span>
         ) : null}
 
-        <span className={clsx(css.error, error && css.errorVisible)}>
-          {error || ' '}
+        <span className={clsx(css.error, props.error && css.errorVisible)}>
+          {props.error || ' '}
         </span>
       </div>
     </div>

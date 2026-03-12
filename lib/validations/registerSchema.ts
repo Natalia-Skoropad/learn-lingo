@@ -15,4 +15,5 @@ export const registerSchema: yup.ObjectSchema<RegisterFormValues> = yup
     email: emailSchema,
     password: passwordSchema,
   })
+
   .required();

@@ -16,4 +16,5 @@ export const bookLessonSchema: yup.ObjectSchema<BookLessonFormValues> = yup
     email: emailSchema,
     phone: phoneSchema,
   })
+
   .required();
