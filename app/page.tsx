@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 
-import Button from '@/components/common/Button/Button';
+import ButtonLink from '@/components/common/Button/ButtonLink';
 import StatsSection from '@/components/home/StatsSection/StatsSection';
 
 import css from './page.module.css';
@@ -30,7 +30,6 @@ export const metadata: Metadata = {
         alt: 'Curly red-haired girl sitting at the computer and sticking out her tongue',
       },
     ],
-
     type: 'website',
   },
 
@@ -55,7 +54,7 @@ function Home() {
           <div className={css.heroWrapper}>
             <div className={css.content}>
               <h1 id="home-title" className={css.title}>
-                Unlock your potential with the best
+                Unlock your potential with the best{' '}
                 <span className={css.accent}>language</span> tutors
               </h1>
 
@@ -65,7 +64,9 @@ function Home() {
                 connecting with highly qualified and experienced tutors.
               </p>
 
-              <Button className={css.heroButton}>Get started</Button>
+              <ButtonLink href="/teachers" className={css.heroButton}>
+                Get started
+              </ButtonLink>
             </div>
 
             <div className={css.imageBox}>
