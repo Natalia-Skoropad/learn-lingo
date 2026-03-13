@@ -43,12 +43,6 @@ function LoginForm({ onSuccess }: Props) {
     defaultValue: '',
   });
 
-  const passwordValue = useWatch({
-    control,
-    name: 'password',
-    defaultValue: '',
-  });
-
   const { login } = useAuth();
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -98,7 +92,6 @@ function LoginForm({ onSuccess }: Props) {
           type="password"
           placeholder="Password*"
           maxLength={20}
-          count={passwordValue.length}
           error={errors.password?.message}
           {...register('password')}
         />
@@ -110,7 +103,7 @@ function LoginForm({ onSuccess }: Props) {
         disabled={!isValid || isSubmitting}
         className={css.submitBtn}
       >
-        Log In
+        {isSubmitting ? 'Wait a minute...' : 'Log In'}
       </Button>
     </form>
   );

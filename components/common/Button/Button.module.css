@@ -45,8 +45,8 @@
 
 /* Disabled */
 .disabled {
-  background-color: #f1d27b;
-  color: var(--text-main);
+  background-color: var(--border);
+  color: var(--text-muted);
   cursor: not-allowed;
   transform: none;
 }

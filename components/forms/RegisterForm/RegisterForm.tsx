@@ -50,12 +50,6 @@ function RegisterForm({ onSuccess }: Props) {
     defaultValue: '',
   });
 
-  const passwordValue = useWatch({
-    control,
-    name: 'password',
-    defaultValue: '',
-  });
-
   const { register: registerUser } = useAuth();
 
   const onSubmit = async (values: RegisterFormValues) => {
@@ -121,7 +115,6 @@ function RegisterForm({ onSuccess }: Props) {
           type="password"
           placeholder="Password*"
           maxLength={20}
-          count={passwordValue.length}
           error={errors.password?.message}
           {...register('password')}
         />
@@ -129,11 +122,11 @@ function RegisterForm({ onSuccess }: Props) {
 
       <Button
         type="submit"
-        variant={isValid && !isSubmitting ? 'registration' : 'disabled'}
+        variant={isValid && !isSubmitting ? 'common' : 'disabled'}
         disabled={!isValid || isSubmitting}
         className={css.submitBtn}
       >
-        Sign Up
+        {isSubmitting ? 'Wait a minute...' : 'Sign Up'}
       </Button>
     </form>
   );
