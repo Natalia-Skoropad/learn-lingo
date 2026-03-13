@@ -1,7 +1,6 @@
 'use client';
 
 import { LogOut } from 'lucide-react';
-
 import AuthActionButton from '../AuthActionButton/AuthActionButton';
 
 //===============================================================

@@ -1,13 +1,13 @@
 .userBox {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
   min-width: 0;
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
 
   display: flex;
@@ -15,36 +15,20 @@
   justify-content: center;
   flex-shrink: 0;
 
-  background-color: var(--main);
+  background-color: var(--accent);
   color: var(--text-main);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: var(--fw-bold);
-  line-height: 1;
+  line-height: 1.5;
 }
 
 .userName {
   font-size: 18px;
-  font-weight: var(--fw-medium);
+  font-weight: var(--fw-regular);
   line-height: 1.1;
   color: var(--text-main);
 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-@media only screen and (max-width: 767px) {
-  .userBox {
-    gap: 12px;
-  }
-
-  .avatar {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-
-  .userName {
-    font-size: 16px;
-  }
 }
