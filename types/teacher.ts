@@ -16,4 +16,5 @@ export type Teacher = {
   lesson_info: string;
   conditions: string[];
   experience: string;
+  isOnline: boolean;
 };

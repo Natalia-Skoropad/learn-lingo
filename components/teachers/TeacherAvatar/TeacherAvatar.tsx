@@ -1,27 +1,35 @@
+import ShimmerImage from '@/components/common/ShimmerImage/ShimmerImage';
+
+import css from './TeacherAvatar.module.css';
+
+//===============================================================
+
 type Props = {
   avatarUrl: string;
   fullName: string;
+  isOnline: boolean;
 };
 
 //===============================================================
 
-import css from './TeacherAvatar.module.css';
-
-function TeacherAvatar({ avatarUrl, fullName }: Props) {
+function TeacherAvatar({ avatarUrl, fullName, isOnline }: Props) {
   return (
     <div className={css.avatarWrap}>
       <div className={css.avatarBorder}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          className={css.avatar}
+        <ShimmerImage
           src={avatarUrl}
           alt={fullName}
-          width={96}
-          height={96}
+          sizes="96px"
+          wrapClassName={css.avatarImageWrap}
+          className={css.avatar}
         />
       </div>
 
-      <span className={css.statusDot} />
+      <span
+        className={isOnline ? css.statusDotOnline : css.statusDotOffline}
+        aria-label={isOnline ? 'Teacher is online' : 'Teacher is offline'}
+        role="status"
+      />
     </div>
   );
 }

@@ -15,21 +15,33 @@
   border-radius: 50%;
 }
 
-.avatar {
-  display: block;
+.avatarImageWrap {
   width: 96px;
   height: 96px;
+  border-radius: 50%;
+}
+
+.avatar {
+  display: block;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.statusDot {
+.statusDotOnline,
+.statusDotOffline {
   position: absolute;
   top: 20px;
   right: 20px;
   width: 15px;
   height: 15px;
-  background-color: var(--green);
   border: 3px solid var(--background);
   border-radius: 50%;
+}
+
+.statusDotOnline {
+  background-color: var(--green);
+}
+
+.statusDotOffline {
+  background-color: var(--text-muted);
 }

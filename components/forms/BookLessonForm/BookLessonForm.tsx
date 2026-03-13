@@ -9,6 +9,7 @@ import type { BookLessonFormValues } from '@/types/forms';
 import { bookLessonSchema } from '@/lib/validations/bookLessonSchema';
 
 import Button from '@/components/common/Button/Button';
+import ShimmerImage from '@/components/common/ShimmerImage/ShimmerImage';
 import FormField from '@/components/forms/FormField/FormField';
 
 import css from './BookLessonForm.module.css';
@@ -18,6 +19,8 @@ import css from './BookLessonForm.module.css';
 type Props = {
   teacher: Teacher;
   onSuccess: () => void;
+  prefilledName?: string;
+  prefilledEmail?: string;
 };
 
 //===============================================================
@@ -32,7 +35,12 @@ const reasons: BookLessonFormValues['reason'][] = [
 
 //===============================================================
 
-function BookLessonForm({ teacher, onSuccess }: Props) {
+function BookLessonForm({
+  teacher,
+  onSuccess,
+  prefilledName = '',
+  prefilledEmail = '',
+}: Props) {
   const fullTeacherName = `${teacher.name} ${teacher.surname}`;
 
   const {
@@ -45,8 +53,8 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
     mode: 'onChange',
     defaultValues: {
       reason: 'Career and business',
-      fullName: '',
-      email: '',
+      fullName: prefilledName,
+      email: prefilledEmail,
       phone: '',
     },
   });
@@ -54,13 +62,13 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
   const fullNameValue = useWatch({
     control,
     name: 'fullName',
-    defaultValue: '',
+    defaultValue: prefilledName,
   });
 
   const emailValue = useWatch({
     control,
     name: 'email',
-    defaultValue: '',
+    defaultValue: prefilledEmail,
   });
 
   const phoneValue = useWatch({
@@ -94,10 +102,11 @@ function BookLessonForm({ teacher, onSuccess }: Props) {
       </p>
 
       <div className={css.teacher}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <ShimmerImage
           src={teacher.avatar_url}
           alt={fullTeacherName}
+          sizes="44px"
+          wrapClassName={css.avatarWrap}
           className={css.avatar}
         />
 

@@ -75,7 +75,8 @@
   }
 
   .heroButton {
-    max-width: 220px;
+    width: 0;
+    min-width: 255px;
   }
 
   .imageBox {
@@ -109,10 +110,6 @@
   .text {
     max-width: 471px;
     margin-bottom: 64px;
-  }
-
-  .heroButton {
-    max-width: 267px;
   }
 
   .imageBox {

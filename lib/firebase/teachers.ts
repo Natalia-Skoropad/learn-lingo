@@ -9,6 +9,8 @@ import {
   startAfter,
   where,
   type QueryConstraint,
+  type QueryDocumentSnapshot,
+  type DocumentData,
 } from 'firebase/firestore';
 
 import { db } from './config';
@@ -52,6 +54,22 @@ function buildTeachersConstraints(filters: TeacherFilters): QueryConstraint[] {
 
 //===============================================================
 
+function getTeacherOnlineStatus(id: string): boolean {
+  return id.charCodeAt(id.length - 1) % 2 === 0;
+}
+
+function mapTeacherWithStatus(
+  doc: QueryDocumentSnapshot<DocumentData>
+): Teacher {
+  return {
+    id: doc.id,
+    ...doc.data(),
+    isOnline: getTeacherOnlineStatus(doc.id),
+  } as Teacher;
+}
+
+//===============================================================
+
 export async function getTeachersPage(
   filters: TeacherFilters,
   lastVisibleId?: string | null
@@ -80,10 +98,7 @@ export async function getTeachersPage(
 
   const snapshot = await getDocs(teachersQuery);
 
-  const teachers = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as Teacher[];
+  const teachers = snapshot.docs.map((doc) => mapTeacherWithStatus(doc));
 
   const lastId = snapshot.docs.length
     ? snapshot.docs[snapshot.docs.length - 1].id
@@ -119,10 +134,7 @@ export async function getTeachersByIds(ids: string[]): Promise<Teacher[]> {
 
   snapshots.forEach((snapshot) => {
     snapshot.docs.forEach((doc) => {
-      teachersMap.set(doc.id, {
-        id: doc.id,
-        ...doc.data(),
-      } as Teacher);
+      teachersMap.set(doc.id, mapTeacherWithStatus(doc));
     });
   });
 

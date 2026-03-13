@@ -84,7 +84,11 @@ function TeacherCard({ teacher }: Props) {
           size="lg"
         />
 
-        <TeacherAvatar avatarUrl={teacher.avatar_url} fullName={fullName} />
+        <TeacherAvatar
+          avatarUrl={teacher.avatar_url}
+          fullName={fullName}
+          isOnline={teacher.isOnline}
+        />
 
         <div className={css.content}>
           <div className={css.topRow}>
