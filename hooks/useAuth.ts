@@ -12,5 +12,6 @@ export function useAuth() {
     register: useAuthStore((state) => state.register),
     login: useAuthStore((state) => state.login),
     logout: useAuthStore((state) => state.logout),
+    resetPassword: useAuthStore((state) => state.resetPassword),
   };
 }

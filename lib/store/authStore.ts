@@ -16,6 +16,10 @@ type LoginData = {
   password: string;
 };
 
+type ResetPasswordData = {
+  email: string;
+};
+
 type AuthState = {
   user: AppUser | null;
   isLoading: boolean;
@@ -26,6 +30,7 @@ type AuthState = {
   register: (data: RegisterData) => Promise<AppUser>;
   login: (data: LoginData) => Promise<AppUser>;
   logout: () => Promise<void>;
+  resetPassword: (data: ResetPasswordData) => Promise<void>;
 };
 
 //===============================================================
@@ -100,6 +105,18 @@ export const useAuthStore = create<AuthState>((set) => ({
         isLoading: false,
         isAuthenticated: false,
       });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  resetPassword: async (data) => {
+    set({ isLoading: true });
+
+    try {
+      await authService.resetPassword(data);
+      set({ isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       throw error;

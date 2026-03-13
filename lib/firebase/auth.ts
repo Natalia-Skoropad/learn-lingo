@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -22,6 +23,10 @@ type RegisterParams = {
 type LoginParams = {
   email: string;
   password: string;
+};
+
+type ResetPasswordParams = {
+  email: string;
 };
 
 //===============================================================
@@ -100,6 +105,14 @@ export async function loginUser({
       email: credentials.user.email || email,
     }
   );
+}
+
+//===============================================================
+
+export async function resetUserPassword({
+  email,
+}: ResetPasswordParams): Promise<void> {
+  await sendPasswordResetEmail(auth, email);
 }
 
 //===============================================================

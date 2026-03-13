@@ -16,6 +16,7 @@ export function useModal() {
     isOpen: modalType !== null,
     isLoginOpen: modalType === 'login',
     isRegisterOpen: modalType === 'register',
+    isForgotPasswordOpen: modalType === 'forgotPassword',
     isBookLessonOpen: modalType === 'bookLesson',
   };
 }

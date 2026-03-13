@@ -18,6 +18,10 @@ export type RegisterFormValues = {
   password: string;
 };
 
+export type ForgotPasswordFormValues = {
+  email: string;
+};
+
 export type BookLessonFormValues = {
   reason: BookLessonReason;
   fullName: string;

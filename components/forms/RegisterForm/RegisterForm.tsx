@@ -8,6 +8,7 @@ import { FirebaseError } from 'firebase/app';
 import type { RegisterFormValues } from '@/types/forms';
 import { registerSchema } from '@/lib/validations/registerSchema';
 import { useAuth } from '@/hooks/useAuth';
+import { useModal } from '@/hooks/useModal';
 
 import Button from '@/components/common/Button/Button';
 import FormField from '@/components/forms/FormField/FormField';
@@ -51,6 +52,11 @@ function RegisterForm({ onSuccess }: Props) {
   });
 
   const { register: registerUser } = useAuth();
+  const { openModal } = useModal();
+
+  const handleOpenLoginModal = () => {
+    openModal('login');
+  };
 
   const onSubmit = async (values: RegisterFormValues) => {
     try {
@@ -128,6 +134,17 @@ function RegisterForm({ onSuccess }: Props) {
       >
         {isSubmitting ? 'Wait a minute...' : 'Sign Up'}
       </Button>
+
+      <p className={css.switchText}>
+        Already have an account?{' '}
+        <button
+          type="button"
+          className={css.switchLink}
+          onClick={handleOpenLoginModal}
+        >
+          Log In
+        </button>
+      </p>
     </form>
   );
 }

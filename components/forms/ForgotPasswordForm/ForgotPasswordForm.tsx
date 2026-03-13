@@ -5,15 +5,15 @@ import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { FirebaseError } from 'firebase/app';
 
-import type { LoginFormValues } from '@/types/forms';
-import { loginSchema } from '@/lib/validations/loginSchema';
+import type { ForgotPasswordFormValues } from '@/types/forms';
+import { forgotPasswordSchema } from '@/lib/validations/forgotPasswordSchema';
 import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
 import Button from '@/components/common/Button/Button';
 import FormField from '@/components/forms/FormField/FormField';
 
-import css from './LoginForm.module.css';
+import css from './ForgotPasswordForm.module.css';
 
 //===============================================================
 
@@ -23,18 +23,17 @@ type Props = {
 
 //===============================================================
 
-function LoginForm({ onSuccess }: Props) {
+function ForgotPasswordForm({ onSuccess }: Props) {
   const {
     control,
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-  } = useForm<LoginFormValues>({
-    resolver: yupResolver(loginSchema),
+  } = useForm<ForgotPasswordFormValues>({
+    resolver: yupResolver(forgotPasswordSchema),
     mode: 'onChange',
     defaultValues: {
       email: '',
-      password: '',
     },
   });
 
@@ -44,48 +43,48 @@ function LoginForm({ onSuccess }: Props) {
     defaultValue: '',
   });
 
-  const { login } = useAuth();
+  const { resetPassword } = useAuth();
   const { openModal } = useModal();
 
-  const handleOpenForgotPasswordModal = () => {
-    openModal('forgotPassword');
+  const handleBackToLogin = () => {
+    openModal('login');
   };
 
-  const handleOpenRegisterModal = () => {
-    openModal('register');
-  };
-
-  const onSubmit = async (values: LoginFormValues) => {
+  const onSubmit = async (values: ForgotPasswordFormValues) => {
     try {
-      await login(values);
+      await resetPassword(values);
 
-      toast.success('Logged in successfully!');
+      toast.success('Password reset email sent. Please check your inbox.');
       onSuccess();
     } catch (error) {
       console.error(error);
 
       if (error instanceof FirebaseError) {
         switch (error.code) {
-          case 'auth/invalid-credential':
-          case 'auth/wrong-password':
           case 'auth/user-not-found':
-            toast.error('Invalid email or password.');
+            toast.error('No account found with this email.');
+            return;
+          case 'auth/invalid-email':
+            toast.error('Invalid email address.');
+            return;
+          case 'auth/too-many-requests':
+            toast.error('Too many attempts. Please try again later.');
             return;
           default:
-            toast.error('Login failed. Please try again.');
+            toast.error('Failed to send reset email. Please try again.');
             return;
         }
       }
 
-      toast.error('Login failed. Please try again.');
+      toast.error('Failed to send reset email. Please try again.');
     }
   };
 
   return (
     <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
       <p className={css.text}>
-        Welcome back! Please enter your credentials to access your account and
-        continue your search for a teacher.
+        Enter your email address and we will send you a link to reset your
+        password.
       </p>
 
       <div className={css.fields}>
@@ -97,23 +96,7 @@ function LoginForm({ onSuccess }: Props) {
           error={errors.email?.message}
           {...register('email')}
         />
-
-        <FormField
-          type="password"
-          placeholder="Password*"
-          maxLength={20}
-          error={errors.password?.message}
-          {...register('password')}
-        />
       </div>
-
-      <button
-        type="button"
-        className={css.forgotButton}
-        onClick={handleOpenForgotPasswordModal}
-      >
-        Forgot password?
-      </button>
 
       <Button
         type="submit"
@@ -121,21 +104,18 @@ function LoginForm({ onSuccess }: Props) {
         disabled={!isValid || isSubmitting}
         className={css.submitBtn}
       >
-        {isSubmitting ? 'Wait a minute...' : 'Log In'}
+        {isSubmitting ? 'Sending...' : 'Send reset link'}
       </Button>
 
-      <p className={css.switchText}>
-        Don&apos;t have an account?{' '}
-        <button
-          type="button"
-          className={css.switchLink}
-          onClick={handleOpenRegisterModal}
-        >
-          Register
-        </button>
-      </p>
+      <button
+        type="button"
+        className={css.backButton}
+        onClick={handleBackToLogin}
+      >
+        Back to Log In
+      </button>
     </form>
   );
 }
 
-export default LoginForm;
+export default ForgotPasswordForm;

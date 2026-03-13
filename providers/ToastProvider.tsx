@@ -1,6 +1,6 @@
 'use client';
 
-import { Toaster, ToastBar, type Toast as HotToast } from 'react-hot-toast';
+import { Toaster, type Toast as HotToast } from 'react-hot-toast';
 
 import Toast from '@/components/common/Toast/Toast';
 

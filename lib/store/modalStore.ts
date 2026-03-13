@@ -3,7 +3,12 @@ import type { Teacher } from '@/types/teacher';
 
 //===============================================================
 
-export type ModalType = 'login' | 'register' | 'bookLesson' | null;
+export type ModalType =
+  | 'login'
+  | 'register'
+  | 'forgotPassword'
+  | 'bookLesson'
+  | null;
 
 type ModalPayload = {
   teacher?: Teacher;
