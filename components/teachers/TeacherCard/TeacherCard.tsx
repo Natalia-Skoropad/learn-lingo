@@ -8,6 +8,7 @@ import { useModal } from '@/hooks/useModal';
 import { useAuth } from '@/hooks/useAuth';
 import { useFavorites } from '@/hooks/useFavorites';
 
+import Button from '@/components/common/Button/Button';
 import FavoriteButton from '@/components/teachers/FavoriteButton/FavoriteButton';
 import TeacherAvatar from '@/components/teachers/TeacherAvatar/TeacherAvatar';
 import TeacherHeader from '@/components/teachers/TeacherHeader/TeacherHeader';
@@ -112,7 +113,7 @@ function TeacherCard({ teacher }: Props) {
                 className={css.readMoreBtn}
                 onClick={handleToggleExpand}
               >
-                Show less
+                Hide additional info
               </button>
             </>
           ) : (
@@ -121,21 +122,21 @@ function TeacherCard({ teacher }: Props) {
               className={css.readMoreBtn}
               onClick={handleToggleExpand}
             >
-              Read more
+              View more info and reviews
             </button>
           )}
 
-          <TeacherLevels levels={teacher.levels} />
+          <div className={css.bottomRow}>
+            <TeacherLevels levels={teacher.levels} />
 
-          {isExpanded ? (
-            <button
+            <Button
               type="button"
               className={css.bookBtn}
               onClick={handleOpenBookModal}
             >
               Book trial lesson
-            </button>
-          ) : null}
+            </Button>
+          </div>
         </div>
       </article>
 

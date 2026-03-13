@@ -6,7 +6,7 @@
 
 .levelItem {
   padding: 8px 12px;
-  border: 1px solid rgba(18, 20, 23, 0.2);
+  border: 1px solid var(--accent);
   border-radius: 35px;
   background-color: var(--background);
 
@@ -15,9 +15,4 @@
   font-size: 14px;
   line-height: 1.1;
   color: var(--text-main);
-}
-
-.levelItemAccent {
-  border-color: var(--main);
-  background-color: var(--main);
 }
