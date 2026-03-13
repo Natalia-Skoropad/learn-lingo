@@ -17,7 +17,7 @@ import css from './TeachersList.module.css';
 
 type Props = {
   initialTeachers: Teacher[];
-  initialLastId: string | null;
+  initialNextOffset: number | null;
   initialHasMore: boolean;
   initialTotal: number;
 };
@@ -26,12 +26,14 @@ type Props = {
 
 function TeachersList({
   initialTeachers,
-  initialLastId,
+  initialNextOffset,
   initialHasMore,
   initialTotal,
 }: Props) {
   const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers);
-  const [lastId, setLastId] = useState<string | null>(initialLastId);
+  const [nextOffset, setNextOffset] = useState<number | null>(
+    initialNextOffset
+  );
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [total, setTotal] = useState(initialTotal);
 
@@ -62,7 +64,7 @@ function TeachersList({
         const result = await teachersService.getPage(nextFilters);
 
         setTeachers(result.teachers);
-        setLastId(result.lastId);
+        setNextOffset(result.nextOffset);
         setHasMore(result.hasMore);
         setTotal(result.total);
       } catch (error) {
@@ -75,15 +77,15 @@ function TeachersList({
   );
 
   const loadMoreTeachers = useCallback(async () => {
-    if (isLoadingMore || isFiltering || !hasMore) return;
+    if (isLoadingMore || isFiltering || !hasMore || nextOffset === null) return;
 
     setIsLoadingMore(true);
 
     try {
-      const result = await teachersService.getPage(filters, lastId);
+      const result = await teachersService.getPage(filters, nextOffset);
 
       setTeachers((prev) => [...prev, ...result.teachers]);
-      setLastId(result.lastId);
+      setNextOffset(result.nextOffset);
       setHasMore(result.hasMore);
       setTotal(result.total);
     } catch (error) {
@@ -91,7 +93,7 @@ function TeachersList({
     } finally {
       setIsLoadingMore(false);
     }
-  }, [filters, hasMore, isFiltering, isLoadingMore, lastId]);
+  }, [filters, hasMore, isFiltering, isLoadingMore, nextOffset]);
 
   const handleFiltersChange = useCallback(
     async (nextFilters: TeacherFiltersType) => {
@@ -140,13 +142,8 @@ function TeachersList({
         filters={filters}
         onChange={handleFiltersChange}
         appliedFiltersCount={appliedFiltersCount}
+        total={total}
       />
-
-      <div className={css.resultsBar}>
-        <p className={css.resultsText}>
-          {total} teacher{total === 1 ? '' : 's'}
-        </p>
-      </div>
 
       {isFiltering ? (
         <InlineLoader className={css.loader} text="Loading teachers..." />

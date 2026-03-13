@@ -1,12 +1,9 @@
 import {
   collection,
   documentId,
-  getCountFromServer,
   getDocs,
-  limit,
   orderBy,
   query,
-  startAfter,
   where,
   type QueryConstraint,
   type QueryDocumentSnapshot,
@@ -27,7 +24,7 @@ const FIRESTORE_IN_LIMIT = 10;
 
 export type TeachersPageResult = {
   teachers: Teacher[];
-  lastId: string | null;
+  nextOffset: number | null;
   hasMore: boolean;
   total: number;
 };
@@ -39,10 +36,6 @@ function buildTeachersConstraints(filters: TeacherFilters): QueryConstraint[] {
 
   if (filters.language !== 'All') {
     constraints.push(where('languages', 'array-contains', filters.language));
-  }
-
-  if (filters.level !== 'All') {
-    constraints.push(where('levels', 'array-contains', filters.level));
   }
 
   if (filters.price !== 'All') {
@@ -68,46 +61,41 @@ function mapTeacherWithStatus(
   } as Teacher;
 }
 
+function matchesLevelFilter(teacher: Teacher, level: string): boolean {
+  if (level === 'All') return true;
+  return teacher.levels.includes(level);
+}
+
 //===============================================================
 
 export async function getTeachersPage(
   filters: TeacherFilters,
-  lastVisibleId?: string | null
+  offset = 0
 ): Promise<TeachersPageResult> {
   const teachersRef = collection(db, 'teachers');
   const filterConstraints = buildTeachersConstraints(filters);
 
-  const countQuery = query(teachersRef, ...filterConstraints);
-  const countSnapshot = await getCountFromServer(countQuery);
-  const total = countSnapshot.data().count;
-
-  const teachersQuery = lastVisibleId
-    ? query(
-        teachersRef,
-        ...filterConstraints,
-        orderBy(documentId()),
-        startAfter(lastVisibleId),
-        limit(TEACHERS_PER_PAGE)
-      )
-    : query(
-        teachersRef,
-        ...filterConstraints,
-        orderBy(documentId()),
-        limit(TEACHERS_PER_PAGE)
-      );
+  const teachersQuery = query(
+    teachersRef,
+    ...filterConstraints,
+    orderBy(documentId())
+  );
 
   const snapshot = await getDocs(teachersQuery);
 
-  const teachers = snapshot.docs.map((doc) => mapTeacherWithStatus(doc));
+  const filteredTeachers = snapshot.docs
+    .map((doc) => mapTeacherWithStatus(doc))
+    .filter((teacher) => matchesLevelFilter(teacher, filters.level));
 
-  const lastId = snapshot.docs.length
-    ? snapshot.docs[snapshot.docs.length - 1].id
-    : null;
+  const total = filteredTeachers.length;
+  const teachers = filteredTeachers.slice(offset, offset + TEACHERS_PER_PAGE);
+  const nextOffset =
+    offset + TEACHERS_PER_PAGE < total ? offset + TEACHERS_PER_PAGE : null;
 
   return {
     teachers,
-    lastId,
-    hasMore: snapshot.docs.length === TEACHERS_PER_PAGE,
+    nextOffset,
+    hasMore: nextOffset !== null,
     total,
   };
 }

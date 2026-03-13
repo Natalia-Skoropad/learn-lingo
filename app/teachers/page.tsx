@@ -52,9 +52,8 @@ export const metadata: Metadata = {
 //===========================================================================
 
 async function TeachersPage() {
-  const { teachers, lastId, hasMore, total } = await teachersService.getPage(
-    DEFAULT_TEACHER_FILTERS
-  );
+  const { teachers, nextOffset, hasMore, total } =
+    await teachersService.getPage(DEFAULT_TEACHER_FILTERS);
 
   return (
     <main>
@@ -64,7 +63,7 @@ async function TeachersPage() {
 
           <TeachersList
             initialTeachers={teachers}
-            initialLastId={lastId}
+            initialNextOffset={nextOffset}
             initialHasMore={hasMore}
             initialTotal={total}
           />

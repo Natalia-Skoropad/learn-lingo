@@ -1,11 +1,54 @@
 .wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
   margin-bottom: 32px;
 }
 
-.row {
+.desktopOnly {
+  display: none;
+}
+
+.mobileTabletOnly {
+  display: block;
+}
+
+.desktopTopRow {
+  margin-bottom: 24px;
+}
+
+.desktopResultsRow {
+  margin-bottom: 24px;
+}
+
+.mobileTabletResultsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.resultsText {
+  margin: 0;
+  font-size: 16px;
+  font-weight: var(--fw-medium);
+  line-height: 1.25;
+  color: var(--text-main);
+}
+
+.contentWrap {
+  display: flex;
+  gap: 24px;
+}
+
+.contentWrapDesktop {
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.contentWrapDrawer {
+  flex-direction: column;
+}
+
+.fieldsRow {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
@@ -30,7 +73,7 @@
 
 .trigger {
   min-width: 198px;
-  height: 48px;
+  height: 45px;
   padding: 0 18px;
   border-radius: 14px;
   border: 1px solid var(--border);
@@ -44,7 +87,7 @@
   background-color: var(--background);
   color: var(--text-main);
 
-  font-size: 18px;
+  font-size: 14px;
   font-weight: var(--fw-medium);
   line-height: 1.11;
   cursor: pointer;
@@ -93,14 +136,14 @@
   padding: 0;
   background: transparent;
   cursor: default;
-  z-index: 4;
+  z-index: 1040;
 }
 
 .menu {
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  z-index: 5;
+  z-index: 1050;
 
   width: 100%;
   max-height: 240px;
@@ -156,11 +199,14 @@
   font-weight: var(--fw-medium);
 }
 
-.resetBtn {
-  align-self: flex-start;
+.filterBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+
   min-height: 40px;
   padding: 10px 16px;
-
   border: 1px solid var(--border);
   border-radius: 999px;
   background-color: transparent;
@@ -174,36 +220,155 @@
     transform 200ms ease;
 }
 
-.resetBtn:hover,
-.resetBtn:focus-visible {
+.filterBtn:hover,
+.filterBtn:focus-visible {
   border-color: var(--main);
   background-color: var(--accent);
 }
 
-@media only screen and (max-width: 767px) {
-  .row {
+.filterBtnIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.resetBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+
+  padding: 0;
+  border: none;
+  background-color: transparent;
+
+  color: var(--text-main);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.resetBtn:focus-visible {
+  outline: none;
+}
+
+.resetBtnIcon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--error);
+}
+
+.resetBtnLabel {
+  position: relative;
+  display: inline-block;
+}
+
+.resetBtnLabel::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+
+  width: 100%;
+  height: 2px;
+  background-color: var(--error);
+
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 250ms ease;
+}
+
+.resetBtn:hover .resetBtnLabel::after,
+.resetBtn:focus-visible .resetBtnLabel::after {
+  transform: scaleX(1);
+}
+
+.offcanvasBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background-color: rgba(18, 20, 23, 0.4);
+}
+
+.offcanvasPanel {
+  display: flex;
+  flex-direction: column;
+
+  width: min(100%, 360px);
+  height: 100%;
+  margin-left: auto;
+  padding: 20px;
+
+  background-color: var(--background);
+  box-shadow: -8px 0 24px rgba(18, 20, 23, 0.08);
+}
+
+.offcanvasHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.offcanvasTitle {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.17;
+  font-weight: var(--fw-bold);
+  color: var(--text-main);
+}
+
+.offcanvasContent {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+@media only screen and (max-width: 1439px) {
+  .contentWrapDrawer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+  }
+
+  .contentWrapDrawer .fieldsRow {
     flex-direction: column;
     gap: 16px;
   }
 
-  .field {
+  .contentWrapDrawer .field,
+  .contentWrapDrawer .dropdown,
+  .contentWrapDrawer .trigger,
+  .contentWrapDrawer .menu {
     width: 100%;
   }
 
-  .dropdown {
-    width: 100%;
-  }
-
-  .trigger {
-    width: 100%;
+  .contentWrapDrawer .trigger {
     min-width: 100%;
   }
+}
 
-  .menu {
-    width: 100%;
+@media only screen and (min-width: 1440px) {
+  .desktopOnly {
+    display: block;
   }
 
-  .resetBtn {
-    width: 100%;
+  .mobileTabletOnly {
+    display: none;
+  }
+
+  .wrap {
+    margin-bottom: 0;
+  }
+
+  .desktopTopRow {
+    margin-bottom: 24px;
+  }
+
+  .desktopResultsRow {
+    margin-bottom: 24px;
   }
 }
