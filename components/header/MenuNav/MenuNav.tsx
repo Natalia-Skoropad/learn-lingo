@@ -21,35 +21,40 @@ function MenuNav() {
   const pathname = usePathname();
   const { isAuthenticated, isAuthReady } = useAuth();
 
-  const navItems = !isAuthReady
-    ? [
-        { href: '/', label: 'Home' },
-        { href: '/teachers', label: 'Teachers' },
-      ]
-    : isAuthenticated
-    ? [
-        { href: '/', label: 'Home' },
-        { href: '/teachers', label: 'Teachers' },
-        { href: '/favorites', label: 'Favorites' },
-      ]
-    : [
-        { href: '/', label: 'Home' },
-        { href: '/teachers', label: 'Teachers' },
-      ];
+  const favoritesEnabled = isAuthReady && isAuthenticated;
+
+  const navItems = [
+    { href: '/', label: 'Home', disabled: false },
+    { href: '/teachers', label: 'Teachers', disabled: false },
+    {
+      href: '/favorites',
+      label: 'Favorites',
+      disabled: !favoritesEnabled,
+    },
+  ];
 
   return (
     <nav className={css.menuNav} aria-label="Primary navigation">
       <ul className={css.menuList}>
-        {navItems.map(({ href, label }) => (
+        {navItems.map(({ href, label, disabled }) => (
           <li key={href} className={css.menuItem}>
-            <Link
-              href={href}
-              className={clsx(css.link, {
-                [css.active]: isActive(pathname, href),
-              })}
-            >
-              {label}
-            </Link>
+            {disabled ? (
+              <span
+                className={clsx(css.link, css.linkDisabled)}
+                aria-disabled="true"
+              >
+                {label}
+              </span>
+            ) : (
+              <Link
+                href={href}
+                className={clsx(css.link, {
+                  [css.active]: isActive(pathname, href),
+                })}
+              >
+                {label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>

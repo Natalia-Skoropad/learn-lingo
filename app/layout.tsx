@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 
+import { getCurrentUserFromSession } from '@/lib/server/auth/session';
+
 import AuthProvider from '@/providers/AuthProvider';
 import TanStackProvider from '@/providers/TanStackProvider';
 import ToastProvider from '@/providers/ToastProvider';
@@ -62,15 +64,17 @@ export const metadata: Metadata = {
 
 //===========================================================================
 
-function RootLayout({
+async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialUser = await getCurrentUserFromSession();
+
   return (
     <html lang="en">
       <body className={roboto.variable}>
-        <AuthProvider>
+        <AuthProvider initialUser={initialUser}>
           <TanStackProvider>
             <Header />
             <ToastProvider />

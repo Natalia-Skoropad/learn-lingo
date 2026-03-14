@@ -88,6 +88,11 @@ function RegisterForm({ onSuccess }: Props) {
         }
       }
 
+      if (error instanceof Error) {
+        toast.error(error.message || 'Registration failed. Please try again.');
+        return;
+      }
+
       toast.error('Registration failed. Please try again.');
     }
   };

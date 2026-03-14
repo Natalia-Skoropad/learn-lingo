@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 
-import AuthGuard from '@/components/auth/AuthGuard/AuthGuard';
 import Breadcrumbs from '@/components/common/Breadcrumbs/Breadcrumbs';
 import FavoritesTeachers from '@/components/favorites/FavoritesTeachers/FavoritesTeachers';
 
@@ -53,25 +52,23 @@ export const metadata: Metadata = {
 
 function FavoritesPage() {
   return (
-    <AuthGuard>
-      <main className={css.page}>
-        <section className={css.section}>
-          <div className="container">
-            <Breadcrumbs
-              items={[{ label: 'Home', href: '/' }, { label: 'Favorites' }]}
-            />
+    <main className={css.page}>
+      <section className={css.section}>
+        <div className="container">
+          <Breadcrumbs
+            items={[{ label: 'Home', href: '/' }, { label: 'Favorites' }]}
+          />
 
-            <h1 className={css.title}>Favorites</h1>
-            <p className={css.text}>
-              Your saved teachers are collected here so you can quickly return
-              to the tutors you liked most.
-            </p>
+          <h1 className={css.title}>Favorites</h1>
+          <p className={css.text}>
+            Your saved teachers are collected here so you can quickly return to
+            the tutors you liked most.
+          </p>
 
-            <FavoritesTeachers />
-          </div>
-        </section>
-      </main>
-    </AuthGuard>
+          <FavoritesTeachers />
+        </div>
+      </section>
+    </main>
   );
 }
 

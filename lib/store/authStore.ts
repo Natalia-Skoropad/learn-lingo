@@ -26,7 +26,8 @@ type AuthState = {
   isAuthReady: boolean;
   isAuthenticated: boolean;
 
-  initAuth: () => () => void;
+  hydrateAuth: (user: AppUser | null) => void;
+  initAuth: () => Promise<void>;
   register: (data: RegisterData) => Promise<AppUser>;
   login: (data: LoginData) => Promise<AppUser>;
   logout: () => Promise<void>;
@@ -41,19 +42,39 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthReady: false,
   isAuthenticated: false,
 
-  initAuth: () => {
-    set({ isLoading: true });
+  hydrateAuth: (user) => {
+    set({
+      user,
+      isLoading: false,
+      isAuthReady: true,
+      isAuthenticated: Boolean(user),
+    });
+  },
 
-    const unsubscribe = authService.observeAuthState((user) => {
+  initAuth: async () => {
+    set((state) => ({
+      isLoading: state.isAuthReady ? state.isLoading : true,
+    }));
+
+    try {
+      const user = await authService.getCurrentUser();
+
       set({
         user,
         isLoading: false,
         isAuthReady: true,
         isAuthenticated: Boolean(user),
       });
-    });
+    } catch (error) {
+      console.error('initAuth error:', error);
 
-    return unsubscribe;
+      set({
+        user: null,
+        isLoading: false,
+        isAuthReady: true,
+        isAuthenticated: false,
+      });
+    }
   },
 
   register: async (data) => {
@@ -65,12 +86,16 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user,
         isLoading: false,
+        isAuthReady: true,
         isAuthenticated: true,
       });
 
       return user;
     } catch (error) {
-      set({ isLoading: false });
+      set({
+        isLoading: false,
+        isAuthReady: true,
+      });
       throw error;
     }
   },
@@ -84,12 +109,16 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user,
         isLoading: false,
+        isAuthReady: true,
         isAuthenticated: true,
       });
 
       return user;
     } catch (error) {
-      set({ isLoading: false });
+      set({
+        isLoading: false,
+        isAuthReady: true,
+      });
       throw error;
     }
   },
@@ -103,6 +132,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({
         user: null,
         isLoading: false,
+        isAuthReady: true,
         isAuthenticated: false,
       });
     } catch (error) {
@@ -116,7 +146,11 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     try {
       await authService.resetPassword(data);
-      set({ isLoading: false });
+
+      set({
+        isLoading: false,
+        isAuthReady: true,
+      });
     } catch (error) {
       set({ isLoading: false });
       throw error;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
 import { useModal } from '@/hooks/useModal';
@@ -27,7 +27,9 @@ interface MobileOffcanvasProps {
 //===============================================================
 
 function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
+  const router = useRouter();
   const pathname = usePathname();
+
   const { openModal } = useModal();
   const { user, isAuthenticated, isAuthReady, logout } = useAuth();
 
@@ -36,6 +38,13 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
       await logout();
       onClose();
       toast.success('Logged out successfully!');
+
+      if (pathname.startsWith('/favorites')) {
+        router.replace('/');
+        return;
+      }
+
+      router.refresh();
     } catch (error) {
       console.error(error);
       toast.error('Logout failed. Please try again.');

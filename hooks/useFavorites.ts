@@ -2,17 +2,20 @@
 
 import { useCallback, useEffect } from 'react';
 
+import type { Teacher } from '@/types/teacher';
+
 import { useAuth } from '@/hooks/useAuth';
 import { useFavoritesStore } from '@/lib/store/favoritesStore';
 
 //===============================================================
 
 export function useFavorites() {
-  const { user, isAuthenticated, isAuthReady } = useAuth();
+  const { isAuthenticated, isAuthReady } = useAuth();
 
   const ids = useFavoritesStore((state) => state.ids);
+  const teachers = useFavoritesStore((state) => state.teachers);
   const isLoading = useFavoritesStore((state) => state.isLoading);
-  const loadedForUserId = useFavoritesStore((state) => state.loadedForUserId);
+  const isLoaded = useFavoritesStore((state) => state.isLoaded);
   const updatingIds = useFavoritesStore((state) => state.updatingIds);
 
   const loadFavorites = useFavoritesStore((state) => state.loadFavorites);
@@ -23,22 +26,15 @@ export function useFavorites() {
   useEffect(() => {
     if (!isAuthReady) return;
 
-    if (!isAuthenticated || !user) {
+    if (!isAuthenticated) {
       resetFavorites();
       return;
     }
 
-    if (loadedForUserId !== user.uid) {
-      loadFavorites(user.uid).catch(console.error);
+    if (!isLoaded) {
+      loadFavorites().catch(console.error);
     }
-  }, [
-    isAuthReady,
-    isAuthenticated,
-    user,
-    loadedForUserId,
-    loadFavorites,
-    resetFavorites,
-  ]);
+  }, [isAuthReady, isAuthenticated, isLoaded, loadFavorites, resetFavorites]);
 
   const isFavorite = useCallback(
     (teacherId: string) => ids.includes(teacherId),
@@ -51,25 +47,23 @@ export function useFavorites() {
   );
 
   const toggleFavorite = useCallback(
-    async (teacherId: string): Promise<'added' | 'removed'> => {
-      if (!user) {
-        throw new Error('User is not authenticated');
-      }
-
-      if (ids.includes(teacherId)) {
-        await removeFavorite(user.uid, teacherId);
+    async (teacher: Teacher): Promise<'added' | 'removed'> => {
+      if (ids.includes(teacher.id)) {
+        await removeFavorite(teacher.id);
         return 'removed';
       }
 
-      await addFavorite(user.uid, teacherId);
+      await addFavorite(teacher);
       return 'added';
     },
-    [user, ids, addFavorite, removeFavorite]
+    [ids, addFavorite, removeFavorite]
   );
 
   return {
     favoriteIds: ids,
+    favoriteTeachers: teachers,
     isFavoritesLoading: isLoading,
+    isFavoritesLoaded: isLoaded,
     isFavorite,
     isUpdating,
     toggleFavorite,

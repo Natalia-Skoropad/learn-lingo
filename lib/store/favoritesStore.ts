@@ -1,38 +1,43 @@
 import { create } from 'zustand';
+
 import { favoritesService } from '@/lib/services/favorites.service';
+import type { Teacher } from '@/types/teacher';
 
 //===============================================================
 
 type FavoritesState = {
+  teachers: Teacher[];
   ids: string[];
   isLoading: boolean;
-  loadedForUserId: string | null;
+  isLoaded: boolean;
   updatingIds: string[];
 
-  loadFavorites: (userId: string) => Promise<void>;
+  loadFavorites: () => Promise<void>;
   resetFavorites: () => void;
-  addFavorite: (userId: string, teacherId: string) => Promise<void>;
-  removeFavorite: (userId: string, teacherId: string) => Promise<void>;
+  addFavorite: (teacher: Teacher) => Promise<void>;
+  removeFavorite: (teacherId: string) => Promise<void>;
 };
 
 //===============================================================
 
 export const useFavoritesStore = create<FavoritesState>((set, get) => ({
+  teachers: [],
   ids: [],
   isLoading: false,
-  loadedForUserId: null,
+  isLoaded: false,
   updatingIds: [],
 
-  loadFavorites: async (userId) => {
+  loadFavorites: async () => {
     set({ isLoading: true });
 
     try {
-      const ids = await favoritesService.getIds(userId);
+      const teachers = await favoritesService.getTeachers();
 
       set({
-        ids,
+        teachers,
+        ids: teachers.map((teacher) => teacher.id),
         isLoading: false,
-        loadedForUserId: userId,
+        isLoaded: true,
       });
     } catch (error) {
       set({ isLoading: false });
@@ -42,53 +47,66 @@ export const useFavoritesStore = create<FavoritesState>((set, get) => ({
 
   resetFavorites: () =>
     set({
+      teachers: [],
       ids: [],
       isLoading: false,
-      loadedForUserId: null,
+      isLoaded: false,
       updatingIds: [],
     }),
 
-  addFavorite: async (userId, teacherId) => {
-    const { updatingIds, ids } = get();
+  addFavorite: async (teacher) => {
+    const { updatingIds, ids, teachers } = get();
 
-    if (updatingIds.includes(teacherId)) return;
+    if (updatingIds.includes(teacher.id)) return;
 
     set({
-      updatingIds: [...updatingIds, teacherId],
-      ids: ids.includes(teacherId) ? ids : [...ids, teacherId],
+      updatingIds: [...updatingIds, teacher.id],
+      ids: ids.includes(teacher.id) ? ids : [...ids, teacher.id],
+      teachers: teachers.some((item) => item.id === teacher.id)
+        ? teachers
+        : [...teachers, teacher],
     });
 
     try {
-      await favoritesService.add(userId, teacherId);
+      await favoritesService.add(teacher.id);
     } catch (error) {
       set((state) => ({
-        ids: state.ids.filter((id) => id !== teacherId),
+        ids: state.ids.filter((id) => id !== teacher.id),
+        teachers: state.teachers.filter((item) => item.id !== teacher.id),
       }));
       throw error;
     } finally {
       set((state) => ({
-        updatingIds: state.updatingIds.filter((id) => id !== teacherId),
+        updatingIds: state.updatingIds.filter((id) => id !== teacher.id),
       }));
     }
   },
 
-  removeFavorite: async (userId, teacherId) => {
-    const { updatingIds, ids } = get();
+  removeFavorite: async (teacherId) => {
+    const { updatingIds, ids, teachers } = get();
 
     if (updatingIds.includes(teacherId)) return;
+
+    const removedTeacher = teachers.find((teacher) => teacher.id === teacherId);
 
     set({
       updatingIds: [...updatingIds, teacherId],
       ids: ids.filter((id) => id !== teacherId),
+      teachers: teachers.filter((teacher) => teacher.id !== teacherId),
     });
 
     try {
-      await favoritesService.remove(userId, teacherId);
+      await favoritesService.remove(teacherId);
     } catch (error) {
       set((state) => ({
         ids: state.ids.includes(teacherId)
           ? state.ids
           : [...state.ids, teacherId],
+        teachers:
+          removedTeacher &&
+          !state.teachers.some((teacher) => teacher.id === teacherId)
+            ? [...state.teachers, removedTeacher]
+            : state.teachers,
       }));
       throw error;
     } finally {

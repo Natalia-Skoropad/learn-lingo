@@ -8,6 +8,7 @@ export function useAuth() {
     isLoading: useAuthStore((state) => state.isLoading),
     isAuthReady: useAuthStore((state) => state.isAuthReady),
     isAuthenticated: useAuthStore((state) => state.isAuthenticated),
+    hydrateAuth: useAuthStore((state) => state.hydrateAuth),
     initAuth: useAuthStore((state) => state.initAuth),
     register: useAuthStore((state) => state.register),
     login: useAuthStore((state) => state.login),

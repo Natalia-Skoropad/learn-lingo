@@ -24,7 +24,7 @@
   line-height: 1.2;
   color: var(--text-main);
 
-  transition: color 200ms ease;
+  transition: color 200ms ease, opacity 200ms ease;
 }
 
 .link::after {
@@ -50,6 +50,16 @@
 
 .link:focus-visible {
   outline: none;
+}
+
+.linkDisabled {
+  opacity: 0;
+  pointer-events: none;
+  cursor: default;
+}
+
+.linkDisabled::after {
+  transform: scaleX(0);
 }
 
 @media only screen and (min-width: 768px) {

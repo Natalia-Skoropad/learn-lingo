@@ -41,12 +41,16 @@ function FilterSelect({
   const displayValue = formatOption ? formatOption(value) : value;
   const isApplied = value !== defaultValue;
 
+  const triggerId = `${id}-trigger`;
+  const listboxId = `${id}-listbox`;
+
   return (
     <div className={css.field}>
       <span className={css.label}>{label}</span>
 
       <div className={css.dropdown}>
         <button
+          id={triggerId}
           type="button"
           className={clsx(
             css.trigger,
@@ -56,12 +60,14 @@ function FilterSelect({
           onClick={() => onToggle(id)}
           aria-haspopup="listbox"
           aria-expanded={isOpen}
-          aria-controls={`${id}-listbox`}
+          aria-controls={isOpen ? listboxId : undefined}
+          aria-label={`${label}: ${displayValue}`}
         >
           <span className={css.triggerText}>{displayValue}</span>
 
           <ChevronDown
             className={clsx(css.chevron, isOpen && css.chevronOpen)}
+            aria-hidden="true"
           />
         </button>
 
@@ -75,13 +81,16 @@ function FilterSelect({
             />
 
             <ul
-              id={`${id}-listbox`}
+              id={listboxId}
               className={clsx(css.menu, css.menuOpen)}
               role="listbox"
-              aria-label={label}
+              aria-labelledby={triggerId}
             >
               {options.map((option) => {
                 const isSelected = option === value;
+                const optionLabel = formatOption
+                  ? formatOption(option)
+                  : option;
 
                 return (
                   <li key={option} role="option" aria-selected={isSelected}>
@@ -96,7 +105,7 @@ function FilterSelect({
                         onClose();
                       }}
                     >
-                      {formatOption ? formatOption(option) : option}
+                      {optionLabel}
                     </button>
                   </li>
                 );

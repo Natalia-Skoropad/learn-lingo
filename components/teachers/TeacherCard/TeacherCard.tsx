@@ -58,7 +58,7 @@ function TeacherCard({ teacher }: Props) {
     }
 
     try {
-      const result = await toggleFavorite(teacher.id);
+      const result = await toggleFavorite(teacher);
 
       if (result === 'added') {
         toast.success('Teacher added to favorites.');

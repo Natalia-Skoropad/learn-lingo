@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -22,6 +23,9 @@ import css from './Header.module.css';
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const router = useRouter();
+  const pathname = usePathname();
+
   const { openModal } = useModal();
   const { user, isAuthenticated, isAuthReady, logout } = useAuth();
 
@@ -40,6 +44,13 @@ function Header() {
     try {
       await logout();
       toast.success('Logged out successfully!');
+
+      if (pathname.startsWith('/favorites')) {
+        router.replace('/');
+        return;
+      }
+
+      router.refresh();
     } catch (error) {
       console.error(error);
       toast.error('Logout failed. Please try again.');

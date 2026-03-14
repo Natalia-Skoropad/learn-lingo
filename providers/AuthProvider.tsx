@@ -1,23 +1,36 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useEffect, useRef } from 'react';
+
+import type { AppUser } from '@/types/auth';
+import { useAuthStore } from '@/lib/store/authStore';
 
 //===============================================================
 
 type Props = {
   children: React.ReactNode;
+  initialUser: AppUser | null;
 };
 
 //===============================================================
 
-function AuthProvider({ children }: Props) {
-  const { initAuth } = useAuth();
+function AuthProvider({ children, initialUser }: Props) {
+  const initializedRef = useRef(false);
+
+  if (!initializedRef.current) {
+    useAuthStore.setState({
+      user: initialUser,
+      isLoading: false,
+      isAuthReady: true,
+      isAuthenticated: Boolean(initialUser),
+    });
+
+    initializedRef.current = true;
+  }
 
   useEffect(() => {
-    const unsubscribe = initAuth();
-    return unsubscribe;
-  }, [initAuth]);
+    void useAuthStore.getState().initAuth();
+  }, []);
 
   return <>{children}</>;
 }
