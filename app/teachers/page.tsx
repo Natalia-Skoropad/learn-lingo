@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import Breadcrumbs from '@/components/common/Breadcrumbs/Breadcrumbs';
 import TeachersList from '@/components/teachers/TeachersList/TeachersList';
 import { teachersService } from '@/lib/services/teachers.service';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
@@ -56,10 +57,18 @@ async function TeachersPage() {
     await teachersService.getPage(DEFAULT_TEACHER_FILTERS);
 
   return (
-    <main>
+    <main className={css.page}>
       <section className={css.section}>
         <div className="container">
+          <Breadcrumbs
+            items={[{ label: 'Home', href: '/' }, { label: 'Teachers' }]}
+          />
+
           <h1 className="visually-hidden">Teachers</h1>
+          <p className="visually-hidden">
+            Explore experienced language teachers and choose the tutor who best
+            matches your goals, level, and budget.
+          </p>
 
           <TeachersList
             initialTeachers={teachers}

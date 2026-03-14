@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
 import Button from '@/components/common/Button/Button';
+import TextActionButton from '@/components/common/TextActionButton/TextActionButton';
 import FormField from '@/components/forms/FormField/FormField';
 
 import css from './RegisterForm.module.css';
@@ -137,13 +138,12 @@ function RegisterForm({ onSuccess }: Props) {
 
       <p className={css.switchText}>
         Already have an account?{' '}
-        <button
-          type="button"
+        <TextActionButton
           className={css.switchLink}
           onClick={handleOpenLoginModal}
         >
           Log In
-        </button>
+        </TextActionButton>
       </p>
     </form>
   );

@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useFavorites } from '@/hooks/useFavorites';
 
 import Button from '@/components/common/Button/Button';
+import TextActionButton from '@/components/common/TextActionButton/TextActionButton';
 import FavoriteButton from '@/components/teachers/FavoriteButton/FavoriteButton';
 import TeacherAvatar from '@/components/teachers/TeacherAvatar/TeacherAvatar';
 import TeacherHeader from '@/components/teachers/TeacherHeader/TeacherHeader';
@@ -112,22 +113,20 @@ function TeacherCard({ teacher }: Props) {
 
               <TeacherReviews reviews={teacher.reviews} />
 
-              <button
-                type="button"
+              <TextActionButton
                 className={css.readMoreBtn}
                 onClick={handleToggleExpand}
               >
                 Hide additional info
-              </button>
+              </TextActionButton>
             </>
           ) : (
-            <button
-              type="button"
+            <TextActionButton
               className={css.readMoreBtn}
               onClick={handleToggleExpand}
             >
               View more info and reviews
-            </button>
+            </TextActionButton>
           )}
 
           <div className={css.bottomRow}>

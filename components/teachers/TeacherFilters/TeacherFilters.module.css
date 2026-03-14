@@ -1,5 +1,5 @@
 .wrap {
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .desktopOnly {
@@ -10,20 +10,12 @@
   display: block;
 }
 
-.desktopTopRow {
-  margin-bottom: 24px;
-}
-
-.desktopResultsRow {
-  margin-bottom: 24px;
-}
-
 .mobileTabletResultsRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 
 .resultsText {
@@ -76,7 +68,7 @@
   height: 45px;
   padding: 0 18px;
   border-radius: 14px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--accent);
   outline: none;
 
   display: inline-flex;

@@ -1,6 +1,6 @@
 .nav {
-  padding-top: 16px;
-  padding-bottom: 25px;
+  padding-top: 10px;
+  padding-bottom: 40px;
 }
 
 .list {
@@ -24,7 +24,7 @@
 }
 
 .sep {
-  color: var(--gray-light);
+  color: #d9d9d9;
 }
 
 .link {
@@ -32,7 +32,8 @@
   align-items: center;
   gap: 8px;
 
-  color: var(--main);
+  color: var(--text-main);
+  text-decoration: none;
 }
 
 .linkText {
@@ -57,21 +58,22 @@
   transition: transform 0.25s ease;
 }
 
-.link:hover .linkText::after {
+.link:hover .linkText::after,
+.link:focus-visible .linkText::after {
   transform: scaleX(1);
 }
 
-.homeIcon {
-  color: var(--main);
+.link:focus-visible {
+  outline: none;
 }
 
-.linkText {
-  white-space: nowrap;
-  font-weight: var(--fw-regular);
+.homeIcon {
+  color: var(--text-main);
+  flex-shrink: 0;
 }
 
 .current {
-  color: var(--gray);
+  color: var(--text-muted);
   white-space: nowrap;
   font-weight: var(--fw-regular);
 }

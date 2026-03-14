@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import AuthGuard from '@/components/auth/AuthGuard/AuthGuard';
+import Breadcrumbs from '@/components/common/Breadcrumbs/Breadcrumbs';
 import FavoritesTeachers from '@/components/favorites/FavoritesTeachers/FavoritesTeachers';
 
 import css from './page.module.css';
@@ -56,6 +57,10 @@ function FavoritesPage() {
       <main className={css.page}>
         <section className={css.section}>
           <div className="container">
+            <Breadcrumbs
+              items={[{ label: 'Home', href: '/' }, { label: 'Favorites' }]}
+            />
+
             <h1 className={css.title}>Favorites</h1>
             <p className={css.text}>
               Your saved teachers are collected here so you can quickly return

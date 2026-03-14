@@ -6,9 +6,8 @@
 
 .levelItem {
   padding: 8px 12px;
-  border: 1px solid var(--accent);
   border-radius: 35px;
-  background-color: var(--background);
+  background-color: var(--accent);
 
   font-family: var(--font-family);
   font-weight: var(--fw-medium);

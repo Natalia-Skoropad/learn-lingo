@@ -6,9 +6,10 @@ import type { Teacher } from '@/types/teacher';
 import type { TeacherFilters as TeacherFiltersType } from '@/types/filters';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
 
+import EmptyState from '@/components/common/EmptyState/EmptyState';
+import InlineLoader from '@/components/common/InlineLoader/InlineLoader';
 import TeacherCard from '@/components/teachers/TeacherCard/TeacherCard';
 import TeacherFilters from '@/components/teachers/TeacherFilters/TeacherFilters';
-import InlineLoader from '@/components/common/InlineLoader/InlineLoader';
 import { teachersService } from '@/lib/services/teachers.service';
 
 import css from './TeachersList.module.css';
@@ -156,12 +157,10 @@ function TeachersList({
           ))}
         </ul>
       ) : (
-        <div className={css.emptyState}>
-          <h2 className={css.emptyTitle}>No teachers found</h2>
-          <p className={css.emptyText}>
-            Try changing the selected filters to see more results.
-          </p>
-        </div>
+        <EmptyState
+          title="No teachers found"
+          text="Try changing the selected filters to see more results."
+        />
       )}
 
       {!isFiltering && isLoadingMore ? (

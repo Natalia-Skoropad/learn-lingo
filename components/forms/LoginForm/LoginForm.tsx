@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
 import Button from '@/components/common/Button/Button';
+import TextActionButton from '@/components/common/TextActionButton/TextActionButton';
 import FormField from '@/components/forms/FormField/FormField';
 
 import css from './LoginForm.module.css';
@@ -107,13 +108,12 @@ function LoginForm({ onSuccess }: Props) {
         />
       </div>
 
-      <button
-        type="button"
+      <TextActionButton
         className={css.forgotButton}
         onClick={handleOpenForgotPasswordModal}
       >
         Forgot password?
-      </button>
+      </TextActionButton>
 
       <Button
         type="submit"
@@ -126,13 +126,12 @@ function LoginForm({ onSuccess }: Props) {
 
       <p className={css.switchText}>
         Don&apos;t have an account?{' '}
-        <button
-          type="button"
+        <TextActionButton
           className={css.switchLink}
           onClick={handleOpenRegisterModal}
         >
           Register
-        </button>
+        </TextActionButton>
       </p>
     </form>
   );

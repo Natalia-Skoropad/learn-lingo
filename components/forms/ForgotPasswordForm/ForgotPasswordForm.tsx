@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useModal } from '@/hooks/useModal';
 
 import Button from '@/components/common/Button/Button';
+import TextActionButton from '@/components/common/TextActionButton/TextActionButton';
 import FormField from '@/components/forms/FormField/FormField';
 
 import css from './ForgotPasswordForm.module.css';
@@ -107,13 +108,9 @@ function ForgotPasswordForm({ onSuccess }: Props) {
         {isSubmitting ? 'Sending...' : 'Send reset link'}
       </Button>
 
-      <button
-        type="button"
-        className={css.backButton}
-        onClick={handleBackToLogin}
-      >
+      <TextActionButton className={css.backButton} onClick={handleBackToLogin}>
         Back to Log In
-      </button>
+      </TextActionButton>
     </form>
   );
 }

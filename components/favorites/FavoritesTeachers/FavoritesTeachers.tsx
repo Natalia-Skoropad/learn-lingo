@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import type { Teacher } from '@/types/teacher';
 
+import EmptyState from '@/components/common/EmptyState/EmptyState';
 import InlineLoader from '@/components/common/InlineLoader/InlineLoader';
 import TeacherCard from '@/components/teachers/TeacherCard/TeacherCard';
 
@@ -63,13 +64,10 @@ function FavoritesTeachers() {
 
   if (!favoriteIds.length) {
     return (
-      <div className={css.emptyState}>
-        <h2 className={css.emptyTitle}>No favorite teachers yet</h2>
-        <p className={css.emptyText}>
-          Add teachers to your favorites from the Teachers page, and they will
-          appear here.
-        </p>
-      </div>
+      <EmptyState
+        title="No favorite teachers yet"
+        text="Add teachers to your favorites from the Teachers page, and they will appear here."
+      />
     );
   }
 
