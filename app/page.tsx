@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import clsx from 'clsx';
 
 import ButtonLink from '@/components/common/Button/ButtonLink';
 import StatsSection from '@/components/home/StatsSection/StatsSection';
 
-import css from './page.module.css';
+import css from './shared-hero.module.css';
 
 //===========================================================================
 
@@ -48,8 +49,8 @@ export const metadata: Metadata = {
 
 function Home() {
   return (
-    <main className={css.page}>
-      <section className={css.hero} aria-labelledby="home-title">
+    <main>
+      <section aria-labelledby="home-title">
         <div className="container">
           <div className={css.heroWrapper}>
             <div className={css.content}>
@@ -59,9 +60,9 @@ function Home() {
               </h1>
 
               <p className={css.text}>
-                Embark on an Exciting Language Journey with Expert Language
-                Tutors: Elevate your language proficiency to new heights by
-                connecting with highly qualified and experienced tutors.
+                Embark on an exciting language journey with expert tutors.
+                Improve your skills, build confidence, and reach new goals with
+                experienced teachers from around the world.
               </p>
 
               <ButtonLink href="/teachers" className={css.heroButton}>
@@ -69,7 +70,7 @@ function Home() {
               </ButtonLink>
             </div>
 
-            <div className={css.imageBox}>
+            <div className={clsx(css.imageBox, css.imageBoxAccent)}>
               <Image
                 src="/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg"
                 alt="Curly red-haired girl sitting at the computer and sticking out her tongue"
