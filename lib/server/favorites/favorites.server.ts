@@ -4,7 +4,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 
 import { adminDb } from '@/lib/firebase/admin';
 import { getCurrentUserFromSession } from '@/lib/server/auth/session';
-import { getTeachersByIds } from '@/lib/firebase/teachers';
+import { getTeachersByIds } from '@/lib/server/teachers/teachers.server';
 
 import type { Teacher } from '@/types/teacher';
 

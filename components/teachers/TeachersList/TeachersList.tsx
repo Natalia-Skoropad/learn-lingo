@@ -1,16 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
 import type { Teacher } from '@/types/teacher';
 import type { TeacherFilters as TeacherFiltersType } from '@/types/filters';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
+import { buildTeachersPath } from '@/lib/server/teachers/teachers.query';
 
 import EmptyState from '@/components/common/EmptyState/EmptyState';
-import InlineLoader from '@/components/common/InlineLoader/InlineLoader';
 import TeacherCard from '@/components/teachers/TeacherCard/TeacherCard';
 import TeacherFilters from '@/components/teachers/TeacherFilters/TeacherFilters';
-import { teachersService } from '@/lib/services/teachers.service';
+import TeachersPagination from '@/components/teachers/TeachersPagination/TeachersPagination';
+import TeachersSeoText from '@/components/teachers/TeachersSeoText/TeachersSeoText';
 
 import css from './TeachersList.module.css';
 
@@ -18,34 +20,30 @@ import css from './TeachersList.module.css';
 
 type Props = {
   initialTeachers: Teacher[];
-  initialNextOffset: number | null;
-  initialHasMore: boolean;
   initialTotal: number;
+  initialFilters: TeacherFiltersType;
+  initialPage: number;
+  seoText: {
+    heading: string;
+    paragraphs: string[];
+  } | null;
 };
 
 //===============================================================
 
 function TeachersList({
   initialTeachers,
-  initialNextOffset,
-  initialHasMore,
   initialTotal,
+  initialFilters,
+  initialPage,
+  seoText,
 }: Props) {
-  const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers);
-  const [nextOffset, setNextOffset] = useState<number | null>(
-    initialNextOffset
-  );
-  const [hasMore, setHasMore] = useState(initialHasMore);
-  const [total, setTotal] = useState(initialTotal);
+  const router = useRouter();
 
-  const [filters, setFilters] = useState<TeacherFiltersType>(
-    DEFAULT_TEACHER_FILTERS
-  );
-
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [isFiltering, setIsFiltering] = useState(false);
-
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const filters = initialFilters;
+  const currentPage = initialPage;
+  const total = initialTotal;
+  const teachers = initialTeachers;
 
   const appliedFiltersCount = useMemo(() => {
     let count = 0;
@@ -57,85 +55,14 @@ function TeachersList({
     return count;
   }, [filters]);
 
-  const loadTeachersByFilters = useCallback(
-    async (nextFilters: TeacherFiltersType) => {
-      setIsFiltering(true);
-
-      try {
-        const result = await teachersService.getPage(nextFilters);
-
-        setTeachers(result.teachers);
-        setNextOffset(result.nextOffset);
-        setHasMore(result.hasMore);
-        setTotal(result.total);
-      } catch (error) {
-        console.error('Failed to filter teachers:', error);
-      } finally {
-        setIsFiltering(false);
-      }
-    },
-    []
-  );
-
-  const loadMoreTeachers = useCallback(async () => {
-    if (isLoadingMore || isFiltering || !hasMore || nextOffset === null) return;
-
-    setIsLoadingMore(true);
-
-    try {
-      const result = await teachersService.getPage(filters, nextOffset);
-
-      setTeachers((prev) => [...prev, ...result.teachers]);
-      setNextOffset(result.nextOffset);
-      setHasMore(result.hasMore);
-      setTotal(result.total);
-    } catch (error) {
-      console.error('Failed to load more teachers:', error);
-    } finally {
-      setIsLoadingMore(false);
-    }
-  }, [filters, hasMore, isFiltering, isLoadingMore, nextOffset]);
+  const pageCount = Math.ceil(total / 4);
 
   const handleFiltersChange = useCallback(
-    async (nextFilters: TeacherFiltersType) => {
-      setFilters(nextFilters);
-      await loadTeachersByFilters(nextFilters);
+    (nextFilters: TeacherFiltersType) => {
+      router.push(buildTeachersPath(nextFilters, 1));
     },
-    [loadTeachersByFilters]
+    [router]
   );
-
-  const sentinelRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          if (
-            entries[0]?.isIntersecting &&
-            hasMore &&
-            !isLoadingMore &&
-            !isFiltering
-          ) {
-            loadMoreTeachers();
-          }
-        },
-        {
-          rootMargin: '200px 0px',
-        }
-      );
-
-      if (node) {
-        observerRef.current.observe(node);
-      }
-    },
-    [hasMore, isFiltering, isLoadingMore, loadMoreTeachers]
-  );
-
-  useEffect(() => {
-    return () => observerRef.current?.disconnect();
-  }, []);
 
   return (
     <>
@@ -146,9 +73,7 @@ function TeachersList({
         total={total}
       />
 
-      {isFiltering ? (
-        <InlineLoader className={css.loader} text="Loading teachers..." />
-      ) : teachers.length ? (
+      {teachers.length ? (
         <ul className={css.list}>
           {teachers.map((teacher) => (
             <li key={teacher.id} className={css.item}>
@@ -163,12 +88,17 @@ function TeachersList({
         />
       )}
 
-      {!isFiltering && isLoadingMore ? (
-        <InlineLoader className={css.loader} text="Loading teachers..." />
-      ) : null}
+      <TeachersPagination
+        currentPage={currentPage}
+        pageCount={pageCount}
+        filters={filters}
+      />
 
-      {!isFiltering && hasMore ? (
-        <div ref={sentinelRef} className={css.sentinel} />
+      {currentPage === 1 && total > 0 && seoText ? (
+        <TeachersSeoText
+          heading={seoText.heading}
+          paragraphs={seoText.paragraphs}
+        />
       ) : null}
     </>
   );

@@ -1,11 +1,11 @@
 .list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 32px;
+  margin-top: 32px;
 }
 
 .item {
-  min-width: 0;
+  list-style: none;
 }
 
 .loader {
@@ -15,4 +15,14 @@
 .sentinel {
   width: 100%;
   height: 1px;
+}
+
+.loadMoreWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.paginationWrap {
+  margin-top: 32px;
 }
