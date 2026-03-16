@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: 'LearnLingo',
     images: [
       {
-        url: '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
+        url: '/learnlingo-og-cover.jpg',
         width: 1200,
         height: 630,
         alt: 'Curly red-haired girl sitting at the computer and sticking out her tongue',
@@ -39,9 +39,7 @@ export const metadata: Metadata = {
     title: 'LearnLingo | Find the best language tutors',
     description:
       'Unlock your potential with the best language tutors. Learn languages with experienced teachers from around the world.',
-    images: [
-      '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
-    ],
+    images: ['/learnlingo-og-cover.jpg'],
   },
 };
 

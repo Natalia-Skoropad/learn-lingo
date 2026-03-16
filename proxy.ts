@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+//===============================================================
+
 const SESSION_COOKIE_NAME = 'learnlingo_session';
 
 const privateRoutes = ['/favorites'];

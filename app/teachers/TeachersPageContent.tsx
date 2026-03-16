@@ -1,7 +1,5 @@
 import { redirect } from 'next/navigation';
 
-import Breadcrumbs from '@/components/common/Breadcrumbs/Breadcrumbs';
-import TeachersList from '@/components/teachers/TeachersList/TeachersList';
 import { getTeachersPage } from '@/lib/server/teachers/teachers.server';
 import { getTeachersSeoText } from '@/lib/server/teachers/teachers-seo';
 import {
@@ -9,6 +7,9 @@ import {
   getTeachersContextLabel,
 } from '@/lib/server/teachers/teachers.query';
 import type { TeacherFilters } from '@/types/filters';
+
+import Breadcrumbs from '@/components/common/Breadcrumbs/Breadcrumbs';
+import TeachersList from '@/components/teachers/TeachersList/TeachersList';
 
 import css from './page.module.css';
 

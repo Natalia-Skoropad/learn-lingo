@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'LearnLingo',
     images: [
       {
-        url: '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
+        url: '/learnlingo-og-cover.jpg',
         width: 1200,
         height: 630,
         alt: 'LearnLingo favorites page preview',
@@ -42,9 +42,7 @@ export const metadata: Metadata = {
     title: 'Favorites | LearnLingo',
     description:
       'View your favorite language teachers on LearnLingo and quickly return to the tutors you saved.',
-    images: [
-      '/curly-red-haired-girl-sitting-at-the-computer-and-sticking-out-her-tongue.jpg',
-    ],
+    images: ['/learnlingo-og-cover.jpg'],
   },
 };
 
