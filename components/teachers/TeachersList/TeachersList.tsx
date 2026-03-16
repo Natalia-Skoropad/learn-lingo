@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { Teacher } from '@/types/teacher';
 import type { TeacherFilters as TeacherFiltersType } from '@/types/filters';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
-import { buildTeachersPath } from '@/lib/server/teachers/teachers.query';
+import { buildTeachersPath } from '@/lib/utils/teachers.query';
 
 import EmptyState from '@/components/common/EmptyState/EmptyState';
 import TeacherCard from '@/components/teachers/TeacherCard/TeacherCard';

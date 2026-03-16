@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 
@@ -38,11 +39,13 @@ function FilterSelect({
   onClose,
   formatOption,
 }: Props) {
+  const reactId = useId();
+
   const displayValue = formatOption ? formatOption(value) : value;
   const isApplied = value !== defaultValue;
 
-  const triggerId = `${id}-trigger`;
-  const listboxId = `${id}-listbox`;
+  const triggerId = `${reactId}-${id}-trigger`;
+  const listboxId = `${reactId}-${id}-listbox`;
 
   return (
     <div className={css.field}>

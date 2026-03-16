@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import type { MouseEvent, ReactNode } from 'react';
 
@@ -20,6 +20,8 @@ type Props = {
 //===============================================================
 
 function ModalBase({ title, children, onClose, maxWidth = 600 }: Props) {
+  const titleId = useId();
+
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -48,7 +50,7 @@ function ModalBase({ title, children, onClose, maxWidth = 600 }: Props) {
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
-      aria-labelledby="modal-title"
+      aria-labelledby={titleId}
     >
       <div className={css.modal} style={{ maxWidth }}>
         <CloseButton
@@ -57,7 +59,7 @@ function ModalBase({ title, children, onClose, maxWidth = 600 }: Props) {
           onClick={onClose}
         />
 
-        <h2 id="modal-title" className={css.title}>
+        <h2 id={titleId} className={css.title}>
           {title}
         </h2>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useId } from 'react';
 import CloseButton from '@/components/common/CloseButton/CloseButton';
 
 import css from './TeacherFilters.module.css';
@@ -16,6 +16,8 @@ type Props = {
 //===========================================================================
 
 function FiltersDrawer({ isOpen, onClose, children }: Props) {
+  const titleId = useId();
+
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target === e.currentTarget) onClose();
@@ -49,11 +51,11 @@ function FiltersDrawer({ isOpen, onClose, children }: Props) {
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
-      aria-labelledby="filters-drawer-title"
+      aria-labelledby={titleId}
     >
       <div className={css.offcanvasPanel} role="document">
         <header className={css.offcanvasHeader}>
-          <h2 id="filters-drawer-title" className={css.offcanvasTitle}>
+          <h2 id={titleId} className={css.offcanvasTitle}>
             Filters
           </h2>
 

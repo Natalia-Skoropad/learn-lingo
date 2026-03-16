@@ -5,7 +5,7 @@ import { getTeachersSeoText } from '@/lib/server/teachers/teachers-seo';
 import {
   buildTeachersPath,
   getTeachersContextLabel,
-} from '@/lib/server/teachers/teachers.query';
+} from '@/lib/utils/teachers.query';
 import type { TeacherFilters } from '@/types/filters';
 
 import Breadcrumbs from '@/components/common/Breadcrumbs/Breadcrumbs';

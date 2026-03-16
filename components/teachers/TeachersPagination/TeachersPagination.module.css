@@ -10,15 +10,15 @@
   gap: 8px;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  margin: 0;
 }
 
-.pageItem,
-.breakItem {
+.pageItem {
   list-style: none;
 }
 
-.pageLink,
-.breakLink {
+.pageLink {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -31,22 +31,38 @@
   font-size: 16px;
   font-weight: 500;
   text-decoration: none;
-  cursor: pointer;
   transition: border-color 200ms ease, background-color 200ms ease,
-    color 200ms ease;
+    color 200ms ease, opacity 200ms ease;
 }
 
-.pageItemActive .pageLink {
+.pageLink:hover {
+  border-color: var(--link);
+}
+
+.pageLinkActive {
   border-color: var(--link);
   background-color: #fff;
+  pointer-events: none;
 }
 
-.pageLink:hover,
-.breakLink:hover {
-  border-color: var(--link);
+.controlLink {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.breakLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--link);
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .disabled {
   pointer-events: none;
   opacity: 0.5;
+  cursor: default;
 }

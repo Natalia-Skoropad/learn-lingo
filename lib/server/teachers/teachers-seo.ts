@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import type { TeacherFilters } from '@/types/filters';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
-import { buildTeachersPath } from './teachers.query';
+import { buildTeachersPath } from '../../utils/teachers.query';
 
 //===============================================================
 

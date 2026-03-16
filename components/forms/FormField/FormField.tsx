@@ -48,26 +48,53 @@ function FormField(props: Props) {
   );
 
   if (isTextarea) {
+    const {
+      error,
+      count,
+      className: _className,
+      maxLength,
+      as: _as,
+      ...textareaProps
+    } = props;
+
+    void _className;
+    void _as;
+
     return (
       <div className={css.wrapper}>
         <div className={fieldBoxClassName}>
-          <textarea {...props} className={css.textarea} />
+          <textarea
+            {...textareaProps}
+            maxLength={maxLength}
+            className={css.textarea}
+          />
 
           {hasCounter ? (
             <span className={css.counter}>
-              {props.count}/{props.maxLength}
+              {count}/{maxLength}
             </span>
           ) : null}
 
-          <span className={clsx(css.error, props.error && css.errorVisible)}>
-            {props.error || ' '}
+          <span className={clsx(css.error, error && css.errorVisible)}>
+            {error || ' '}
           </span>
         </div>
       </div>
     );
   }
 
-  const { type, ...inputProps } = props;
+  const {
+    type,
+    error,
+    count,
+    className: _className,
+    maxLength,
+    as: _as,
+    ...inputProps
+  } = props;
+
+  void _className;
+  void _as;
 
   return (
     <div className={css.wrapper}>
@@ -75,12 +102,13 @@ function FormField(props: Props) {
         <input
           {...inputProps}
           type={isPasswordField && isPasswordVisible ? 'text' : type}
+          maxLength={maxLength}
           className={clsx(css.input, isPasswordField && css.inputWithIcon)}
         />
 
         {hasCounter ? (
           <span className={css.counter}>
-            {props.count}/{props.maxLength}
+            {count}/{maxLength}
           </span>
         ) : null}
 
@@ -100,8 +128,8 @@ function FormField(props: Props) {
           </button>
         ) : null}
 
-        <span className={clsx(css.error, props.error && css.errorVisible)}>
-          {props.error || ' '}
+        <span className={clsx(css.error, error && css.errorVisible)}>
+          {error || ' '}
         </span>
       </div>
     </div>
