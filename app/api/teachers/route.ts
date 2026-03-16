@@ -1,17 +1,24 @@
 import { NextResponse } from 'next/server';
 
 import { getTeachersPage } from '@/lib/server/teachers/teachers.server';
+import { SORT_OPTIONS } from '@/lib/constants/filters';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
 import type { TeacherFilters } from '@/types/filters';
 
 //===============================================================
 
 function parseFilters(searchParams: URLSearchParams): TeacherFilters {
+  const rawSort = searchParams.get('sort')?.trim();
+
   return {
     language:
       searchParams.get('language')?.trim() || DEFAULT_TEACHER_FILTERS.language,
     level: searchParams.get('level')?.trim() || DEFAULT_TEACHER_FILTERS.level,
     price: searchParams.get('price')?.trim() || DEFAULT_TEACHER_FILTERS.price,
+    sort:
+      rawSort && SORT_OPTIONS.includes(rawSort as TeacherFilters['sort'])
+        ? (rawSort as TeacherFilters['sort'])
+        : DEFAULT_TEACHER_FILTERS.sort,
   };
 }
 

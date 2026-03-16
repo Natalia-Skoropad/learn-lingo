@@ -34,10 +34,37 @@
 .contentWrapDesktop {
   align-items: flex-end;
   justify-content: space-between;
+  gap: 32px;
 }
 
 .contentWrapDrawer {
   flex-direction: column;
+}
+
+.desktopLeft {
+  display: flex;
+  align-items: flex-end;
+  align-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.desktopRight {
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.resetWrapDesktop {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 45px;
+}
+
+.drawerSortWrap {
+  display: block;
 }
 
 .fieldsRow {
@@ -334,7 +361,8 @@
   .contentWrapDrawer .field,
   .contentWrapDrawer .dropdown,
   .contentWrapDrawer .trigger,
-  .contentWrapDrawer .menu {
+  .contentWrapDrawer .menu,
+  .drawerSortWrap {
     width: 100%;
   }
 

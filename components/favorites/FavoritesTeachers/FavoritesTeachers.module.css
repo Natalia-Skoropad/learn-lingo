@@ -1,3 +1,11 @@
+.resultsText {
+  margin: 0 0 24px;
+  font-size: 16px;
+  font-weight: var(--fw-medium);
+  line-height: 1.25;
+  color: var(--text-main);
+}
+
 .list {
   display: flex;
   flex-direction: column;

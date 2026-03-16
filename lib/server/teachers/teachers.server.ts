@@ -55,6 +55,40 @@ function matchesLevelFilter(teacher: Teacher, level: string): boolean {
   return teacher.levels.includes(level);
 }
 
+function compareTeachers(a: Teacher, b: Teacher, sort: TeacherFilters['sort']) {
+  const fullNameA = `${a.name} ${a.surname}`.toLowerCase();
+  const fullNameB = `${b.name} ${b.surname}`.toLowerCase();
+
+  switch (sort) {
+    case 'A to Z':
+      return fullNameA.localeCompare(fullNameB);
+
+    case 'Z to A':
+      return fullNameB.localeCompare(fullNameA);
+
+    case 'Price: low to high':
+      return a.price_per_hour - b.price_per_hour;
+
+    case 'Price: high to low':
+      return b.price_per_hour - a.price_per_hour;
+
+    case 'Rating: low to high':
+      return a.rating - b.rating;
+
+    case 'Rating: high to low':
+      return b.rating - a.rating;
+
+    case 'Lessons: low to high':
+      return a.lessons_done - b.lessons_done;
+
+    case 'Lessons: high to low':
+      return b.lessons_done - a.lessons_done;
+
+    default:
+      return fullNameA.localeCompare(fullNameB);
+  }
+}
+
 //===============================================================
 
 export async function getTeachersPage({
@@ -79,7 +113,8 @@ export async function getTeachersPage({
 
   const filteredTeachers = snapshot.docs
     .map((doc) => mapTeacher(doc.id, doc.data()))
-    .filter((teacher) => matchesLevelFilter(teacher, filters.level));
+    .filter((teacher) => matchesLevelFilter(teacher, filters.level))
+    .sort((a, b) => compareTeachers(a, b, filters.sort));
 
   const total = filteredTeachers.length;
   const startIndex = (normalizedPage - 1) * TEACHERS_PER_PAGE;

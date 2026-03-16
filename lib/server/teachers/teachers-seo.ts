@@ -5,7 +5,7 @@ import { buildTeachersPath } from '../../utils/teachers.query';
 
 //===============================================================
 
-const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
+const SITE_URL = 'https://learn-lingo.vercel.app';
 
 //===============================================================
 
@@ -56,10 +56,20 @@ function getSeoDescription(filters: TeacherFilters): string {
   return `Browse ${languagePart}${levelPart}${pricePart} on LearnLingo. Compare profiles, experience, reviews, and choose the teacher who fits your goals.`;
 }
 
+function hasActiveSort(filters: TeacherFilters): boolean {
+  return filters.sort !== DEFAULT_TEACHER_FILTERS.sort;
+}
+
 //===============================================================
 
 export function getTeachersCanonical(filters: TeacherFilters): string {
-  return buildTeachersPath(filters, 1);
+  return buildTeachersPath(
+    {
+      ...filters,
+      sort: DEFAULT_TEACHER_FILTERS.sort,
+    },
+    1
+  );
 }
 
 //===============================================================
@@ -72,6 +82,8 @@ export function getTeachersMetadata(
   const description = getSeoDescription(filters);
   const canonicalPath = getTeachersCanonical(filters);
 
+  const shouldNoIndex = page > 1 || hasActiveSort(filters);
+
   return {
     metadataBase: new URL(SITE_URL),
     title,
@@ -80,16 +92,15 @@ export function getTeachersMetadata(
       canonical: canonicalPath,
     },
 
-    robots:
-      page > 1
-        ? {
-            index: false,
-            follow: true,
-          }
-        : {
-            index: true,
-            follow: true,
-          },
+    robots: shouldNoIndex
+      ? {
+          index: false,
+          follow: true,
+        }
+      : {
+          index: true,
+          follow: true,
+        },
 
     openGraph: {
       title,

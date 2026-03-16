@@ -4,6 +4,7 @@ import {
   LANGUAGE_OPTIONS,
   LEVEL_OPTIONS,
   PRICE_OPTIONS,
+  SORT_OPTIONS,
 } from '@/lib/constants/filters';
 
 //===============================================================
@@ -16,7 +17,12 @@ type TeacherRouteState = {
 //===============================================================
 
 function slugify(value: string): string {
-  return value.trim().toLowerCase().replace(/\s+/g, '-');
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
 }
 
 function findOptionBySlug(
@@ -75,6 +81,17 @@ export function parseTeacherSegments(segments?: string[]): TeacherRouteState {
       continue;
     }
 
+    if (segment.startsWith('sort-')) {
+      const slug = segment.replace('sort-', '');
+      const sort = findOptionBySlug(slug, SORT_OPTIONS);
+
+      if (sort) {
+        filters.sort = sort as TeacherFilters['sort'];
+      }
+
+      continue;
+    }
+
     if (segment.startsWith('page-')) {
       const rawPage = Number(segment.replace('page-', ''));
 
@@ -102,6 +119,10 @@ export function buildTeachersPath(filters: TeacherFilters, page = 1): string {
 
   if (filters.price !== DEFAULT_TEACHER_FILTERS.price) {
     segments.push(`price-${filters.price}`);
+  }
+
+  if (filters.sort !== DEFAULT_TEACHER_FILTERS.sort) {
+    segments.push(`sort-${slugify(filters.sort)}`);
   }
 
   if (page > 1) {

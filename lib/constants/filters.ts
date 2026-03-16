@@ -1,3 +1,5 @@
+import type { TeacherSort } from '@/types/filters';
+
 export const LANGUAGE_OPTIONS = [
   'All',
   'French',
@@ -21,3 +23,16 @@ export const LEVEL_OPTIONS = [
 ];
 
 export const PRICE_OPTIONS = ['All', '25', '27', '28', '30', '32', '35'];
+
+//===============================================================
+
+export const SORT_OPTIONS: TeacherSort[] = [
+  'A to Z',
+  'Z to A',
+  'Price: low to high',
+  'Price: high to low',
+  'Rating: low to high',
+  'Rating: high to low',
+  'Lessons: low to high',
+  'Lessons: high to low',
+];

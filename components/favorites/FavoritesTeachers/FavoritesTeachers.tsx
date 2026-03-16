@@ -27,14 +27,22 @@ function FavoritesTeachers() {
     );
   }
 
+  const resultsLabel = `${favoriteTeachers.length} favorite teacher${
+    favoriteTeachers.length === 1 ? '' : 's'
+  }`;
+
   return (
-    <ul className={css.list}>
-      {favoriteTeachers.map((teacher) => (
-        <li key={teacher.id} className={css.item}>
-          <TeacherCard teacher={teacher} />
-        </li>
-      ))}
-    </ul>
+    <>
+      <p className={css.resultsText}>{resultsLabel}</p>
+
+      <ul className={css.list}>
+        {favoriteTeachers.map((teacher) => (
+          <li key={teacher.id} className={css.item}>
+            <TeacherCard teacher={teacher} />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 

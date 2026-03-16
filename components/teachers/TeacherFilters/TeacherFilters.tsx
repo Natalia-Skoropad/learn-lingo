@@ -34,6 +34,7 @@ function TeacherFilters({ filters, appliedFiltersCount, total }: Props) {
   const handleFiltersChange = useCallback(
     (nextFilters: TeacherFiltersType) => {
       router.push(buildTeachersPath(nextFilters, 1));
+      setIsDrawerOpen(false);
     },
     [router]
   );

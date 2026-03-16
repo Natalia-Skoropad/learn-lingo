@@ -9,6 +9,7 @@ import {
   LANGUAGE_OPTIONS,
   LEVEL_OPTIONS,
   PRICE_OPTIONS,
+  SORT_OPTIONS,
 } from '@/lib/constants/filters';
 
 import FilterSelect from './FilterSelect';
@@ -55,7 +56,11 @@ function FiltersContent({
   };
 
   const handleReset = (): void => {
-    onChange(DEFAULT_TEACHER_FILTERS);
+    onChange({
+      ...DEFAULT_TEACHER_FILTERS,
+      sort: filters.sort,
+    });
+
     setOpenField(null);
   };
 
@@ -63,13 +68,78 @@ function FiltersContent({
     return option === 'All' ? option : `${option} $`;
   };
 
+  if (layout === 'desktop') {
+    return (
+      <div className={clsx(css.contentWrap, css.contentWrapDesktop)}>
+        <div className={css.desktopLeft}>
+          <div className={css.fieldsRow}>
+            <FilterSelect
+              id="language"
+              label="Languages"
+              value={filters.language}
+              defaultValue={DEFAULT_TEACHER_FILTERS.language}
+              options={LANGUAGE_OPTIONS}
+              onSelect={handleSelect}
+              isOpen={openField === 'language'}
+              onToggle={handleToggle}
+              onClose={handleClose}
+            />
+
+            <FilterSelect
+              id="level"
+              label="Level of knowledge"
+              value={filters.level}
+              defaultValue={DEFAULT_TEACHER_FILTERS.level}
+              options={LEVEL_OPTIONS}
+              onSelect={handleSelect}
+              isOpen={openField === 'level'}
+              onToggle={handleToggle}
+              onClose={handleClose}
+            />
+
+            <FilterSelect
+              id="price"
+              label="Price"
+              value={filters.price}
+              defaultValue={DEFAULT_TEACHER_FILTERS.price}
+              options={PRICE_OPTIONS}
+              onSelect={handleSelect}
+              isOpen={openField === 'price'}
+              onToggle={handleToggle}
+              onClose={handleClose}
+              formatOption={formatPriceOption}
+            />
+          </div>
+
+          {hasAppliedFilters ? (
+            <div className={css.resetWrapDesktop}>
+              <ResetFiltersButton
+                count={appliedFiltersCount}
+                onClick={handleReset}
+              />
+            </div>
+          ) : null}
+        </div>
+
+        <div className={css.desktopRight}>
+          <FilterSelect
+            id="sort"
+            label="Sort by"
+            value={filters.sort}
+            defaultValue={DEFAULT_TEACHER_FILTERS.sort}
+            options={SORT_OPTIONS}
+            onSelect={handleSelect}
+            isOpen={openField === 'sort'}
+            onToggle={handleToggle}
+            onClose={handleClose}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={clsx(
-        css.contentWrap,
-        layout === 'desktop' ? css.contentWrapDesktop : css.contentWrapDrawer
-      )}
-    >
+    <div className={clsx(css.contentWrap, css.contentWrapDrawer)}>
       <div className={css.fieldsRow}>
         <FilterSelect
           id="language"
@@ -112,6 +182,20 @@ function FiltersContent({
       {hasAppliedFilters ? (
         <ResetFiltersButton count={appliedFiltersCount} onClick={handleReset} />
       ) : null}
+
+      <div className={css.drawerSortWrap}>
+        <FilterSelect
+          id="sort"
+          label="Sort by"
+          value={filters.sort}
+          defaultValue={DEFAULT_TEACHER_FILTERS.sort}
+          options={SORT_OPTIONS}
+          onSelect={handleSelect}
+          isOpen={openField === 'sort'}
+          onToggle={handleToggle}
+          onClose={handleClose}
+        />
+      </div>
     </div>
   );
 }

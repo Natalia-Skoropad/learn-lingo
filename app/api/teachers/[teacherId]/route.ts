@@ -1,45 +1,36 @@
 import { NextResponse } from 'next/server';
 
-import { getTeachersPage } from '@/lib/server/teachers/teachers.server';
-import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
-import type { TeacherFilters } from '@/types/filters';
+import { getTeacherById } from '@/lib/server/teachers/teachers.server';
 
 //===============================================================
 
-function parseFilters(searchParams: URLSearchParams): TeacherFilters {
-  return {
-    language:
-      searchParams.get('language')?.trim() || DEFAULT_TEACHER_FILTERS.language,
-    level: searchParams.get('level')?.trim() || DEFAULT_TEACHER_FILTERS.level,
-    price: searchParams.get('price')?.trim() || DEFAULT_TEACHER_FILTERS.price,
-  };
-}
-
-function parsePage(searchParams: URLSearchParams): number {
-  const rawPage = Number(searchParams.get('page'));
-  return Number.isInteger(rawPage) && rawPage > 0 ? rawPage : 1;
-}
+type Params = {
+  params: Promise<{
+    teacherId: string;
+  }>;
+};
 
 //===============================================================
 
-export async function GET(request: Request) {
+export async function GET(_: Request, { params }: Params) {
   try {
-    const { searchParams } = new URL(request.url);
+    const { teacherId } = await params;
 
-    const filters = parseFilters(searchParams);
-    const page = parsePage(searchParams);
+    const teacher = await getTeacherById(teacherId);
 
-    const result = await getTeachersPage({
-      filters,
-      page,
-    });
+    if (!teacher) {
+      return NextResponse.json(
+        { message: 'Teacher not found' },
+        { status: 404 }
+      );
+    }
 
-    return NextResponse.json(result);
+    return NextResponse.json({ teacher });
   } catch (error) {
-    console.error('GET /api/teachers error:', error);
+    console.error('GET /api/teachers/[teacherId] error:', error);
 
     return NextResponse.json(
-      { message: 'Failed to load teachers' },
+      { message: 'Failed to load teacher' },
       { status: 500 }
     );
   }

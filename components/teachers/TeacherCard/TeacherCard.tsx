@@ -49,9 +49,11 @@ function TeacherCard({ teacher }: Props) {
         />
 
         <details className={css.details}>
-          <summary className={css.readMoreBtn}>
-            View more info and reviews
-          </summary>
+          <summary
+            className={css.readMoreBtn}
+            data-open-text="Hide details"
+            data-closed-text="View more info and reviews"
+          />
 
           <div className={css.expandedContent}>
             <p className={css.experience}>{teacher.experience}</p>
