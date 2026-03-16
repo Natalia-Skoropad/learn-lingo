@@ -1,10 +1,26 @@
 'use client';
 
-import BookLessonModal from '@/components/modals/BookLessonModal/BookLessonModal';
-import ForgotPasswordModal from '@/components/modals/ForgotPasswordModal/ForgotPasswordModal';
-import LoginModal from '@/components/modals/LoginModal/LoginModal';
-import RegisterModal from '@/components/modals/RegisterModal/RegisterModal';
+import dynamic from 'next/dynamic';
+
 import { useModal } from '@/hooks/useModal';
+
+//===============================================================
+
+const LoginModal = dynamic(
+  () => import('@/components/modals/LoginModal/LoginModal')
+);
+
+const RegisterModal = dynamic(
+  () => import('@/components/modals/RegisterModal/RegisterModal')
+);
+
+const ForgotPasswordModal = dynamic(
+  () => import('@/components/modals/ForgotPasswordModal/ForgotPasswordModal')
+);
+
+const BookLessonModal = dynamic(
+  () => import('@/components/modals/BookLessonModal/BookLessonModal')
+);
 
 //===============================================================
 

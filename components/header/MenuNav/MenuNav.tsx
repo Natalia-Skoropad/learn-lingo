@@ -3,12 +3,15 @@
 import clsx from 'clsx';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { toast } from 'react-hot-toast';
-
-import { useAuth } from '@/hooks/useAuth';
-import { useModal } from '@/hooks/useModal';
 
 import css from './MenuNav.module.css';
+
+//===============================================================
+
+type Props = {
+  isAuthenticated: boolean;
+  onProtectedNavClick?: () => void;
+};
 
 //===============================================================
 
@@ -19,15 +22,8 @@ function isActive(pathname: string, href: string) {
 
 //===============================================================
 
-function MenuNav() {
+function MenuNav({ isAuthenticated, onProtectedNavClick }: Props) {
   const pathname = usePathname();
-  const { isAuthenticated } = useAuth();
-  const { openModal } = useModal();
-
-  const handleProtectedNavClick = () => {
-    toast.error('You need to sign in to open Favorites.');
-    openModal('login');
-  };
 
   const navItems = [
     { href: '/', label: 'Home', protected: false },
@@ -47,7 +43,7 @@ function MenuNav() {
                 <button
                   type="button"
                   className={clsx(css.link, css.linkButton, css.linkLocked)}
-                  onClick={handleProtectedNavClick}
+                  onClick={onProtectedNavClick}
                   aria-label={`${label} page requires authorization`}
                 >
                   {label}

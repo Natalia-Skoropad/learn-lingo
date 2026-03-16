@@ -15,7 +15,6 @@ function CompanyLogo() {
         alt="LearnLingo logo"
         width={28}
         height={28}
-        priority
         className={css.icon}
       />
 

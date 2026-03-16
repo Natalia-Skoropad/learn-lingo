@@ -9,7 +9,7 @@ import css from './shared-hero.module.css';
 
 //===========================================================================
 
-const SITE_URL = 'https://learn-lingo.vercel.app';
+const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -74,6 +74,7 @@ function Home() {
                 alt="Curly red-haired girl sitting at the computer and sticking out her tongue"
                 fill
                 priority
+                fetchPriority="high"
                 sizes="(min-width: 1440px) 568px, (min-width: 768px) 50vw, 100vw"
                 className={css.image}
               />

@@ -1,5 +1,3 @@
-'use client';
-
 import { DollarSign, BookCheck, BookOpen, Star } from 'lucide-react';
 
 import css from './TeacherMeta.module.css';

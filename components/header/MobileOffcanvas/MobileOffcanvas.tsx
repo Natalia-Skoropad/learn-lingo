@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
@@ -29,6 +29,7 @@ interface MobileOffcanvasProps {
 function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const previousPathnameRef = useRef(pathname);
 
   const { openModal } = useModal();
   const { user, isAuthenticated, isAuthReady, logout } = useAuth();
@@ -68,11 +69,21 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
     openModal('register');
   };
 
+  const handleProtectedNavClick = () => {
+    onClose();
+    toast.error('You need to sign in to open Favorites.');
+    openModal('login');
+  };
+
   useEffect(() => {
     if (!isOpen) return;
-    onClose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+
+    if (previousPathnameRef.current !== pathname) {
+      onClose();
+    }
+
+    previousPathnameRef.current = pathname;
+  }, [isOpen, pathname, onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -101,7 +112,10 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
         </div>
 
         <div className={css.content}>
-          <MenuNav />
+          <MenuNav
+            isAuthenticated={isAuthenticated}
+            onProtectedNavClick={handleProtectedNavClick}
+          />
 
           <div className={css.actions}>
             {!isAuthReady ? null : isAuthenticated ? (

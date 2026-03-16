@@ -1,9 +1,11 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { SlidersHorizontal } from 'lucide-react';
 
 import type { TeacherFilters as TeacherFiltersType } from '@/types/filters';
+import { buildTeachersPath } from '@/lib/utils/teachers.query';
 
 import FiltersContent from './FiltersContent';
 import FiltersDrawer from './FiltersDrawer';
@@ -14,24 +16,27 @@ import css from './TeacherFilters.module.css';
 
 type Props = {
   filters: TeacherFiltersType;
-  onChange: (nextFilters: TeacherFiltersType) => void;
   appliedFiltersCount: number;
   total: number;
 };
 
 //===============================================================
 
-function TeacherFilters({
-  filters,
-  onChange,
-  appliedFiltersCount,
-  total,
-}: Props) {
+function TeacherFilters({ filters, appliedFiltersCount, total }: Props) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const router = useRouter();
 
   const resultsLabel = useMemo(() => {
     return `${total} teacher${total === 1 ? '' : 's'}`;
   }, [total]);
+
+  const handleFiltersChange = useCallback(
+    (nextFilters: TeacherFiltersType) => {
+      router.push(buildTeachersPath(nextFilters, 1));
+    },
+    [router]
+  );
 
   const openDrawer = useCallback(() => {
     setIsDrawerOpen(true);
@@ -47,7 +52,7 @@ function TeacherFilters({
         <div className={css.desktopTopRow}>
           <FiltersContent
             filters={filters}
-            onChange={onChange}
+            onChange={handleFiltersChange}
             appliedFiltersCount={appliedFiltersCount}
             layout="desktop"
           />
@@ -73,7 +78,7 @@ function TeacherFilters({
         <FiltersDrawer isOpen={isDrawerOpen} onClose={closeDrawer}>
           <FiltersContent
             filters={filters}
-            onChange={onChange}
+            onChange={handleFiltersChange}
             appliedFiltersCount={appliedFiltersCount}
             layout="drawer"
           />

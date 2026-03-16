@@ -1,12 +1,6 @@
-'use client';
-
-import { useCallback, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-
 import type { Teacher } from '@/types/teacher';
 import type { TeacherFilters as TeacherFiltersType } from '@/types/filters';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
-import { buildTeachersPath } from '@/lib/utils/teachers.query';
 
 import EmptyState from '@/components/common/EmptyState/EmptyState';
 import TeacherCard from '@/components/teachers/TeacherCard/TeacherCard';
@@ -38,37 +32,31 @@ function TeachersList({
   initialPage,
   seoText,
 }: Props) {
-  const router = useRouter();
-
   const filters = initialFilters;
   const currentPage = initialPage;
   const total = initialTotal;
   const teachers = initialTeachers;
 
-  const appliedFiltersCount = useMemo(() => {
-    let count = 0;
+  let appliedFiltersCount = 0;
 
-    if (filters.language !== DEFAULT_TEACHER_FILTERS.language) count += 1;
-    if (filters.level !== DEFAULT_TEACHER_FILTERS.level) count += 1;
-    if (filters.price !== DEFAULT_TEACHER_FILTERS.price) count += 1;
+  if (filters.language !== DEFAULT_TEACHER_FILTERS.language) {
+    appliedFiltersCount += 1;
+  }
 
-    return count;
-  }, [filters]);
+  if (filters.level !== DEFAULT_TEACHER_FILTERS.level) {
+    appliedFiltersCount += 1;
+  }
+
+  if (filters.price !== DEFAULT_TEACHER_FILTERS.price) {
+    appliedFiltersCount += 1;
+  }
 
   const pageCount = Math.ceil(total / 4);
-
-  const handleFiltersChange = useCallback(
-    (nextFilters: TeacherFiltersType) => {
-      router.push(buildTeachersPath(nextFilters, 1));
-    },
-    [router]
-  );
 
   return (
     <>
       <TeacherFilters
         filters={filters}
-        onChange={handleFiltersChange}
         appliedFiltersCount={appliedFiltersCount}
         total={total}
       />

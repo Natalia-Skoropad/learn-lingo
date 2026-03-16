@@ -1,6 +1,7 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import type { FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
+import { getFirestore, type Firestore } from 'firebase/firestore';
 
 //===============================================================
 
@@ -15,7 +16,38 @@ const firebaseConfig = {
 
 //===============================================================
 
-export const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+let firebaseAppInstance: FirebaseApp | null = null;
+let firebaseAuthInstance: Auth | null = null;
+let firebaseDbInstance: Firestore | null = null;
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+//===============================================================
+
+export function getFirebaseApp(): FirebaseApp {
+  if (firebaseAppInstance) {
+    return firebaseAppInstance;
+  }
+
+  firebaseAppInstance = getApps().length
+    ? getApp()
+    : initializeApp(firebaseConfig);
+
+  return firebaseAppInstance;
+}
+
+export function getFirebaseAuth(): Auth {
+  if (firebaseAuthInstance) {
+    return firebaseAuthInstance;
+  }
+
+  firebaseAuthInstance = getAuth(getFirebaseApp());
+  return firebaseAuthInstance;
+}
+
+export function getFirebaseDb(): Firestore {
+  if (firebaseDbInstance) {
+    return firebaseDbInstance;
+  }
+
+  firebaseDbInstance = getFirestore(getFirebaseApp());
+  return firebaseDbInstance;
+}

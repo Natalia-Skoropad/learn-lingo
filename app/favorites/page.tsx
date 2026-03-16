@@ -7,7 +7,7 @@ import css from './page.module.css';
 
 //===========================================================================
 
-const SITE_URL = 'https://learn-lingo.vercel.app';
+const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
 const PAGE_URL = `${SITE_URL}/favorites`;
 
 export const metadata: Metadata = {

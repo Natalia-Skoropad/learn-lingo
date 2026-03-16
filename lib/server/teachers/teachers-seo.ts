@@ -5,7 +5,7 @@ import { buildTeachersPath } from '../../utils/teachers.query';
 
 //===============================================================
 
-const SITE_URL = 'https://learn-lingo.vercel.app';
+const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
 
 //===============================================================
 

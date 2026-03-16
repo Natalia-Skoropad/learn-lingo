@@ -1,13 +1,3 @@
-import {
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signOut,
-  updateProfile,
-} from 'firebase/auth';
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
-
-import { auth, db } from '@/lib/firebase/config';
 import type { AppUser } from '@/types/auth';
 
 //===============================================================
@@ -60,6 +50,19 @@ export async function registerUser({
   email,
   password,
 }: RegisterParams): Promise<AppUser> {
+  const [
+    { createUserWithEmailAndPassword, updateProfile },
+    { doc, serverTimestamp, setDoc },
+    { getFirebaseAuth, getFirebaseDb },
+  ] = await Promise.all([
+    import('firebase/auth'),
+    import('firebase/firestore'),
+    import('@/lib/firebase/config'),
+  ]);
+
+  const auth = getFirebaseAuth();
+  const db = getFirebaseDb();
+
   const credentials = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -88,6 +91,19 @@ export async function loginUser({
   email,
   password,
 }: LoginParams): Promise<AppUser> {
+  const [
+    { signInWithEmailAndPassword },
+    { doc, getDoc, serverTimestamp, setDoc },
+    { getFirebaseAuth, getFirebaseDb },
+  ] = await Promise.all([
+    import('firebase/auth'),
+    import('firebase/firestore'),
+    import('@/lib/firebase/config'),
+  ]);
+
+  const auth = getFirebaseAuth();
+  const db = getFirebaseDb();
+
   const credentials = await signInWithEmailAndPassword(auth, email, password);
 
   const profileRef = doc(db, 'users', credentials.user.uid);
@@ -114,6 +130,13 @@ export async function loginUser({
 //===============================================================
 
 export async function logoutUser(): Promise<void> {
+  const [{ signOut }, { getFirebaseAuth }] = await Promise.all([
+    import('firebase/auth'),
+    import('@/lib/firebase/config'),
+  ]);
+
+  const auth = getFirebaseAuth();
+
   const response = await fetch('/api/auth/logout', {
     method: 'POST',
   });
@@ -155,6 +178,13 @@ export async function getCurrentUser(): Promise<AppUser | null> {
 export async function resetUserPassword({
   email,
 }: ResetPasswordParams): Promise<void> {
+  const [{ sendPasswordResetEmail }, { getFirebaseAuth }] = await Promise.all([
+    import('firebase/auth'),
+    import('@/lib/firebase/config'),
+  ]);
+
+  const auth = getFirebaseAuth();
+
   await sendPasswordResetEmail(auth, email);
 }
 

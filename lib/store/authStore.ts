@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 
-import { authService } from '@/lib/services/auth.service';
 import type { AppUser } from '@/types/auth';
 
 //===============================================================
@@ -57,6 +56,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     }));
 
     try {
+      const { authService } = await import('@/lib/services/auth.service');
       const user = await authService.getCurrentUser();
 
       set({
@@ -81,6 +81,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
 
     try {
+      const { authService } = await import('@/lib/services/auth.service');
       const user = await authService.register(data);
 
       set({
@@ -104,6 +105,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
 
     try {
+      const { authService } = await import('@/lib/services/auth.service');
       const user = await authService.login(data);
 
       set({
@@ -127,6 +129,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
 
     try {
+      const { authService } = await import('@/lib/services/auth.service');
       await authService.logout();
 
       set({
@@ -145,6 +148,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
 
     try {
+      const { authService } = await import('@/lib/services/auth.service');
       await authService.resetPassword(data);
 
       set({

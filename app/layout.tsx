@@ -4,11 +4,10 @@ import { Roboto } from 'next/font/google';
 import { getCurrentUserFromSession } from '@/lib/server/auth/session';
 
 import AuthProvider from '@/providers/AuthProvider';
-import TanStackProvider from '@/providers/TanStackProvider';
 import ToastProvider from '@/providers/ToastProvider';
 
-import ModalRoot from '@/components/modals/ModalRoot/ModalRoot';
 import Header from '@/components/header/Header/Header';
+import ModalRootLazy from '@/components/modals/ModalRoot/ModalRootLazy';
 
 import './globals.css';
 
@@ -23,7 +22,7 @@ const roboto = Roboto({
 
 //===========================================================================
 
-const SITE_URL = 'https://learn-lingo.vercel.app';
+const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -71,14 +70,20 @@ async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="preconnect"
+          href="https://learn-lingo-66650.firebaseapp.com"
+        />
+        <link rel="preconnect" href="https://apis.google.com" />
+      </head>
+
       <body className={roboto.variable}>
         <AuthProvider initialUser={initialUser}>
-          <TanStackProvider>
-            <Header />
-            <ToastProvider />
-            <ModalRoot />
-            {children}
-          </TanStackProvider>
+          <Header />
+          <ToastProvider />
+          <ModalRootLazy />
+          {children}
         </AuthProvider>
       </body>
     </html>

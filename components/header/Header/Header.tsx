@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Menu } from 'lucide-react';
@@ -13,10 +14,18 @@ import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
 import LoginButton from '@/components/header/AuthActionButton/LoginButton';
 import LogoutButton from '@/components/header/AuthActionButton/LogoutButton';
 import MenuNav from '@/components/header/MenuNav/MenuNav';
-import MobileOffcanvas from '@/components/header/MobileOffcanvas/MobileOffcanvas';
 import UserBadge from '@/components/header/UserBadge/UserBadge';
 
 import css from './Header.module.css';
+
+//===============================================================
+
+const MobileOffcanvas = dynamic(
+  () => import('@/components/header/MobileOffcanvas/MobileOffcanvas'),
+  {
+    ssr: false,
+  }
+);
 
 //===============================================================
 
@@ -38,6 +47,11 @@ function Header() {
 
   const handleOpenRegisterModal = () => {
     openModal('register');
+  };
+
+  const handleProtectedNavClick = () => {
+    toast.error('You need to sign in to open Favorites.');
+    openModal('login');
   };
 
   const handleLogout = async () => {
@@ -87,7 +101,10 @@ function Header() {
         </button>
 
         <div className={css.desktopNav}>
-          <MenuNav />
+          <MenuNav
+            isAuthenticated={isAuthenticated}
+            onProtectedNavClick={handleProtectedNavClick}
+          />
         </div>
 
         <div className={css.desktopActions}>
@@ -113,7 +130,9 @@ function Header() {
           )}
         </div>
 
-        <MobileOffcanvas isOpen={isMobileMenuOpen} onClose={closeMenu} />
+        {isMobileMenuOpen ? (
+          <MobileOffcanvas isOpen={isMobileMenuOpen} onClose={closeMenu} />
+        ) : null}
       </div>
     </header>
   );
