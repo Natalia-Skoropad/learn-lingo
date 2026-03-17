@@ -36,34 +36,8 @@
   margin-bottom: 20px;
 }
 
-.details[open] {
-  margin-bottom: 20px;
-}
-
-.details summary {
-  list-style: none;
-}
-
-.details summary::-webkit-details-marker {
-  display: none;
-}
-
 .readMoreBtn {
-  display: inline-block;
   align-self: flex-start;
-  cursor: pointer;
-  color: var(--link);
-  font-size: 14px;
-  font-weight: var(--fw-medium);
-  line-height: 1.4;
-}
-
-.readMoreBtn::before {
-  content: attr(data-closed-text);
-}
-
-.details[open] .readMoreBtn::before {
-  content: attr(data-open-text);
 }
 
 .expandedContent {

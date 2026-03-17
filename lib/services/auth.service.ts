@@ -185,7 +185,12 @@ export async function resetUserPassword({
 
   const auth = getFirebaseAuth();
 
-  await sendPasswordResetEmail(auth, email);
+  auth.useDeviceLanguage();
+
+  await sendPasswordResetEmail(auth, email, {
+    url: `${window.location.origin}/`,
+    handleCodeInApp: false,
+  });
 }
 
 //===============================================================

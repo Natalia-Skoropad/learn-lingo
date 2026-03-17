@@ -1,5 +1,10 @@
+'use client';
+
+import { useState } from 'react';
+
 import type { Teacher } from '@/types/teacher';
 
+import TextActionButton from '@/components/common/TextActionButton/TextActionButton';
 import FavoriteTeacherButton from '@/components/teachers/FavoriteTeacherButton/FavoriteTeacherButton';
 import BookLessonTrigger from '@/components/teachers/BookLessonTrigger/BookLessonTrigger';
 import TeacherAvatar from '@/components/teachers/TeacherAvatar/TeacherAvatar';
@@ -20,7 +25,13 @@ type Props = {
 //===============================================================
 
 function TeacherCard({ teacher }: Props) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const fullName = `${teacher.name} ${teacher.surname}`;
+
+  const handleToggleDetails = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   return (
     <article className={css.card}>
@@ -48,18 +59,22 @@ function TeacherCard({ teacher }: Props) {
           conditions={teacher.conditions}
         />
 
-        <details className={css.details}>
-          <summary
+        <div className={css.details}>
+          <TextActionButton
             className={css.readMoreBtn}
-            data-open-text="Hide details"
-            data-closed-text="View more info and reviews"
-          />
+            onClick={handleToggleDetails}
+            aria-expanded={isExpanded}
+          >
+            {isExpanded ? 'Hide details' : 'View more info and reviews'}
+          </TextActionButton>
 
-          <div className={css.expandedContent}>
-            <p className={css.experience}>{teacher.experience}</p>
-            <TeacherReviews reviews={teacher.reviews} />
-          </div>
-        </details>
+          {isExpanded && (
+            <div className={css.expandedContent}>
+              <p className={css.experience}>{teacher.experience}</p>
+              <TeacherReviews reviews={teacher.reviews} />
+            </div>
+          )}
+        </div>
 
         <div className={css.bottomRow}>
           <TeacherLevels levels={teacher.levels} />

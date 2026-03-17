@@ -62,19 +62,29 @@ function ForgotPasswordForm({ onSuccess }: Props) {
 
       if (error instanceof FirebaseError) {
         switch (error.code) {
-          case 'auth/user-not-found':
-            toast.error('No account found with this email.');
-            return;
           case 'auth/invalid-email':
             toast.error('Invalid email address.');
             return;
           case 'auth/too-many-requests':
             toast.error('Too many attempts. Please try again later.');
             return;
+          case 'auth/invalid-continue-uri':
+            toast.error('Invalid redirect URL in password reset settings.');
+            return;
+          case 'auth/unauthorized-continue-uri':
+            toast.error('This domain is not authorized in Firebase.');
+            return;
           default:
             toast.error('Failed to send reset email. Please try again.');
             return;
         }
+      }
+
+      if (error instanceof Error) {
+        toast.error(
+          error.message || 'Failed to send reset email. Please try again.'
+        );
+        return;
       }
 
       toast.error('Failed to send reset email. Please try again.');
