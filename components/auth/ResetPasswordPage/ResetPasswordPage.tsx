@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
 import { FirebaseError } from 'firebase/app';
 import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth';
+import Image from 'next/image';
 
 import { getFirebaseAuth } from '@/lib/firebase/config';
 import { resetPasswordConfirmSchema } from '@/lib/validations/resetPasswordConfirmSchema';
@@ -146,20 +147,35 @@ function ResetPasswordPage({ mode, oobCode, continueUrl }: Props) {
     return (
       <main className={css.page}>
         <div className="container">
-          <section className={css.card}>
-            <h1 className={css.title}>Password changed</h1>
-            <p className={css.text}>
-              Your password has been updated successfully. You can now log in
-              with your new password.
-            </p>
+          <section className={css.hero}>
+            <div className={css.card}>
+              <p className={css.kicker}>All set</p>
 
-            <Button
-              type="button"
-              className={css.button}
-              onClick={handleContinue}
-            >
-              Continue
-            </Button>
+              <h1 className={css.title}>Password changed successfully</h1>
+
+              <p className={css.text}>
+                Your password has been updated. You can now log in with your new
+                password and continue using LearnLingo.
+              </p>
+
+              <Button
+                type="button"
+                className={css.button}
+                onClick={handleContinue}
+              >
+                Continue
+              </Button>
+            </div>
+
+            <div className={css.imageBox} aria-hidden="true">
+              <Image
+                src="/successful-password-recovery.jpg"
+                alt=""
+                fill
+                sizes="(min-width: 1440px) 520px, (min-width: 768px) 40vw, 100vw"
+                className={css.image}
+              />
+            </div>
           </section>
         </div>
       </main>
@@ -169,40 +185,52 @@ function ResetPasswordPage({ mode, oobCode, continueUrl }: Props) {
   return (
     <main className={css.page}>
       <div className="container">
-        <section className={css.card}>
-          <h1 className={css.title}>Set a new password</h1>
-          <p className={css.text}>
-            Create a new password for <strong>{email}</strong>.
-          </p>
+        <section className={css.hero}>
+          <div className={css.card}>
+            <h1 className={css.title}>Set a new password</h1>
+            <p className={css.text}>
+              Create a new password for <strong>{email}</strong>.
+            </p>
 
-          <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
-            <FormField
-              type="password"
-              placeholder="New password*"
-              maxLength={20}
-              error={errors.password?.message}
-              {...register('password')}
+            <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
+              <FormField
+                type="password"
+                placeholder="New password*"
+                maxLength={20}
+                error={errors.password?.message}
+                {...register('password')}
+              />
+
+              <FormField
+                type="password"
+                placeholder="Confirm password*"
+                maxLength={20}
+                error={errors.confirmPassword?.message}
+                {...register('confirmPassword')}
+              />
+
+              <Button
+                type="submit"
+                variant={isValid && !isSubmitting ? 'common' : 'disabled'}
+                disabled={!isValid || isSubmitting}
+                className={css.button}
+              >
+                {isSubmitting ? 'Saving...' : 'Save new password'}
+              </Button>
+            </form>
+
+            <p className={css.helper}>Password must contain 6–20 characters.</p>
+          </div>
+
+          <div className={css.imageBox} aria-hidden="true">
+            <Image
+              src="/password-recovery.jpg"
+              alt=""
+              fill
+              sizes="(min-width: 1440px) 520px, (min-width: 768px) 40vw, 100vw"
+              className={css.image}
             />
-
-            <FormField
-              type="password"
-              placeholder="Confirm password*"
-              maxLength={20}
-              error={errors.confirmPassword?.message}
-              {...register('confirmPassword')}
-            />
-
-            <Button
-              type="submit"
-              variant={isValid && !isSubmitting ? 'common' : 'disabled'}
-              disabled={!isValid || isSubmitting}
-              className={css.button}
-            >
-              {isSubmitting ? 'Saving...' : 'Save new password'}
-            </Button>
-          </form>
-
-          <p className={css.helper}>Password must contain 6–20 characters.</p>
+          </div>
         </section>
       </div>
     </main>
