@@ -1,4 +1,5 @@
 import type { AppUser } from '@/types/auth';
+import { APP_URL } from '@/lib/constants/app';
 
 //===============================================================
 
@@ -188,7 +189,7 @@ export async function resetUserPassword({
   auth.useDeviceLanguage();
 
   await sendPasswordResetEmail(auth, email, {
-    url: `${window.location.origin}/`,
+    url: `${APP_URL}/auth/action`,
     handleCodeInApp: false,
   });
 }
