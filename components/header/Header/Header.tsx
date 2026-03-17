@@ -104,6 +104,7 @@ function Header() {
           <MenuNav
             isAuthenticated={isAuthenticated}
             onProtectedNavClick={handleProtectedNavClick}
+            variant="offcanvas"
           />
         </div>
 

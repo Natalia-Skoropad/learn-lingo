@@ -13,6 +13,9 @@
   line-height: 1.25;
   color: var(--text-main);
 
+  white-space: nowrap;
+  flex-shrink: 0;
+
   transition: color 200ms ease;
 }
 

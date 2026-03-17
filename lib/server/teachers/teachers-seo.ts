@@ -31,10 +31,10 @@ function getSeoTitle(filters: TeacherFilters): string {
   const parts = getActiveParts(filters);
 
   if (!parts.length) {
-    return 'Teachers | LearnLingo';
+    return 'Teachers';
   }
 
-  return `${parts.join(' ')} | LearnLingo`;
+  return parts.join(' ');
 }
 
 function getSeoDescription(filters: TeacherFilters): string {
@@ -109,7 +109,7 @@ export function getTeachersMetadata(
       siteName: 'LearnLingo',
       images: [
         {
-          url: '/learnlingo-og-cover.jpg',
+          url: '/og/learnlingo-og-cover.jpg',
           width: 1200,
           height: 630,
           alt: 'LearnLingo teachers page preview',
@@ -122,7 +122,7 @@ export function getTeachersMetadata(
       card: 'summary_large_image',
       title,
       description,
-      images: ['/learnlingo-og-cover.jpg'],
+      images: ['/og/learnlingo-og-cover.jpg'],
     },
   };
 }

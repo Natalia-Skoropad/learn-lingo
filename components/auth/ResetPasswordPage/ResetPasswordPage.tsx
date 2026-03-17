@@ -227,7 +227,7 @@ function ResetPasswordPage({ mode, oobCode, continueUrl }: Props) {
               src="/password-recovery.jpg"
               alt=""
               fill
-              sizes="(min-width: 1440px) 520px, (min-width: 768px) 40vw, 100vw"
+              sizes="(min-width: 1440px) 568px, (min-width: 768px) 50vw, 100vw"
               className={css.image}
             />
           </div>

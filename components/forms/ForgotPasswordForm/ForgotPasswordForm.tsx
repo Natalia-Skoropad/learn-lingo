@@ -55,7 +55,9 @@ function ForgotPasswordForm({ onSuccess }: Props) {
     try {
       await resetPassword(values);
 
-      toast.success('Password reset email sent. Please check your inbox.');
+      toast.success(
+        'If an account with that email exists, you will receive a password reset email shortly. Please check your inbox.'
+      );
       onSuccess();
     } catch (error) {
       console.error(error);

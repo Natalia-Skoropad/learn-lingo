@@ -51,7 +51,7 @@
 
 .actionsPlaceholder {
   position: relative;
-  width: 264px;
+  width: 286px;
   height: 32px;
   border-radius: 999px;
   flex-shrink: 0;
@@ -83,10 +83,10 @@
   }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: 1440px) {
   .inner {
     display: grid;
-    grid-template-columns: auto 1fr 264px;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     column-gap: 32px;
   }
@@ -104,13 +104,13 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 24px;
-    width: 264px;
-    min-width: 264px;
+    gap: 20px;
+    min-width: 0;
+    max-width: 360px;
+    width: 100%;
+    justify-self: end;
   }
-}
 
-@media only screen and (min-width: 1440px) {
   .registrationBtn {
     min-width: 166px;
   }

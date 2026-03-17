@@ -13,19 +13,19 @@ const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: 'LearnLingo | Find the best language tutors',
+  title: 'Find the best language tutors',
   description:
     'Unlock your potential with the best language tutors. Learn languages with experienced teachers from around the world.',
 
   openGraph: {
-    title: 'LearnLingo | Find the best language tutors',
+    title: 'Find the best language tutors',
     description:
       'Unlock your potential with the best language tutors. Learn languages with experienced teachers from around the world.',
     url: SITE_URL,
     siteName: 'LearnLingo',
     images: [
       {
-        url: '/learnlingo-og-cover.jpg',
+        url: '/og/learnlingo-og-cover.jpg',
         width: 1200,
         height: 630,
         alt: 'Curly red-haired girl sitting at the computer and sticking out her tongue',
@@ -36,10 +36,10 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: 'LearnLingo | Find the best language tutors',
+    title: 'Find the best language tutors',
     description:
       'Unlock your potential with the best language tutors. Learn languages with experienced teachers from around the world.',
-    images: ['/learnlingo-og-cover.jpg'],
+    images: ['/og/learnlingo-og-cover.jpg'],
   },
 };
 

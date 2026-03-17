@@ -11,6 +11,7 @@ import css from './MenuNav.module.css';
 type Props = {
   isAuthenticated: boolean;
   onProtectedNavClick?: () => void;
+  variant?: 'header' | 'offcanvas';
 };
 
 //===============================================================
@@ -22,7 +23,11 @@ function isActive(pathname: string, href: string) {
 
 //===============================================================
 
-function MenuNav({ isAuthenticated, onProtectedNavClick }: Props) {
+function MenuNav({
+  isAuthenticated,
+  onProtectedNavClick,
+  variant = 'header',
+}: Props) {
   const pathname = usePathname();
 
   const navItems = [
@@ -32,8 +37,16 @@ function MenuNav({ isAuthenticated, onProtectedNavClick }: Props) {
   ];
 
   return (
-    <nav className={css.menuNav} aria-label="Primary navigation">
-      <ul className={css.menuList}>
+    <nav
+      className={clsx(css.menuNav, variant === 'offcanvas' && css.offcanvasNav)}
+      aria-label="Primary navigation"
+    >
+      <ul
+        className={clsx(
+          css.menuList,
+          variant === 'offcanvas' && css.menuListOffcanvas
+        )}
+      >
         {navItems.map(({ href, label, protected: isProtected }) => {
           const isLocked = isProtected && !isAuthenticated;
 
@@ -42,7 +55,12 @@ function MenuNav({ isAuthenticated, onProtectedNavClick }: Props) {
               {isLocked ? (
                 <button
                   type="button"
-                  className={clsx(css.link, css.linkButton, css.linkLocked)}
+                  className={clsx(
+                    css.link,
+                    css.linkButton,
+                    css.linkLocked,
+                    variant === 'offcanvas' && css.linkOffcanvas
+                  )}
                   onClick={onProtectedNavClick}
                   aria-label={`${label} page requires authorization`}
                 >
@@ -51,9 +69,13 @@ function MenuNav({ isAuthenticated, onProtectedNavClick }: Props) {
               ) : (
                 <Link
                   href={href}
-                  className={clsx(css.link, {
-                    [css.active]: isActive(pathname, href),
-                  })}
+                  className={clsx(
+                    css.link,
+                    variant === 'offcanvas' && css.linkOffcanvas,
+                    {
+                      [css.active]: isActive(pathname, href),
+                    }
+                  )}
                 >
                   {label}
                 </Link>

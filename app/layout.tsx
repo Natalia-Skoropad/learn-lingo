@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: 'LearnLingo',
     images: [
       {
-        url: '/learnlingo-og-cover.jpg',
+        url: '/og/learnlingo-og-cover.jpg',
         width: 1200,
         height: 630,
         alt: 'LearnLingo preview image',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     title: 'LearnLingo',
     description:
       'LearnLingo helps you find experienced language tutors and improve your language skills with confidence.',
-    images: ['/learnlingo-og-cover.jpg'],
+    images: ['/og/learnlingo-og-cover.jpg'],
   },
 };
 
