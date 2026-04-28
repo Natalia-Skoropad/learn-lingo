@@ -27,6 +27,7 @@ function BookLessonModal({ teacher }: Props) {
         onSuccess={closeModal}
         prefilledName={isAuthenticated ? user?.name ?? '' : ''}
         prefilledEmail={isAuthenticated ? user?.email ?? '' : ''}
+        prefilledPhone={isAuthenticated ? user?.phone ?? '' : ''}
       />
     </ModalBase>
   );

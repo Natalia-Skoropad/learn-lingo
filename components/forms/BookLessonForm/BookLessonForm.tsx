@@ -21,6 +21,7 @@ type Props = {
   onSuccess: () => void;
   prefilledName?: string;
   prefilledEmail?: string;
+  prefilledPhone?: string;
 };
 
 //===============================================================
@@ -40,6 +41,7 @@ function BookLessonForm({
   onSuccess,
   prefilledName = '',
   prefilledEmail = '',
+  prefilledPhone = '',
 }: Props) {
   const fullTeacherName = `${teacher.name} ${teacher.surname}`;
 
@@ -55,7 +57,7 @@ function BookLessonForm({
       reason: 'Career and business',
       fullName: prefilledName,
       email: prefilledEmail,
-      phone: '',
+      phone: prefilledPhone,
     },
   });
 
@@ -74,7 +76,7 @@ function BookLessonForm({
   const phoneValue = useWatch({
     control,
     name: 'phone',
-    defaultValue: '',
+    defaultValue: prefilledPhone,
   });
 
   const onSubmit = async (values: BookLessonFormValues) => {
