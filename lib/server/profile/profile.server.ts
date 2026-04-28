@@ -5,6 +5,11 @@ import { FieldValue, Timestamp } from 'firebase-admin/firestore';
 import { adminDb, adminAuth } from '@/lib/firebase/admin';
 import { getCurrentUserFromSession } from '@/lib/server/auth/session';
 
+import {
+  validateProfileName,
+  validateProfilePhone,
+} from '@/lib/validations/profile.server';
+
 import type { AppUser } from '@/types/auth';
 import type { UserProfile } from '@/types/profile';
 
@@ -169,11 +174,7 @@ export async function updateCurrentUserProfile(
   } = {};
 
   if (typeof payload.name === 'string') {
-    const name = payload.name.trim();
-
-    if (name.length < 2 || name.length > 20) {
-      throw new Error('Name must contain 2–20 characters');
-    }
+    const name = validateProfileName(payload.name);
 
     updateData.name = name;
     authUpdateData.displayName = name;
@@ -186,19 +187,9 @@ export async function updateCurrentUserProfile(
   }
 
   if ('phone' in payload) {
-    const phone = payload.phone?.trim();
+    const phone = validateProfilePhone(payload.phone);
 
-    if (phone) {
-      const isValidPhone = /^[+]?[\d\s()-]{7,20}$/.test(phone);
-
-      if (!isValidPhone) {
-        throw new Error('Enter a valid phone number');
-      }
-
-      updateData.phone = phone;
-    } else {
-      updateData.phone = FieldValue.delete();
-    }
+    updateData.phone = phone || FieldValue.delete();
   }
 
   if (Object.keys(authUpdateData).length > 0) {

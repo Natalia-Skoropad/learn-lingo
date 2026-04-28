@@ -40,6 +40,16 @@ async function deleteStorageFile(path?: string): Promise<void> {
   }
 }
 
+function validateAvatarFile(file: File): void {
+  if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+    throw new Error('Please upload a JPG, PNG, or WEBP image.');
+  }
+
+  if (file.size > MAX_AVATAR_SIZE) {
+    throw new Error('Avatar image must be smaller than 2 MB.');
+  }
+}
+
 //===============================================================
 
 export async function POST(request: Request) {
@@ -59,6 +69,8 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    validateAvatarFile(file);
 
     if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
       return NextResponse.json(
