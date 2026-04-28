@@ -90,7 +90,11 @@ async function deleteAvatar(): Promise<AppUser> {
     throw new Error(data.message || 'Failed to delete avatar');
   }
 
-  return data.user;
+  return {
+    ...data.user,
+    avatarUrl: undefined,
+    avatarPath: undefined,
+  };
 }
 
 //===============================================================

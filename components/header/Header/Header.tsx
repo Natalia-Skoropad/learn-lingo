@@ -69,7 +69,10 @@ function Header() {
             <div className={css.actionsPlaceholder} aria-hidden="true" />
           ) : isAuthenticated ? (
             <>
-              <UserBadge name={user?.name ?? 'User'} />
+              <UserBadge
+                name={user?.name ?? 'User'}
+                avatarUrl={user?.avatarUrl}
+              />
               <LogoutButton onClick={handleLogout} />
             </>
           ) : (

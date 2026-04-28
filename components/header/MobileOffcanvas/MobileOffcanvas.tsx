@@ -89,6 +89,7 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
               <>
                 <UserBadge
                   name={user?.name ?? 'User'}
+                  avatarUrl={user?.avatarUrl}
                   className={css.userBadge}
                 />
 
