@@ -4,5 +4,6 @@ export type AppUser = {
   email: string;
   phone?: string;
   avatarUrl?: string;
+  avatarPath?: string;
   createdAt?: string;
 };

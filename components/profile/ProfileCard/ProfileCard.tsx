@@ -152,6 +152,15 @@ function ProfileCard({ profile }: Props) {
           <ProfileAvatar
             name={localProfile.name}
             avatarUrl={localProfile.avatarUrl}
+            avatarPath={localProfile.avatarPath}
+            onAvatarChange={(avatarUrl, avatarPath) => {
+              setLocalProfile((prev) => ({
+                ...prev,
+                avatarUrl,
+                avatarPath,
+                updatedAt: new Date().toISOString(),
+              }));
+            }}
           />
         </div>
 

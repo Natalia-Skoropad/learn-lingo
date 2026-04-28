@@ -65,7 +65,49 @@ async function updateCurrentProfile(
 
 //===============================================================
 
+async function uploadAvatar(file: File): Promise<AppUser> {
+  const formData = new FormData();
+  formData.append('avatar', file);
+
+  const response = await fetch('/api/profile/avatar', {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = (await response
+    .json()
+    .catch(() => null)) as UpdateProfileResponse | null;
+
+  if (!response.ok || !data?.user) {
+    throw new Error(data?.message || 'Failed to upload avatar');
+  }
+
+  return data.user;
+}
+
+//===============================================================
+
+async function deleteAvatar(): Promise<AppUser> {
+  const response = await fetch('/api/profile/avatar', {
+    method: 'DELETE',
+  });
+
+  const data = (await response
+    .json()
+    .catch(() => null)) as UpdateProfileResponse | null;
+
+  if (!response.ok || !data?.user) {
+    throw new Error(data?.message || 'Failed to delete avatar');
+  }
+
+  return data.user;
+}
+
+//===============================================================
+
 export const profileService = {
   getCurrent: getCurrentProfile,
   updateCurrent: updateCurrentProfile,
+  uploadAvatar,
+  deleteAvatar,
 };

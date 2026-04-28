@@ -23,12 +23,18 @@ type UserProfileDoc = {
   favorites?: string[];
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
+  avatarPath?: string;
 };
 
 export type UpdateCurrentUserProfilePayload = {
   name?: string;
   email?: string;
   phone?: string | null;
+};
+
+export type UpdateCurrentUserAvatarPayload = {
+  avatarUrl: string | null;
+  avatarPath: string | null;
 };
 
 //===============================================================
@@ -60,6 +66,10 @@ function mapUserProfile(
       typeof data?.avatarUrl === 'string' && data.avatarUrl.trim()
         ? data.avatarUrl
         : undefined,
+    avatarPath:
+      typeof data?.avatarPath === 'string' && data.avatarPath.trim()
+        ? data.avatarPath
+        : undefined,
     favorites: Array.isArray(data?.favorites) ? data.favorites : [],
     createdAt: serializeTimestamp(data?.createdAt),
     updatedAt: serializeTimestamp(data?.updatedAt),
@@ -74,6 +84,7 @@ function toAppUser(profile: UserProfile): AppUser {
     phone: profile.phone,
     avatarUrl: profile.avatarUrl,
     createdAt: profile.createdAt,
+    avatarPath: profile.avatarPath,
   };
 }
 
@@ -204,6 +215,51 @@ export async function updateCurrentUserProfile(
       typeof updateData.email === 'string'
         ? updateData.email
         : sessionUser.email,
+  });
+
+  return toAppUser(profile);
+}
+
+//===============================================================
+
+export async function updateCurrentUserAvatar({
+  avatarUrl,
+  avatarPath,
+}: UpdateCurrentUserAvatarPayload): Promise<AppUser> {
+  const sessionUser = await getCurrentUserFromSession();
+
+  if (!sessionUser) {
+    throw new Error('Unauthorized');
+  }
+
+  const userRef = adminDb.collection(USERS_COLLECTION).doc(sessionUser.uid);
+
+  const updateData: Record<string, unknown> = {
+    updatedAt: FieldValue.serverTimestamp(),
+  };
+
+  if (avatarUrl && avatarPath) {
+    updateData.avatarUrl = avatarUrl;
+    updateData.avatarPath = avatarPath;
+
+    await adminAuth.updateUser(sessionUser.uid, {
+      photoURL: avatarUrl,
+    });
+  } else {
+    updateData.avatarUrl = FieldValue.delete();
+    updateData.avatarPath = FieldValue.delete();
+
+    await adminAuth.updateUser(sessionUser.uid, {
+      photoURL: null,
+    });
+  }
+
+  await userRef.set(updateData, { merge: true });
+
+  const profile = await getUserProfileByUid(sessionUser.uid, {
+    uid: sessionUser.uid,
+    name: sessionUser.name,
+    email: sessionUser.email,
   });
 
   return toAppUser(profile);
