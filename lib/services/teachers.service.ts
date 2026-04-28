@@ -1,6 +1,8 @@
 import type { Teacher } from '@/types/teacher';
 import type { TeacherFilters } from '@/types/filters';
 
+import { requestJson } from '@/lib/services/http.service';
+
 //===============================================================
 
 export type TeachersPageResult = {
@@ -61,39 +63,30 @@ async function getTeachersPage(
   page = 1,
   keyword = ''
 ): Promise<TeachersPageResult> {
-  const response = await fetch(createTeachersApiQuery(filters, page, keyword), {
-    method: 'GET',
-    cache: 'no-store',
-  });
-
-  const data = (await response
-    .json()
-    .catch(() => null)) as TeachersResponse | null;
-
-  if (!response.ok || !data) {
-    throw new Error(data?.message || 'Failed to load teachers');
-  }
-
-  return data;
+  return requestJson<TeachersResponse>(
+    createTeachersApiQuery(filters, page, keyword),
+    {
+      method: 'GET',
+      cache: 'no-store',
+      fallbackErrorMessage: 'Failed to load teachers',
+    }
+  );
 }
 
 //===============================================================
 
 async function getTeacherById(teacherId: string): Promise<Teacher> {
-  const response = await fetch(
+  const data = await requestJson<TeacherResponse>(
     `/api/teachers/${encodeURIComponent(teacherId)}`,
     {
       method: 'GET',
       cache: 'no-store',
+      fallbackErrorMessage: 'Failed to load teacher',
     }
   );
 
-  const data = (await response
-    .json()
-    .catch(() => null)) as TeacherResponse | null;
-
-  if (!response.ok || !data?.teacher) {
-    throw new Error(data?.message || 'Failed to load teacher');
+  if (!data.teacher) {
+    throw new Error(data.message || 'Failed to load teacher');
   }
 
   return data.teacher;

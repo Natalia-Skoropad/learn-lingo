@@ -230,9 +230,9 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_value
 FIREBASE_PROJECT_ID=your_value
 FIREBASE_CLIENT_EMAIL=your_value
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour_key_here\n-----END PRIVATE KEY-----\n"
-
-> Do not commit `.env.local` or files from the `secrets/` folder. Firebase Admin credentials must stay private.
 ```
+
+> Do not commit `.env.local` or files from the `secrets/` folder.
 
 ---
 

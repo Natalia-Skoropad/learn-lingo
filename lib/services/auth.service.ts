@@ -1,6 +1,12 @@
 import type { AppUser } from '@/types/auth';
 import { APP_URL } from '@/lib/constants/app';
 
+import {
+  requestJson,
+  requestJsonOrNull,
+  requestVoid,
+} from '@/lib/services/http.service';
+
 //===============================================================
 
 type RegisterParams = {
@@ -27,18 +33,17 @@ type AuthResponse = {
 //===============================================================
 
 async function createServerSession(idToken: string): Promise<AppUser> {
-  const response = await fetch('/api/auth/login', {
+  const data = await requestJson<AuthResponse>('/api/auth/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ idToken }),
+    fallbackErrorMessage: 'Failed to create server session',
   });
 
-  const data = (await response.json().catch(() => null)) as AuthResponse | null;
-
-  if (!response.ok || !data?.user) {
-    throw new Error(data?.message || 'Failed to create server session');
+  if (!data.user) {
+    throw new Error(data.message || 'Failed to create server session');
   }
 
   return data.user;
@@ -144,40 +149,24 @@ export async function logoutUser(): Promise<void> {
 
   const auth = getFirebaseAuth();
 
-  const response = await fetch('/api/auth/logout', {
+  await requestVoid('/api/auth/logout', {
     method: 'POST',
+    fallbackErrorMessage: 'Failed to clear server session',
   });
 
   await signOut(auth);
-
-  if (!response.ok) {
-    const data = (await response.json().catch(() => null)) as {
-      message?: string;
-    } | null;
-
-    throw new Error(data?.message || 'Failed to clear server session');
-  }
 }
 
 //===============================================================
 
 export async function getCurrentUser(): Promise<AppUser | null> {
-  const response = await fetch('/api/auth/me', {
+  const data = await requestJsonOrNull<AuthResponse>('/api/auth/me', {
     method: 'GET',
     cache: 'no-store',
+    fallbackErrorMessage: 'Failed to fetch current user',
   });
 
-  if (response.status === 401) {
-    return null;
-  }
-
-  const data = (await response.json().catch(() => null)) as AuthResponse | null;
-
-  if (!response.ok || !data?.user) {
-    throw new Error(data?.message || 'Failed to fetch current user');
-  }
-
-  return data.user;
+  return data?.user ?? null;
 }
 
 //===============================================================

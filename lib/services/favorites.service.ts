@@ -1,5 +1,7 @@
 import type { Teacher } from '@/types/teacher';
 
+import { requestJsonOrNull, requestVoid } from '@/lib/services/http.service';
+
 //===============================================================
 
 type FavoritesResponse = {
@@ -10,63 +12,35 @@ type FavoritesResponse = {
 //===============================================================
 
 async function getFavoriteTeachers(): Promise<Teacher[]> {
-  const response = await fetch('/api/favorites', {
+  const data = await requestJsonOrNull<FavoritesResponse>('/api/favorites', {
     method: 'GET',
     cache: 'no-store',
+    fallbackErrorMessage: 'Failed to load favorite teachers',
   });
 
-  if (response.status === 401) {
-    return [];
-  }
-
-  const data = (await response
-    .json()
-    .catch(() => null)) as FavoritesResponse | null;
-
-  if (!response.ok || !data?.teachers) {
-    throw new Error(data?.message || 'Failed to load favorite teachers');
-  }
-
-  return data.teachers;
+  return data?.teachers ?? [];
 }
 
 //===============================================================
 
 async function addFavorite(teacherId: string): Promise<void> {
-  const response = await fetch('/api/favorites', {
+  await requestVoid('/api/favorites', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ teacherId }),
+    fallbackErrorMessage: 'Failed to add favorite',
   });
-
-  const data = (await response.json().catch(() => null)) as {
-    message?: string;
-  } | null;
-
-  if (!response.ok) {
-    throw new Error(data?.message || 'Failed to add favorite');
-  }
 }
 
 //===============================================================
 
 async function removeFavorite(teacherId: string): Promise<void> {
-  const response = await fetch(
-    `/api/favorites/${encodeURIComponent(teacherId)}`,
-    {
-      method: 'DELETE',
-    }
-  );
-
-  const data = (await response.json().catch(() => null)) as {
-    message?: string;
-  } | null;
-
-  if (!response.ok) {
-    throw new Error(data?.message || 'Failed to remove favorite');
-  }
+  await requestVoid(`/api/favorites/${encodeURIComponent(teacherId)}`, {
+    method: 'DELETE',
+    fallbackErrorMessage: 'Failed to remove favorite',
+  });
 }
 
 //===============================================================

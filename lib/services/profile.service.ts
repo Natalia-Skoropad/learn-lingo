@@ -1,6 +1,8 @@
 import type { AppUser } from '@/types/auth';
 import type { UserProfile } from '@/types/profile';
 
+import { requestJson } from '@/lib/services/http.service';
+
 //===============================================================
 
 type ProfileResponse = {
@@ -23,17 +25,14 @@ type UpdateProfileResponse = {
 //===============================================================
 
 async function getCurrentProfile(): Promise<UserProfile> {
-  const response = await fetch('/api/profile', {
+  const data = await requestJson<ProfileResponse>('/api/profile', {
     method: 'GET',
     cache: 'no-store',
+    fallbackErrorMessage: 'Failed to load profile',
   });
 
-  const data = (await response
-    .json()
-    .catch(() => null)) as ProfileResponse | null;
-
-  if (!response.ok || !data?.profile) {
-    throw new Error(data?.message || 'Failed to load profile');
+  if (!data.profile) {
+    throw new Error(data.message || 'Failed to load profile');
   }
 
   return data.profile;
@@ -44,20 +43,17 @@ async function getCurrentProfile(): Promise<UserProfile> {
 async function updateCurrentProfile(
   payload: UpdateProfilePayload
 ): Promise<AppUser> {
-  const response = await fetch('/api/profile', {
+  const data = await requestJson<UpdateProfileResponse>('/api/profile', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload),
+    fallbackErrorMessage: 'Failed to update profile',
   });
 
-  const data = (await response
-    .json()
-    .catch(() => null)) as UpdateProfileResponse | null;
-
-  if (!response.ok || !data?.user) {
-    throw new Error(data?.message || 'Failed to update profile');
+  if (!data.user) {
+    throw new Error(data.message || 'Failed to update profile');
   }
 
   return data.user;
@@ -69,17 +65,14 @@ async function uploadAvatar(file: File): Promise<AppUser> {
   const formData = new FormData();
   formData.append('avatar', file);
 
-  const response = await fetch('/api/profile/avatar', {
+  const data = await requestJson<UpdateProfileResponse>('/api/profile/avatar', {
     method: 'POST',
     body: formData,
+    fallbackErrorMessage: 'Failed to upload avatar',
   });
 
-  const data = (await response
-    .json()
-    .catch(() => null)) as UpdateProfileResponse | null;
-
-  if (!response.ok || !data?.user) {
-    throw new Error(data?.message || 'Failed to upload avatar');
+  if (!data.user) {
+    throw new Error(data.message || 'Failed to upload avatar');
   }
 
   return data.user;
@@ -88,16 +81,13 @@ async function uploadAvatar(file: File): Promise<AppUser> {
 //===============================================================
 
 async function deleteAvatar(): Promise<AppUser> {
-  const response = await fetch('/api/profile/avatar', {
+  const data = await requestJson<UpdateProfileResponse>('/api/profile/avatar', {
     method: 'DELETE',
+    fallbackErrorMessage: 'Failed to delete avatar',
   });
 
-  const data = (await response
-    .json()
-    .catch(() => null)) as UpdateProfileResponse | null;
-
-  if (!response.ok || !data?.user) {
-    throw new Error(data?.message || 'Failed to delete avatar');
+  if (!data.user) {
+    throw new Error(data.message || 'Failed to delete avatar');
   }
 
   return data.user;
