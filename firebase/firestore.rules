@@ -2,25 +2,77 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function hasOnlyUserFields(data) {
+      return data.keys().hasOnly([
+        'uid',
+        'name',
+        'email',
+        'phone',
+        'avatarUrl',
+        'avatarPath',
+        'favorites',
+        'createdAt',
+        'updatedAt'
+      ]);
+    }
+
+    function hasRequiredUserFields(data, userId) {
+      return data.keys().hasAll([
+        'uid',
+        'name',
+        'email',
+        'favorites'
+      ])
+        && data.uid == userId
+        && data.uid is string
+        && data.name is string
+        && data.email is string
+        && data.favorites is list;
+    }
+
+    function hasValidOptionalUserFields(data) {
+      return (!('phone' in data) || data.phone is string)
+        && (!('avatarUrl' in data) || data.avatarUrl is string)
+        && (!('avatarPath' in data) || data.avatarPath is string)
+        && (!('createdAt' in data) || data.createdAt is timestamp)
+        && (!('updatedAt' in data) || data.updatedAt is timestamp);
+    }
+
+    function isValidUserDocument(data, userId) {
+      return hasOnlyUserFields(data)
+        && hasRequiredUserFields(data, userId)
+        && hasValidOptionalUserFields(data);
+    }
+
+    function keepsProtectedUserFields(userId) {
+      return request.resource.data.uid == userId
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+
     match /teachers/{teacherId} {
       allow read: if true;
       allow write: if false;
     }
 
     match /users/{userId} {
-      allow create: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.data.uid == userId;
+      allow create: if isOwner(userId)
+        && isValidUserDocument(request.resource.data, userId);
 
-      allow read: if request.auth != null
-        && request.auth.uid == userId;
+      allow read: if isOwner(userId);
 
-      allow update: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.data.uid == userId
-        && request.resource.data.email is string
-        && request.resource.data.name is string
-        && request.resource.data.favorites is list;
+      allow update: if isOwner(userId)
+        && isValidUserDocument(request.resource.data, userId)
+        && keepsProtectedUserFields(userId);
 
       allow delete: if false;
     }
