@@ -1,6 +1,11 @@
 'use client';
 
-import { useCallback, useEffect, useId } from 'react';
+import { useId } from 'react';
+
+import { useBackdropClose } from '@/hooks/useBackdropClose';
+import { useEscapeKey } from '@/hooks/useEscapeKey';
+import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
+
 import CloseButton from '@/components/common/CloseButton/CloseButton';
 
 import css from './TeacherFilters.module.css';
@@ -18,30 +23,14 @@ type Props = {
 function FiltersDrawer({ isOpen, onClose, children }: Props) {
   const titleId = useId();
 
-  const handleBackdropClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) onClose();
-    },
-    [onClose]
-  );
+  const handleBackdropClick = useBackdropClose(onClose);
 
-  useEffect(() => {
-    if (!isOpen) return;
+  useEscapeKey({
+    isEnabled: isOpen,
+    onEscape: onClose,
+  });
 
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    window.addEventListener('keydown', onKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [isOpen, onClose]);
+  useLockBodyScroll(isOpen);
 
   if (!isOpen) return null;
 

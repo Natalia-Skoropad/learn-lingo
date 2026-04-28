@@ -1,8 +1,12 @@
 'use client';
 
-import { useEffect, useId } from 'react';
+import { useId } from 'react';
 import { createPortal } from 'react-dom';
-import type { MouseEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+
+import { useBackdropClose } from '@/hooks/useBackdropClose';
+import { useEscapeKey } from '@/hooks/useEscapeKey';
+import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 
 import CloseButton from '@/components/common/CloseButton/CloseButton';
 
@@ -22,27 +26,14 @@ type Props = {
 function ModalBase({ title, children, onClose, maxWidth = 600 }: Props) {
   const titleId = useId();
 
-  useEffect(() => {
-    const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
+  const handleBackdropClick = useBackdropClose(onClose);
 
-    document.addEventListener('keydown', handleEsc);
-    document.body.style.overflow = 'hidden';
+  useEscapeKey({
+    isEnabled: true,
+    onEscape: onClose,
+  });
 
-    return () => {
-      document.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = '';
-    };
-  }, [onClose]);
-
-  const handleBackdropClick = (event: MouseEvent<HTMLDivElement>) => {
-    if (event.target === event.currentTarget) {
-      onClose();
-    }
-  };
+  useLockBodyScroll(true);
 
   return createPortal(
     <div

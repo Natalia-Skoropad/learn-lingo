@@ -1,9 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 
+import { useBackdropClose } from '@/hooks/useBackdropClose';
+import { useEscapeKey } from '@/hooks/useEscapeKey';
+import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
 import { useModal } from '@/hooks/useModal';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -34,6 +37,15 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
   const { openModal } = useModal();
   const { user, isAuthenticated, isAuthReady, logout } = useAuth();
 
+  const handleBackdropClick = useBackdropClose(onClose);
+
+  useEscapeKey({
+    isEnabled: isOpen,
+    onEscape: onClose,
+  });
+
+  useLockBodyScroll(isOpen);
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -51,13 +63,6 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
       toast.error('Logout failed. Please try again.');
     }
   };
-
-  const handleBackdropClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (e.target === e.currentTarget) onClose();
-    },
-    [onClose]
-  );
 
   const handleOpenLoginModal = () => {
     onClose();
@@ -84,17 +89,6 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
 
     previousPathnameRef.current = pathname;
   }, [isOpen, pathname, onClose]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
