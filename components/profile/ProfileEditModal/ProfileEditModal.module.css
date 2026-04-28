@@ -1,0 +1,16 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.note {
+  margin-bottom: 20px;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: 8px;
+}

@@ -14,5 +14,6 @@ export function useAuth() {
     login: useAuthStore((state) => state.login),
     logout: useAuthStore((state) => state.logout),
     resetPassword: useAuthStore((state) => state.resetPassword),
+    updateUser: useAuthStore((state) => state.updateUser),
   };
 }

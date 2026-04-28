@@ -31,6 +31,8 @@ type AuthState = {
   login: (data: LoginData) => Promise<AppUser>;
   logout: () => Promise<void>;
   resetPassword: (data: ResetPasswordData) => Promise<void>;
+
+  updateUser: (patch: Partial<AppUser>) => void;
 };
 
 //===============================================================
@@ -159,5 +161,20 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ isLoading: false });
       throw error;
     }
+  },
+
+  updateUser: (patch) => {
+    set((state) => {
+      if (!state.user) return state;
+
+      return {
+        user: {
+          ...state.user,
+          ...patch,
+        },
+        isAuthenticated: true,
+        isAuthReady: true,
+      };
+    });
   },
 }));

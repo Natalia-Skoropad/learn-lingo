@@ -7,11 +7,20 @@ type Props = {
   value: string;
   actionLabel?: string;
   dangerActionLabel?: string;
+  onAction?: () => void;
+  onDangerAction?: () => void;
 };
 
 //===============================================================
 
-function ProfileField({ label, value, actionLabel, dangerActionLabel }: Props) {
+function ProfileField({
+  label,
+  value,
+  actionLabel,
+  dangerActionLabel,
+  onAction,
+  onDangerAction,
+}: Props) {
   return (
     <div className={css.field}>
       <div className={css.content}>
@@ -21,13 +30,17 @@ function ProfileField({ label, value, actionLabel, dangerActionLabel }: Props) {
 
       <div className={css.actions}>
         {actionLabel ? (
-          <button type="button" className={css.actionBtn} disabled>
+          <button type="button" className={css.actionBtn} onClick={onAction}>
             {actionLabel}
           </button>
         ) : null}
 
         {dangerActionLabel ? (
-          <button type="button" className={css.dangerBtn} disabled>
+          <button
+            type="button"
+            className={css.dangerBtn}
+            onClick={onDangerAction}
+          >
             {dangerActionLabel}
           </button>
         ) : null}
