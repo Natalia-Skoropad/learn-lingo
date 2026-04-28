@@ -38,6 +38,15 @@ export const FAVORITES_OG_IMAGE_ALT = 'LearnLingo favorites page preview';
 
 //===============================================================
 
+export const PROFILE_TITLE = 'Profile';
+
+export const PROFILE_DESCRIPTION =
+  'Manage your LearnLingo profile details, contact information, and account settings.';
+
+export const PROFILE_OG_IMAGE_ALT = 'LearnLingo profile page preview';
+
+//===============================================================
+
 export const NOT_FOUND_TITLE = '404 | Page not found';
 
 export const NOT_FOUND_DESCRIPTION =
