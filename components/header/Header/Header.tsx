@@ -2,12 +2,10 @@
 
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
 import { Menu } from 'lucide-react';
-import { toast } from 'react-hot-toast';
 
 import { useAuth } from '@/hooks/useAuth';
-import { useModal } from '@/hooks/useModal';
+import { useHeaderActions } from '@/hooks/useHeaderActions';
 
 import Button from '@/components/common/Button/Button';
 import CompanyLogo from '@/components/header/CompanyLogo/CompanyLogo';
@@ -32,44 +30,17 @@ const MobileOffcanvas = dynamic(
 function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const router = useRouter();
-  const pathname = usePathname();
+  const { user, isAuthenticated, isAuthReady } = useAuth();
 
-  const { openModal } = useModal();
-  const { user, isAuthenticated, isAuthReady, logout } = useAuth();
+  const {
+    openLoginModal,
+    openRegisterModal,
+    handleProtectedNavClick,
+    handleLogout,
+  } = useHeaderActions();
 
   const openMenu = () => setIsMobileMenuOpen(true);
   const closeMenu = () => setIsMobileMenuOpen(false);
-
-  const handleOpenLoginModal = () => {
-    openModal('login');
-  };
-
-  const handleOpenRegisterModal = () => {
-    openModal('register');
-  };
-
-  const handleProtectedNavClick = () => {
-    toast.error('You need to sign in to open Favorites.');
-    openModal('login');
-  };
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      toast.success('Logged out successfully!');
-
-      if (pathname.startsWith('/favorites')) {
-        router.replace('/');
-        return;
-      }
-
-      router.refresh();
-    } catch (error) {
-      console.error(error);
-      toast.error('Logout failed. Please try again.');
-    }
-  };
 
   return (
     <header className={css.header}>
@@ -103,12 +74,12 @@ function Header() {
             </>
           ) : (
             <>
-              <LoginButton onClick={handleOpenLoginModal} />
+              <LoginButton onClick={openLoginModal} />
 
               <Button
                 variant="registration"
                 className={css.registrationBtn}
-                onClick={handleOpenRegisterModal}
+                onClick={openRegisterModal}
               >
                 Registration
               </Button>

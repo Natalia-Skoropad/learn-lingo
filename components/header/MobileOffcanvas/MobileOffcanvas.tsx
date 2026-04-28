@@ -1,14 +1,13 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { toast } from 'react-hot-toast';
+import { usePathname } from 'next/navigation';
 
+import { useAuth } from '@/hooks/useAuth';
 import { useBackdropClose } from '@/hooks/useBackdropClose';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
+import { useHeaderActions } from '@/hooks/useHeaderActions';
 import { useLockBodyScroll } from '@/hooks/useLockBodyScroll';
-import { useModal } from '@/hooks/useModal';
-import { useAuth } from '@/hooks/useAuth';
 
 import Button from '@/components/common/Button/Button';
 import CloseButton from '@/components/common/CloseButton/CloseButton';
@@ -30,12 +29,20 @@ interface MobileOffcanvasProps {
 //===============================================================
 
 function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
-  const router = useRouter();
   const pathname = usePathname();
   const previousPathnameRef = useRef(pathname);
 
-  const { openModal } = useModal();
-  const { user, isAuthenticated, isAuthReady, logout } = useAuth();
+  const { user, isAuthenticated, isAuthReady } = useAuth();
+
+  const {
+    openLoginModal,
+    openRegisterModal,
+    handleProtectedNavClick,
+    handleLogout,
+  } = useHeaderActions({
+    onBeforeModalOpen: onClose,
+    onAfterLogout: onClose,
+  });
 
   const handleBackdropClick = useBackdropClose(onClose);
 
@@ -45,40 +52,6 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
   });
 
   useLockBodyScroll(isOpen);
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-      onClose();
-      toast.success('Logged out successfully!');
-
-      if (pathname.startsWith('/favorites')) {
-        router.replace('/');
-        return;
-      }
-
-      router.refresh();
-    } catch (error) {
-      console.error(error);
-      toast.error('Logout failed. Please try again.');
-    }
-  };
-
-  const handleOpenLoginModal = () => {
-    onClose();
-    openModal('login');
-  };
-
-  const handleOpenRegisterModal = () => {
-    onClose();
-    openModal('register');
-  };
-
-  const handleProtectedNavClick = () => {
-    onClose();
-    toast.error('You need to sign in to open Favorites.');
-    openModal('login');
-  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -128,13 +101,13 @@ function MobileOffcanvas({ isOpen, onClose }: MobileOffcanvasProps) {
               <>
                 <LoginButton
                   className={css.loginButton}
-                  onClick={handleOpenLoginModal}
+                  onClick={openLoginModal}
                 />
 
                 <Button
                   variant="registration"
                   className={css.registrationButton}
-                  onClick={handleOpenRegisterModal}
+                  onClick={openRegisterModal}
                 >
                   Registration
                 </Button>
