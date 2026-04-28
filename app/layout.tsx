@@ -3,6 +3,14 @@ import { Roboto } from 'next/font/google';
 
 import { getCurrentUserFromSession } from '@/lib/server/auth/session';
 
+import {
+  APP_URL,
+  OG_IMAGE,
+  OG_IMAGE_ALT,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+} from '@/lib/constants/metadata';
+
 import AuthProvider from '@/providers/AuthProvider';
 import ToastProvider from '@/providers/ToastProvider';
 
@@ -22,29 +30,27 @@ const roboto = Roboto({
 
 //===========================================================================
 
-const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(APP_URL),
+
   title: {
-    default: 'LearnLingo',
-    template: '%s | LearnLingo',
+    default: SITE_NAME,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    'LearnLingo helps you find experienced language tutors and improve your language skills with confidence.',
+
+  description: SITE_DESCRIPTION,
 
   openGraph: {
-    title: 'LearnLingo',
-    description:
-      'LearnLingo helps you find experienced language tutors and improve your language skills with confidence.',
-    url: SITE_URL,
-    siteName: 'LearnLingo',
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: APP_URL,
+    siteName: SITE_NAME,
     images: [
       {
-        url: '/og/learnlingo-og-cover.jpg',
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: 'LearnLingo preview image',
+        alt: OG_IMAGE_ALT,
       },
     ],
     type: 'website',
@@ -52,10 +58,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: 'LearnLingo',
-    description:
-      'LearnLingo helps you find experienced language tutors and improve your language skills with confidence.',
-    images: ['/og/learnlingo-og-cover.jpg'],
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [OG_IMAGE],
   },
 };
 

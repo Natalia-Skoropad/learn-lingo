@@ -219,6 +219,7 @@ Create a `.env.local` file in the project root.
 
 ```env
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+
 NEXT_PUBLIC_FIREBASE_API_KEY=your_value
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_value
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_value
@@ -228,7 +229,9 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_value
 
 FIREBASE_PROJECT_ID=your_value
 FIREBASE_CLIENT_EMAIL=your_value
-FIREBASE_PRIVATE_KEY=your_value
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour_key_here\n-----END PRIVATE KEY-----\n"
+
+> Do not commit `.env.local` or files from the `secrets/` folder. Firebase Admin credentials must stay private.
 ```
 
 ---
@@ -238,7 +241,7 @@ FIREBASE_PRIVATE_KEY=your_value
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Natalia-Skoropad/learn-lingo
 cd learn-lingo
 ```
 
@@ -295,7 +298,8 @@ What makes this project especially interesting:
 
 **Nataliia Skoropad**
 
-Frontend Developer / UX/UI Designer
+Frontend Developer
+UX/UI redesign and user experience improvements
 
 ---
 

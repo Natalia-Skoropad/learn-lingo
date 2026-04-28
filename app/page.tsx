@@ -2,6 +2,14 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import clsx from 'clsx';
 
+import {
+  APP_URL,
+  HOME_DESCRIPTION,
+  HOME_TITLE,
+  OG_IMAGE,
+  SITE_NAME,
+} from '@/lib/constants/metadata';
+
 import ButtonLink from '@/components/common/Button/ButtonLink';
 import StatsSection from '@/components/home/StatsSection/StatsSection';
 
@@ -9,23 +17,24 @@ import css from './shared-hero.module.css';
 
 //===========================================================================
 
-const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: 'Find the best language tutors',
-  description:
-    'Unlock your potential with the best language tutors. Learn languages with experienced teachers from around the world.',
+  metadataBase: new URL(APP_URL),
+
+  title: HOME_TITLE,
+  description: HOME_DESCRIPTION,
+
+  alternates: {
+    canonical: '/',
+  },
 
   openGraph: {
-    title: 'Find the best language tutors',
-    description:
-      'Unlock your potential with the best language tutors. Learn languages with experienced teachers from around the world.',
-    url: SITE_URL,
-    siteName: 'LearnLingo',
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: '/',
+    siteName: SITE_NAME,
     images: [
       {
-        url: '/og/learnlingo-og-cover.jpg',
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
         alt: 'Curly red-haired girl sitting at the computer and sticking out her tongue',
@@ -36,10 +45,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: 'Find the best language tutors',
-    description:
-      'Unlock your potential with the best language tutors. Learn languages with experienced teachers from around the world.',
-    images: ['/og/learnlingo-og-cover.jpg'],
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: [OG_IMAGE],
   },
 };
 

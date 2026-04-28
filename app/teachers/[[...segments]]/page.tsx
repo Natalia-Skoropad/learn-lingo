@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import TeachersPageContent from '@/app/teachers/TeachersPageContent';
+
 import {
   buildTeachersPath,
   parseTeacherSegments,
 } from '@/lib/utils/teachers.query';
+
 import { getTeachersMetadata } from '@/lib/server/teachers/teachers-seo';
 
 //===============================================================

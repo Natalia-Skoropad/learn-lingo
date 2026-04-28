@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
+
 import type { TeacherFilters } from '@/types/filters';
 import { DEFAULT_TEACHER_FILTERS } from '@/types/filters';
+import { APP_URL, OG_IMAGE, SITE_NAME } from '@/lib/constants/metadata';
+
 import { buildTeachersPath } from '../../utils/teachers.query';
-
-//===============================================================
-
-const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
 
 //===============================================================
 
@@ -53,7 +52,7 @@ function getSeoDescription(filters: TeacherFilters): string {
       ? ` with lessons at ${filters.price}$ per hour`
       : '';
 
-  return `Browse ${languagePart}${levelPart}${pricePart} on LearnLingo. Compare profiles, experience, reviews, and choose the teacher who fits your goals.`;
+  return `Browse ${languagePart}${levelPart}${pricePart} on ${SITE_NAME}. Compare profiles, experience, reviews, and choose the teacher who fits your goals.`;
 }
 
 function hasActiveSort(filters: TeacherFilters): boolean {
@@ -85,9 +84,10 @@ export function getTeachersMetadata(
   const shouldNoIndex = page > 1 || hasActiveSort(filters);
 
   return {
-    metadataBase: new URL(SITE_URL),
+    metadataBase: new URL(APP_URL),
     title,
     description,
+
     alternates: {
       canonical: canonicalPath,
     },
@@ -106,13 +106,13 @@ export function getTeachersMetadata(
       title,
       description,
       url: canonicalPath,
-      siteName: 'LearnLingo',
+      siteName: SITE_NAME,
       images: [
         {
-          url: '/og/learnlingo-og-cover.jpg',
+          url: OG_IMAGE,
           width: 1200,
           height: 630,
-          alt: 'LearnLingo teachers page preview',
+          alt: `${SITE_NAME} teachers page preview`,
         },
       ],
       type: 'website',
@@ -122,7 +122,7 @@ export function getTeachersMetadata(
       card: 'summary_large_image',
       title,
       description,
-      images: ['/og/learnlingo-og-cover.jpg'],
+      images: [OG_IMAGE],
     },
   };
 }
@@ -150,7 +150,7 @@ export function getTeachersSeoText(filters: TeacherFilters) {
 
   const paragraph1 = level
     ? `Explore ${language} tutors suitable for students at the ${level} stage. Compare experience, lesson style, and reviews to find a teacher who matches your pace and goals.`
-    : `Explore experienced ${language} tutors on LearnLingo. Review profiles, compare teaching styles, and choose the teacher who best fits your learning goals.`;
+    : `Explore experienced ${language} tutors on ${SITE_NAME}. Review profiles, compare teaching styles, and choose the teacher who best fits your learning goals.`;
 
   const paragraph2 = price
     ? `This selection includes teachers with lessons priced at ${price}$ per hour, so you can quickly focus on tutors that match your budget without losing sight of quality and experience.`

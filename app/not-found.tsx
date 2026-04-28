@@ -2,6 +2,15 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import clsx from 'clsx';
 
+import {
+  APP_URL,
+  NOT_FOUND_DESCRIPTION,
+  NOT_FOUND_IMAGE,
+  NOT_FOUND_IMAGE_ALT,
+  NOT_FOUND_TITLE,
+  SITE_NAME,
+} from '@/lib/constants/metadata';
+
 import ButtonLink from '@/components/common/Button/ButtonLink';
 import BackButton from '@/components/common/Button/BackButton';
 
@@ -9,31 +18,27 @@ import css from './shared-hero.module.css';
 
 //===========================================================================
 
-const SITE_URL = 'https://learn-lingo-ivory-six.vercel.app';
-const PAGE_URL = `${SITE_URL}/404`;
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: '404 | Page not found',
-  description:
-    'Sorry, the page you are looking for does not exist or may have been moved.',
+  metadataBase: new URL(APP_URL),
+
+  title: NOT_FOUND_TITLE,
+  description: NOT_FOUND_DESCRIPTION,
 
   alternates: {
-    canonical: PAGE_URL,
+    canonical: '/404',
   },
 
   openGraph: {
-    title: '404 | Page not found',
-    description:
-      'Sorry, the page you are looking for does not exist or may have been moved.',
-    url: PAGE_URL,
-    siteName: 'LearnLingo',
+    title: NOT_FOUND_TITLE,
+    description: NOT_FOUND_DESCRIPTION,
+    url: '/404',
+    siteName: SITE_NAME,
     images: [
       {
-        url: '/404-page-girl.jpg',
+        url: NOT_FOUND_IMAGE,
         width: 1200,
         height: 630,
-        alt: 'LearnLingo 404 page preview',
+        alt: NOT_FOUND_IMAGE_ALT,
       },
     ],
     type: 'website',
@@ -41,10 +46,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: 'summary_large_image',
-    title: '404 | Page not found',
-    description:
-      'Sorry, the page you are looking for does not exist or may have been moved.',
-    images: ['/404-page-girl.jpg'],
+    title: NOT_FOUND_TITLE,
+    description: NOT_FOUND_DESCRIPTION,
+    images: [NOT_FOUND_IMAGE],
   },
 };
 
@@ -86,7 +90,7 @@ function NotFound() {
 
             <div className={clsx(css.imageBox, css.imageBoxNeutral)}>
               <Image
-                src="/404-page-girl.jpg"
+                src={NOT_FOUND_IMAGE}
                 alt="Funny 404 illustration"
                 fill
                 priority
