@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 
-import { getCurrentUserFromSession } from '@/lib/server/auth/session';
+import { getCurrentAppUser } from '@/lib/server/profile/profile.server';
 
 import {
   APP_URL,
@@ -71,7 +71,7 @@ async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialUser = await getCurrentUserFromSession();
+  const initialUser = await getCurrentAppUser();
 
   return (
     <html lang="en">

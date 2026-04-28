@@ -2,9 +2,10 @@ import { NextResponse } from 'next/server';
 
 import {
   createSessionCookie,
-  getCurrentUserFromSession,
   setSessionCookie,
 } from '@/lib/server/auth/session';
+
+import { getCurrentAppUser } from '@/lib/server/profile/profile.server';
 
 //===============================================================
 
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
     const sessionCookie = await createSessionCookie(idToken);
     await setSessionCookie(sessionCookie);
 
-    const user = await getCurrentUserFromSession();
+    const user = await getCurrentAppUser();
 
     if (!user) {
       return NextResponse.json(

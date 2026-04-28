@@ -1,23 +1,23 @@
 import { NextResponse } from 'next/server';
 
-import { getCurrentAppUser } from '@/lib/server/profile/profile.server';
+import { getCurrentUserProfile } from '@/lib/server/profile/profile.server';
 
 //===============================================================
 
 export async function GET() {
   try {
-    const user = await getCurrentAppUser();
+    const profile = await getCurrentUserProfile();
 
-    if (!user) {
+    if (!profile) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    return NextResponse.json({ user });
+    return NextResponse.json({ profile });
   } catch (error) {
-    console.error('GET /api/auth/me error:', error);
+    console.error('GET /api/profile error:', error);
 
     return NextResponse.json(
-      { message: 'Unable to get current user' },
+      { message: 'Unable to load profile' },
       { status: 500 }
     );
   }

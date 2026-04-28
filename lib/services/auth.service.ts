@@ -78,8 +78,11 @@ export async function registerUser({
     uid: credentials.user.uid,
     name: fullName,
     email,
+    phone: '',
+    avatarUrl: '',
     favorites: [],
     createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
 
   const idToken = await credentials.user.getIdToken(true);
@@ -117,8 +120,11 @@ export async function loginUser({
         uid: credentials.user.uid,
         name: credentials.user.displayName || 'User',
         email: credentials.user.email || email,
+        phone: '',
+        avatarUrl: '',
         favorites: [],
         createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       },
       { merge: true }
     );
