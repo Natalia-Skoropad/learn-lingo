@@ -8,9 +8,9 @@ import { profileService } from '@/lib/services/profile.service';
 import { useAuth } from '@/hooks/useAuth';
 
 import ProfileAvatar from '@/components/profile/ProfileAvatar/ProfileAvatar';
-import ProfileEditModal, {
-  type ProfileEditField,
-} from '@/components/profile/ProfileEditModal/ProfileEditModal';
+import type { ProfileEditField } from '@/types/profile';
+
+import ProfileEditModal from '@/components/profile/ProfileEditModal/ProfileEditModal';
 import ProfileField from '@/components/profile/ProfileField/ProfileField';
 
 import css from './ProfileCard.module.css';

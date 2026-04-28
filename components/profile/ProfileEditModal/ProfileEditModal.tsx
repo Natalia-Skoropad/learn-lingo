@@ -3,7 +3,13 @@
 import { useMemo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, useWatch } from 'react-hook-form';
-import * as yup from 'yup';
+
+import type { ProfileEditField } from '@/types/profile';
+
+import {
+  createProfileEditSchema,
+  type ProfileEditFormValues,
+} from '@/lib/validations/profileEditSchema';
 
 import Button from '@/components/common/Button/Button';
 import FormField from '@/components/forms/FormField/FormField';
@@ -12,12 +18,6 @@ import ModalBase from '@/components/modals/ModalBase/ModalBase';
 import css from './ProfileEditModal.module.css';
 
 //===============================================================
-
-export type ProfileEditField = 'name' | 'email' | 'phone';
-
-type FormValues = {
-  value: string;
-};
 
 type Props = {
   field: ProfileEditField;
@@ -76,55 +76,17 @@ function getMaxLength(field: ProfileEditField): number {
   }
 }
 
-function createSchema(field: ProfileEditField) {
-  if (field === 'email') {
-    return yup
-      .object({
-        value: yup
-          .string()
-          .trim()
-          .email('Enter a valid email')
-          .max(64, 'Must be at most 64 characters')
-          .required('Required'),
-      })
-      .required();
-  }
-
-  if (field === 'phone') {
-    return yup
-      .object({
-        value: yup
-          .string()
-          .trim()
-          .matches(/^[+]?[\d\s()-]{7,20}$/, 'Enter a valid phone number')
-          .required('Required'),
-      })
-      .required();
-  }
-
-  return yup
-    .object({
-      value: yup
-        .string()
-        .trim()
-        .min(2, 'Must be at least 2 characters')
-        .max(20, 'Must be at most 20 characters')
-        .required('Required'),
-    })
-    .required();
-}
-
 //===============================================================
 
 function ProfileEditModal({ field, defaultValue, onClose, onSubmit }: Props) {
-  const schema = useMemo(() => createSchema(field), [field]);
+  const schema = useMemo(() => createProfileEditSchema(field), [field]);
 
   const {
     control,
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-  } = useForm<FormValues>({
+  } = useForm<ProfileEditFormValues>({
     resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
@@ -138,7 +100,7 @@ function ProfileEditModal({ field, defaultValue, onClose, onSubmit }: Props) {
     defaultValue,
   });
 
-  const handleFormSubmit = async ({ value }: FormValues) => {
+  const handleFormSubmit = async ({ value }: ProfileEditFormValues) => {
     await onSubmit(value.trim());
   };
 

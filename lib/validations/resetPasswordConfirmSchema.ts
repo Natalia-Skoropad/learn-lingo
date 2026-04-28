@@ -1,20 +1,18 @@
 import * as yup from 'yup';
 
+import { passwordSchema } from '@/lib/validations/commonFields';
+import { VALIDATION_MESSAGES } from '@/lib/validations/validationRules';
+
 //===============================================================
 
 export const resetPasswordConfirmSchema = yup
   .object({
-    password: yup
-      .string()
-      .trim()
-      .min(6, 'Must be at least 6 characters')
-      .max(20, 'Must be at most 20 characters')
-      .required('Required'),
+    password: passwordSchema,
 
     confirmPassword: yup
       .string()
       .trim()
-      .oneOf([yup.ref('password')], 'Passwords must match')
-      .required('Required'),
+      .oneOf([yup.ref('password')], VALIDATION_MESSAGES.passwordsMustMatch)
+      .required(VALIDATION_MESSAGES.required),
   })
   .required();

@@ -9,3 +9,5 @@ export type UserProfile = {
   createdAt?: string;
   updatedAt?: string;
 };
+
+export type ProfileEditField = 'name' | 'email' | 'phone';
