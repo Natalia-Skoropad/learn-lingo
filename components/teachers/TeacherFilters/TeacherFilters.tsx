@@ -1,14 +1,16 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { SlidersHorizontal } from 'lucide-react';
 
 import type { TeacherFilters as TeacherFiltersType } from '@/types/filters';
-import { buildTeachersPath } from '@/lib/utils/teachers.query';
+import { buildTeachersPathWithSearch } from '@/lib/utils/teachers.query';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue';
 
 import FiltersContent from './FiltersContent';
 import FiltersDrawer from './FiltersDrawer';
+import TeacherSearch from './TeacherSearch';
 
 import css from './TeacherFilters.module.css';
 
@@ -16,14 +18,23 @@ import css from './TeacherFilters.module.css';
 
 type Props = {
   filters: TeacherFiltersType;
+  keyword: string;
   appliedFiltersCount: number;
   total: number;
 };
 
 //===============================================================
 
-function TeacherFilters({ filters, appliedFiltersCount, total }: Props) {
+function TeacherFilters({
+  filters,
+  keyword,
+  appliedFiltersCount,
+  total,
+}: Props) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState(keyword);
+
+  const debouncedSearchValue = useDebouncedValue(searchValue, 400);
 
   const router = useRouter();
 
@@ -31,26 +42,37 @@ function TeacherFilters({ filters, appliedFiltersCount, total }: Props) {
     return `${total} teacher${total === 1 ? '' : 's'}`;
   }, [total]);
 
-  const handleFiltersChange = useCallback(
-    (nextFilters: TeacherFiltersType) => {
-      router.push(buildTeachersPath(nextFilters, 1));
-      setIsDrawerOpen(false);
-    },
-    [router]
-  );
+  useEffect(() => {
+    setSearchValue(keyword);
+  }, [keyword]);
 
-  const openDrawer = useCallback(() => {
-    setIsDrawerOpen(true);
-  }, []);
+  useEffect(() => {
+    const nextKeyword = debouncedSearchValue.trim();
 
-  const closeDrawer = useCallback(() => {
+    if (nextKeyword === keyword) return;
+
+    router.push(buildTeachersPathWithSearch(filters, 1, nextKeyword));
+  }, [debouncedSearchValue, filters, keyword, router]);
+
+  const handleFiltersChange = (nextFilters: TeacherFiltersType) => {
+    router.push(buildTeachersPathWithSearch(nextFilters, 1, keyword));
     setIsDrawerOpen(false);
-  }, []);
+  };
+
+  const openDrawer = () => {
+    setIsDrawerOpen(true);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerOpen(false);
+  };
 
   return (
     <div className={css.wrap}>
       <div className={css.desktopOnly}>
         <div className={css.desktopTopRow}>
+          <TeacherSearch value={searchValue} onChange={setSearchValue} />
+
           <FiltersContent
             filters={filters}
             onChange={handleFiltersChange}
@@ -65,8 +87,8 @@ function TeacherFilters({ filters, appliedFiltersCount, total }: Props) {
       </div>
 
       <div className={css.mobileTabletOnly}>
-        <div className={css.mobileTabletResultsRow}>
-          <p className={css.resultsText}>{resultsLabel}</p>
+        <div className={css.mobileTabletTopRow}>
+          <TeacherSearch value={searchValue} onChange={setSearchValue} />
 
           <button type="button" className={css.filterBtn} onClick={openDrawer}>
             <SlidersHorizontal className={css.filterBtnIcon} />
@@ -75,6 +97,8 @@ function TeacherFilters({ filters, appliedFiltersCount, total }: Props) {
             </span>
           </button>
         </div>
+
+        <p className={css.resultsText}>{resultsLabel}</p>
 
         <FiltersDrawer isOpen={isDrawerOpen} onClose={closeDrawer}>
           <FiltersContent

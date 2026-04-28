@@ -75,13 +75,15 @@ export function getTeachersCanonical(filters: TeacherFilters): string {
 
 export function getTeachersMetadata(
   filters: TeacherFilters,
-  page: number
+  page: number,
+  keyword = ''
 ): Metadata {
   const title = getSeoTitle(filters);
   const description = getSeoDescription(filters);
   const canonicalPath = getTeachersCanonical(filters);
 
-  const shouldNoIndex = page > 1 || hasActiveSort(filters);
+  const hasActiveKeyword = Boolean(keyword.trim());
+  const shouldNoIndex = page > 1 || hasActiveSort(filters) || hasActiveKeyword;
 
   return {
     metadataBase: new URL(APP_URL),

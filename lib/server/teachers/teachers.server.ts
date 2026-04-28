@@ -22,6 +22,7 @@ export type TeachersPageResult = {
 type GetTeachersParams = {
   filters: TeacherFilters;
   page?: number;
+  keyword?: string;
 };
 
 //===============================================================
@@ -94,6 +95,7 @@ function compareTeachers(a: Teacher, b: Teacher, sort: TeacherFilters['sort']) {
 export async function getTeachersPage({
   filters,
   page = 1,
+  keyword = '',
 }: GetTeachersParams): Promise<TeachersPageResult> {
   const normalizedPage = Number.isInteger(page) && page > 0 ? page : 1;
 
@@ -114,6 +116,7 @@ export async function getTeachersPage({
   const filteredTeachers = snapshot.docs
     .map((doc) => mapTeacher(doc.id, doc.data()))
     .filter((teacher) => matchesLevelFilter(teacher, filters.level))
+    .filter((teacher) => matchesKeyword(teacher, keyword))
     .sort((a, b) => compareTeachers(a, b, filters.sort));
 
   const total = filteredTeachers.length;
@@ -175,4 +178,30 @@ export async function getTeachersByIds(ids: string[]): Promise<Teacher[]> {
   return ids
     .map((id) => teachersMap.get(id))
     .filter((teacher): teacher is Teacher => Boolean(teacher));
+}
+
+//===============================================================
+
+function normalizeSearchValue(value: string): string {
+  return value.trim().toLowerCase();
+}
+
+function matchesKeyword(teacher: Teacher, keyword = ''): boolean {
+  const normalizedKeyword = normalizeSearchValue(keyword);
+
+  if (!normalizedKeyword) return true;
+
+  const searchableText = [
+    teacher.name,
+    teacher.surname,
+    `${teacher.name} ${teacher.surname}`,
+    ...teacher.languages,
+    ...teacher.levels,
+    teacher.lesson_info,
+    teacher.experience,
+  ]
+    .join(' ')
+    .toLowerCase();
+
+  return searchableText.includes(normalizedKeyword);
 }

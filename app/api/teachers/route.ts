@@ -35,10 +35,12 @@ export async function GET(request: Request) {
 
     const filters = parseFilters(searchParams);
     const page = parsePage(searchParams);
+    const keyword = parseKeyword(searchParams);
 
     const result = await getTeachersPage({
       filters,
       page,
+      keyword,
     });
 
     return NextResponse.json(result);
@@ -50,4 +52,10 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
+}
+
+//===============================================================
+
+function parseKeyword(searchParams: URLSearchParams): string {
+  return searchParams.get('keyword')?.trim().replace(/\s+/g, ' ') ?? '';
 }

@@ -4,7 +4,8 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import type { TeacherFilters } from '@/types/filters';
-import { buildTeachersPath } from '@/lib/utils/teachers.query';
+
+import { buildTeachersPathWithSearch } from '@/lib/utils/teachers.query';
 
 import css from './TeachersPagination.module.css';
 
@@ -14,6 +15,7 @@ type Props = {
   currentPage: number;
   pageCount: number;
   filters: TeacherFilters;
+  keyword: string;
 };
 
 //===============================================================
@@ -55,7 +57,12 @@ function getVisiblePages(
 
 //===============================================================
 
-function TeachersPagination({ currentPage, pageCount, filters }: Props) {
+function TeachersPagination({
+  currentPage,
+  pageCount,
+  filters,
+  keyword,
+}: Props) {
   if (pageCount <= 1) return null;
 
   const pages = getVisiblePages(currentPage, pageCount);
@@ -69,7 +76,7 @@ function TeachersPagination({ currentPage, pageCount, filters }: Props) {
         <li className={css.pageItem}>
           {currentPage > 1 ? (
             <Link
-              href={buildTeachersPath(filters, prevPage)}
+              href={buildTeachersPathWithSearch(filters, prevPage, keyword)}
               className={clsx(css.pageLink, css.controlLink)}
               aria-label="Previous page"
               rel="prev"
@@ -104,7 +111,7 @@ function TeachersPagination({ currentPage, pageCount, filters }: Props) {
               </span>
             ) : (
               <Link
-                href={buildTeachersPath(filters, page)}
+                href={buildTeachersPathWithSearch(filters, page, keyword)}
                 className={css.pageLink}
                 aria-label={`Page ${page}`}
                 rel={page < currentPage ? 'prev' : 'next'}
@@ -118,7 +125,7 @@ function TeachersPagination({ currentPage, pageCount, filters }: Props) {
         <li className={css.pageItem}>
           {currentPage < pageCount ? (
             <Link
-              href={buildTeachersPath(filters, nextPage)}
+              href={buildTeachersPathWithSearch(filters, nextPage, keyword)}
               className={clsx(css.pageLink, css.controlLink)}
               aria-label="Next page"
               rel="next"

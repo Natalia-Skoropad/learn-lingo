@@ -16,6 +16,10 @@ type TeacherRouteState = {
 
 //===============================================================
 
+const MAX_TEACHER_KEYWORD_LENGTH = 40;
+
+//===============================================================
+
 function slugify(value: string): string {
   return value
     .trim()
@@ -173,4 +177,34 @@ export function getTeachersContextLabel(filters: TeacherFilters): string {
   }
 
   return parts.length ? parts.join(' • ') : 'Teachers';
+}
+
+//===============================================================
+
+export function normalizeTeacherKeyword(keyword?: string): string {
+  return (
+    keyword?.trim().replace(/\s+/g, ' ').slice(0, MAX_TEACHER_KEYWORD_LENGTH) ??
+    ''
+  );
+}
+
+//===============================================================
+
+export function buildTeachersPathWithSearch(
+  filters: TeacherFilters,
+  page = 1,
+  keyword = ''
+): string {
+  const path = buildTeachersPath(filters, page);
+  const normalizedKeyword = normalizeTeacherKeyword(keyword);
+
+  if (!normalizedKeyword) {
+    return path;
+  }
+
+  const searchParams = new URLSearchParams({
+    keyword: normalizedKeyword,
+  });
+
+  return `${path}?${searchParams.toString()}`;
 }

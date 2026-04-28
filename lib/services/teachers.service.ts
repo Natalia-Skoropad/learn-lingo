@@ -23,7 +23,11 @@ type TeachersResponse = TeachersPageResult & {
 
 //===============================================================
 
-function createTeachersApiQuery(filters: TeacherFilters, page = 1): string {
+function createTeachersApiQuery(
+  filters: TeacherFilters,
+  page = 1,
+  keyword = ''
+): string {
   const searchParams = new URLSearchParams();
 
   if (filters.language !== 'All') {
@@ -38,6 +42,10 @@ function createTeachersApiQuery(filters: TeacherFilters, page = 1): string {
     searchParams.set('price', filters.price);
   }
 
+  if (keyword.trim()) {
+    searchParams.set('keyword', keyword.trim());
+  }
+
   if (page > 1) {
     searchParams.set('page', String(page));
   }
@@ -50,9 +58,10 @@ function createTeachersApiQuery(filters: TeacherFilters, page = 1): string {
 
 async function getTeachersPage(
   filters: TeacherFilters,
-  page = 1
+  page = 1,
+  keyword = ''
 ): Promise<TeachersPageResult> {
-  const response = await fetch(createTeachersApiQuery(filters, page), {
+  const response = await fetch(createTeachersApiQuery(filters, page, keyword), {
     method: 'GET',
     cache: 'no-store',
   });

@@ -17,6 +17,7 @@ type Props = {
   initialTotal: number;
   initialFilters: TeacherFiltersType;
   initialPage: number;
+  keyword: string;
   seoText: {
     heading: string;
     paragraphs: string[];
@@ -30,6 +31,7 @@ function TeachersList({
   initialTotal,
   initialFilters,
   initialPage,
+  keyword,
   seoText,
 }: Props) {
   const filters = initialFilters;
@@ -53,10 +55,15 @@ function TeachersList({
 
   const pageCount = Math.ceil(total / 4);
 
+  const emptyStateText = keyword
+    ? `No teachers match your search. Try another keyword or change the selected filters.`
+    : 'Try changing the selected filters to see more results.';
+
   return (
     <>
       <TeacherFilters
         filters={filters}
+        keyword={keyword}
         appliedFiltersCount={appliedFiltersCount}
         total={total}
       />
@@ -70,16 +77,14 @@ function TeachersList({
           ))}
         </ul>
       ) : (
-        <EmptyState
-          title="No teachers found"
-          text="Try changing the selected filters to see more results."
-        />
+        <EmptyState title="No teachers found" text={emptyStateText} />
       )}
 
       <TeachersPagination
         currentPage={currentPage}
         pageCount={pageCount}
         filters={filters}
+        keyword={keyword}
       />
 
       {currentPage === 1 && total > 0 && seoText ? (
