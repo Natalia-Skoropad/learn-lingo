@@ -40,7 +40,9 @@ function UserBadge({ name, avatarUrl, className }: Props) {
         )}
       </span>
 
-      <span className={css.userName}>{trimmedName}</span>
+      <span className={css.userName}>
+        <span className={css.userNameText}>{trimmedName}</span>
+      </span>
     </Link>
   );
 }

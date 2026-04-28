@@ -9,11 +9,6 @@
   text-decoration: none;
 }
 
-.userBox:hover .userName,
-.userBox:focus-visible .userName {
-  color: var(--link);
-}
-
 .userBox:focus-visible {
   outline: none;
 }
@@ -42,18 +37,43 @@
 }
 
 .userName {
+  position: relative;
+  display: inline-flex;
+  min-width: 0;
+  max-width: 100%;
+
+  color: var(--text-main);
+  font-size: 18px;
+  font-weight: var(--fw-regular);
+  line-height: 1.1;
+}
+
+.userNameText {
   display: block;
   min-width: 0;
   max-width: 100%;
 
-  font-size: 18px;
-  font-weight: var(--fw-regular);
-  line-height: 1.1;
-  color: var(--text-main);
-
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
 
-  transition: color 200ms ease;
+.userName::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+
+  width: 100%;
+  height: 2px;
+  background-color: var(--main);
+
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 250ms ease;
+}
+
+.userBox:hover .userName::after,
+.userBox:focus-visible .userName::after {
+  transform: scaleX(1);
 }
