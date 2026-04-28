@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import css from './UserBadge.module.css';
 
 //===============================================================
@@ -16,13 +18,17 @@ function UserBadge({ name, className }: Props) {
   const initial = trimmedName.charAt(0).toUpperCase();
 
   return (
-    <div className={`${css.userBox} ${className ?? ''}`}>
-      <div className={css.avatar} aria-hidden="true">
+    <Link
+      href="/profile"
+      className={`${css.userBox} ${className ?? ''}`}
+      aria-label="Open profile page"
+    >
+      <span className={css.avatar} aria-hidden="true">
         {initial}
-      </div>
+      </span>
 
       <span className={css.userName}>{trimmedName}</span>
-    </div>
+    </Link>
   );
 }
 

@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const SESSION_COOKIE_NAME = 'learnlingo_session';
 
-const privateRoutes = ['/favorites'];
+const privateRoutes = ['/favorites', '/profile'];
 const privateApiRoutes = ['/api/favorites', '/api/profile'];
 
 //===============================================================
@@ -41,6 +41,7 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     '/favorites/:path*',
+    '/profile/:path*',
     '/api/favorites/:path*',
     '/api/profile/:path*',
   ],

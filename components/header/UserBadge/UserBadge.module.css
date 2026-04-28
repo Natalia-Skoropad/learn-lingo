@@ -4,6 +4,18 @@
   gap: 10px;
   min-width: 0;
   max-width: 180px;
+
+  color: var(--text-main);
+  text-decoration: none;
+}
+
+.userBox:hover .userName,
+.userBox:focus-visible .userName {
+  color: var(--link);
+}
+
+.userBox:focus-visible {
+  outline: none;
 }
 
 .avatar {
@@ -36,4 +48,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  transition: color 200ms ease;
 }
