@@ -8,7 +8,7 @@ import css from './Button.module.css';
 //===============================================================
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'common' | 'registration' | 'disabled';
+  variant?: 'common' | 'registration' | 'outline' | 'disabled';
 };
 
 //===============================================================
@@ -32,6 +32,7 @@ function Button({
         {
           [css.common]: variant === 'common',
           [css.registration]: variant === 'registration',
+          [css.outline]: variant === 'outline',
           [css.disabled]: variant === 'disabled',
         },
         className

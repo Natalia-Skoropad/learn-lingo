@@ -55,3 +55,15 @@
   cursor: not-allowed;
   transform: none;
 }
+
+/* Outline */
+.outline {
+  border: 1px solid var(--main);
+  background-color: transparent;
+  color: var(--text-main);
+}
+
+.outline:hover,
+.outline:focus-visible {
+  background-color: var(--accent);
+}

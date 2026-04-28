@@ -41,6 +41,10 @@ https://learn-lingo-ivory-six.vercel.app
 
 ![Favorites page](./public/readme/favorite-page-screenshot.jpg)
 
+### Profile page
+
+![Profile page](./public/readme/profile-page-screenshot.jpg)
+
 ### Password recovery page
 
 ![Password recovery page](./public/readme/password-recovery-page-screenshot.jpg)

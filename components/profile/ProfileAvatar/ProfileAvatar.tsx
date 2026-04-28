@@ -7,6 +7,8 @@ import { toast } from 'react-hot-toast';
 import { profileService } from '@/lib/services/profile.service';
 import { useAuth } from '@/hooks/useAuth';
 
+import ConfirmActionModal from '@/components/modals/ConfirmActionModal/ConfirmActionModal';
+
 import css from './ProfileAvatar.module.css';
 
 //===============================================================
@@ -25,14 +27,28 @@ function ProfileAvatar({ name, avatarUrl, avatarPath, onAvatarChange }: Props) {
 
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const { updateUser } = useAuth();
 
   const trimmedName = name.trim() || 'User';
   const initial = trimmedName.charAt(0).toUpperCase();
 
+  const hasAvatar = Boolean(avatarUrl);
+  const isBusy = isUploading || isDeleting;
+
   const openFilePicker = () => {
     fileInputRef.current?.click();
+  };
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    if (isDeleting) return;
+
+    setIsDeleteModalOpen(false);
   };
 
   const handleFileChange = async (
@@ -70,12 +86,6 @@ function ProfileAvatar({ name, avatarUrl, avatarPath, onAvatarChange }: Props) {
   const handleDeleteAvatar = async () => {
     if (!avatarPath) return;
 
-    const shouldDelete = window.confirm(
-      'Are you sure you want to delete your avatar?'
-    );
-
-    if (!shouldDelete) return;
-
     try {
       setIsDeleting(true);
 
@@ -85,6 +95,7 @@ function ProfileAvatar({ name, avatarUrl, avatarPath, onAvatarChange }: Props) {
       onAvatarChange?.(undefined, undefined);
 
       toast.success('Avatar deleted.');
+      setIsDeleteModalOpen(false);
     } catch (error) {
       console.error(error);
       toast.error('Failed to delete avatar. Please try again.');
@@ -93,59 +104,70 @@ function ProfileAvatar({ name, avatarUrl, avatarPath, onAvatarChange }: Props) {
     }
   };
 
-  const hasAvatar = Boolean(avatarUrl);
-  const isBusy = isUploading || isDeleting;
-
   return (
-    <div className={css.wrap}>
-      <div className={css.avatarBox}>
-        {avatarUrl ? (
-          <Image
-            src={avatarUrl}
-            alt={`${trimmedName} avatar`}
-            fill
-            sizes="112px"
-            className={css.image}
-          />
-        ) : (
-          <span className={css.initial} aria-hidden="true">
-            {initial}
-          </span>
-        )}
-      </div>
+    <>
+      <div className={css.wrap}>
+        <div className={css.avatarBox}>
+          {avatarUrl ? (
+            <Image
+              src={avatarUrl}
+              alt={`${trimmedName} avatar`}
+              fill
+              sizes="112px"
+              className={css.image}
+            />
+          ) : (
+            <span className={css.initial} aria-hidden="true">
+              {initial}
+            </span>
+          )}
+        </div>
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/jpeg,image/png,image/webp"
-        className="visually-hidden"
-        onChange={handleFileChange}
-      />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="visually-hidden"
+          onChange={handleFileChange}
+        />
 
-      <div className={css.actions}>
-        <button
-          type="button"
-          className={css.actionBtn}
-          onClick={openFilePicker}
-          disabled={isBusy}
-        >
-          {hasAvatar ? 'Change avatar' : 'Upload avatar'}
-        </button>
-
-        {hasAvatar ? (
+        <div className={css.actions}>
           <button
             type="button"
-            className={css.dangerBtn}
-            onClick={handleDeleteAvatar}
+            className={css.actionBtn}
+            onClick={openFilePicker}
             disabled={isBusy}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {hasAvatar ? 'Change avatar' : 'Upload avatar'}
           </button>
-        ) : null}
+
+          {hasAvatar ? (
+            <button
+              type="button"
+              className={css.dangerBtn}
+              onClick={openDeleteModal}
+              disabled={isBusy}
+            >
+              {isDeleting ? 'Deleting...' : 'Delete'}
+            </button>
+          ) : null}
+        </div>
+
+        {isUploading ? <p className={css.status}>Uploading...</p> : null}
       </div>
 
-      {isUploading ? <p className={css.status}>Uploading...</p> : null}
-    </div>
+      {isDeleteModalOpen ? (
+        <ConfirmActionModal
+          title="Delete avatar"
+          message="Are you sure you want to delete your avatar? This action cannot be undone."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          isSubmitting={isDeleting}
+          onConfirm={handleDeleteAvatar}
+          onCancel={closeDeleteModal}
+        />
+      ) : null}
+    </>
   );
 }
 

@@ -3,13 +3,13 @@
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-import type { UserProfile } from '@/types/profile';
+import type { UserProfile, ProfileEditField } from '@/types/profile';
+
 import { profileService } from '@/lib/services/profile.service';
 import { useAuth } from '@/hooks/useAuth';
 
+import ConfirmActionModal from '@/components/modals/ConfirmActionModal/ConfirmActionModal';
 import ProfileAvatar from '@/components/profile/ProfileAvatar/ProfileAvatar';
-import type { ProfileEditField } from '@/types/profile';
-
 import ProfileEditModal from '@/components/profile/ProfileEditModal/ProfileEditModal';
 import ProfileField from '@/components/profile/ProfileField/ProfileField';
 
@@ -49,9 +49,20 @@ function ProfileCard({ profile }: Props) {
     null
   );
   const [isDeletingPhone, setIsDeletingPhone] = useState(false);
+  const [isDeletePhoneModalOpen, setIsDeletePhoneModalOpen] = useState(false);
   const [isSendingPasswordEmail, setIsSendingPasswordEmail] = useState(false);
 
   const phoneValue = localProfile.phone?.trim() || 'Not added yet';
+
+  const openDeletePhoneModal = () => {
+    setIsDeletePhoneModalOpen(true);
+  };
+
+  const closeDeletePhoneModal = () => {
+    if (isDeletingPhone) return;
+
+    setIsDeletePhoneModalOpen(false);
+  };
 
   const getEditingDefaultValue = (): string => {
     if (!editingField) return '';
@@ -98,12 +109,6 @@ function ProfileCard({ profile }: Props) {
   };
 
   const handleDeletePhone = async () => {
-    const shouldDelete = window.confirm(
-      'Are you sure you want to delete your phone number?'
-    );
-
-    if (!shouldDelete) return;
-
     try {
       setIsDeletingPhone(true);
 
@@ -120,6 +125,7 @@ function ProfileCard({ profile }: Props) {
       }));
 
       toast.success('Phone number deleted.');
+      setIsDeletePhoneModalOpen(false);
     } catch (error) {
       console.error(error);
       toast.error('Failed to delete phone number. Please try again.');
@@ -194,7 +200,7 @@ function ProfileCard({ profile }: Props) {
                   : undefined
               }
               onAction={() => setEditingField('phone')}
-              onDangerAction={handleDeletePhone}
+              onDangerAction={openDeletePhoneModal}
             />
 
             <ProfileField
@@ -220,6 +226,18 @@ function ProfileCard({ profile }: Props) {
           defaultValue={getEditingDefaultValue()}
           onClose={() => setEditingField(null)}
           onSubmit={handleUpdateProfile}
+        />
+      ) : null}
+
+      {isDeletePhoneModalOpen ? (
+        <ConfirmActionModal
+          title="Delete phone"
+          message="Are you sure you want to delete your phone number?"
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          isSubmitting={isDeletingPhone}
+          onConfirm={handleDeletePhone}
+          onCancel={closeDeletePhoneModal}
         />
       ) : null}
     </>
