@@ -76,8 +76,8 @@ async function ProfilePage() {
           />
 
           <div className={css.heading}>
-            <h1 className={css.title}>{PROFILE_TITLE}</h1>
-            <p className={css.text}>
+            <h1 className="visually-hidden">{PROFILE_TITLE}</h1>
+            <p className="visually-hidden">
               Manage your account details, update your profile information, and
               keep your contact data up to date.
             </p>

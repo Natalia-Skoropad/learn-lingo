@@ -6,10 +6,6 @@
   width: 100%;
 }
 
-.heading {
-  margin-bottom: 28px;
-}
-
 .title {
   margin-bottom: 12px;
   color: var(--text-main);
@@ -29,10 +25,6 @@
 @media only screen and (min-width: 768px) {
   .page {
     padding-bottom: 64px;
-  }
-
-  .heading {
-    margin-bottom: 32px;
   }
 
   .title {
