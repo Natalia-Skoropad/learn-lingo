@@ -6,13 +6,15 @@
 
 ## Overview
 
-**LearnLingo** is a responsive web application for browsing language teachers, saving favorites, booking trial lessons, and recovering account access through a custom password reset flow.
+**LearnLingo** is a responsive language tutor marketplace for browsing teachers, saving favorites, booking trial lessons, managing a personal profile, and recovering account access through a custom password reset flow.
 
 The project combines a polished interface with practical real-world functionality:
 
 - semantic, SEO-friendly catalog routes
 - Firebase authentication with server session cookies
-- protected favorites flow
+- protected favorites and profile pages
+- user profile management with editable personal data
+- avatar upload and deletion through Firebase Storage
 - custom password recovery page
 - responsive UI for mobile, tablet, and desktop
 - reusable component architecture with clean styling
@@ -68,12 +70,17 @@ https://learn-lingo-ivory-six.vercel.app
 ### Core functionality
 
 - browse a catalog of language teachers
+- search teachers by keyword
 - filter teachers by language, level, and price
 - sort catalog results
 - semantic route-driven catalog URLs
 - view detailed teacher information and reviews
 - add and remove teachers from favorites
 - access a protected favorites page
+- access a protected profile page
+- edit profile name and phone number
+- upload, change, and delete a profile avatar
+- request password reset from the profile page
 - book a trial lesson
 - register and log in with Firebase Authentication
 - recover password through a custom reset page
@@ -82,9 +89,11 @@ https://learn-lingo-ivory-six.vercel.app
 
 - responsive layout for mobile, tablet, and desktop
 - mobile and tablet offcanvas navigation
-- custom auth and booking modals
+- custom auth, booking, profile edit, and confirm action modals
+- custom confirmation dialogs instead of native browser confirms
 - shimmer image placeholders
-- reusable buttons, loaders, empty states, breadcrumbs, and actions
+- reusable buttons, loaders, empty states, breadcrumbs, and text actions
+- uploaded avatar support in the header user badge
 - custom success and recovery screens
 - clean visual hierarchy with modern card-based layout
 
@@ -94,6 +103,7 @@ https://learn-lingo-ivory-six.vercel.app
 - canonical path normalization
 - dynamic metadata for filtered catalog pages
 - Open Graph and Twitter metadata
+- noindex metadata for private pages
 - SEO content blocks for catalog pages
 
 ---
@@ -121,6 +131,7 @@ https://learn-lingo-ivory-six.vercel.app
 
 - **Firebase Authentication**
 - **Firebase Firestore**
+- **Firebase Storage**
 - **Firebase Admin SDK**
 
 ### UI utilities
@@ -137,32 +148,83 @@ https://learn-lingo-ivory-six.vercel.app
 app/
   api/
     auth/
+      login/
+      logout/
+      me/
     favorites/
+      [teacherId]/
+    profile/
+      avatar/
     teachers/
+      [teacherId]/
   auth/
     action/
   favorites/
+  profile/
   teachers/
+    [[...segments]]/
   error.tsx
   layout.tsx
+  loading.tsx
   not-found.tsx
   page.tsx
 
 components/
   auth/
   common/
+    Breadcrumbs/
+    Button/
+    CloseButton/
+    EmptyState/
+    InlineLoader/
+    ShimmerImage/
+    SvgIcon/
+    TextActionButton/
+    Toast/
   favorites/
   forms/
+    BookLessonForm/
+    ForgotPasswordForm/
+    FormField/
+    LoginForm/
+    RegisterForm/
   header/
+    AuthActionButton/
+    CompanyLogo/
+    Header/
+    MenuNav/
+    MobileOffcanvas/
+    UserBadge/
   home/
+    StatsSection/
   modals/
+    BookLessonModal/
+    ConfirmActionModal/
+    ForgotPasswordModal/
+    LoginModal/
+    ModalBase/
+    ModalRoot/
+    RegisterModal/
+  profile/
+    ProfileAvatar/
+    ProfileCard/
+    ProfileEditModal/
+    ProfileField/
   teachers/
+
+firebase/
+  firestore.rules
+  storage.rules
 
 hooks/
 lib/
   constants/
   firebase/
   server/
+    auth/
+    favorites/
+    profile/
+    teachers/
   services/
   store/
   utils/
@@ -172,6 +234,7 @@ providers/
 public/
   og/
   readme/
+scripts/
 types/
 ```
 
@@ -187,12 +250,34 @@ The project uses **Firebase Authentication** together with **server session cook
 - login with email and password
 - logout with server session cleanup
 - fetch current authenticated user from session
+- protect private pages and API routes
 - reset password through a custom `/auth/action` page
+- request a password reset email from the profile page
 
 ### Protected routes
 
 - `/favorites`
+- `/profile`
 - `/api/favorites`
+- `/api/profile`
+
+---
+
+## Profile Management
+
+Authenticated users can manage their personal account data from the protected profile page.
+
+### Profile features
+
+- view account name, email, phone number, and creation date
+- edit profile name
+- add, edit, and delete phone number
+- upload and change profile avatar
+- delete profile avatar
+- request a password reset email
+- see the uploaded avatar in the header user badge
+
+Profile data is stored in **Cloud Firestore**, while avatar files are stored in **Firebase Storage**. Server-side profile updates are handled through protected API routes powered by the Firebase Admin SDK.
 
 ---
 
@@ -237,6 +322,29 @@ FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour_key_here\n-----END PRIVA
 ```
 
 > Do not commit `.env.local` or files from the `secrets/` folder.
+
+---
+
+## Firebase Security
+
+The project includes Firestore and Storage security rules.
+
+### Firestore
+
+- teachers are publicly readable
+- teacher writes are blocked from the client
+- user documents are readable only by their owner
+- user document creation and updates are restricted to the authenticated owner
+- user documents only allow expected profile fields
+- user document deletion is blocked from the client
+
+### Storage
+
+- profile avatars are publicly readable
+- avatar uploads are restricted to the authenticated owner
+- avatar files are limited by file size and image content type
+- users can delete only their own avatar files
+- all other Storage paths are blocked
 
 ---
 
@@ -292,17 +400,21 @@ What makes this project especially interesting:
 
 - custom password reset UX instead of the default Firebase hosted page
 - route-driven filtering with canonical redirects
-- protected favorites flow powered by session cookies
+- protected favorites and profile flows powered by session cookies
+- profile editing with server-side validation
+- avatar upload and deletion through Firebase Storage
+- reusable confirmation modal instead of native browser confirms
+- uploaded avatar support in the header user badge
 - reusable component system and modular styling
+- centralized validation rules for forms and profile fields
 - polished UI states for not-found, error, recovery, and success pages
 
 ---
 
 ## Author
 
-**Nataliia Skoropad**
-
-Frontend Developer
+**Nataliia Skoropad**  
+Frontend Developer  
 UX/UI redesign and user experience improvements
 
 ---
