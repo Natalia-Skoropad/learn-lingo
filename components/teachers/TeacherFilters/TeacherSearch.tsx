@@ -1,5 +1,6 @@
 'use client';
 
+import { useId } from 'react';
 import { Search, X } from 'lucide-react';
 
 import css from './TeacherFilters.module.css';
@@ -14,9 +15,11 @@ type Props = {
 //===============================================================
 
 function TeacherSearch({ value, onChange }: Props) {
+  const searchId = useId();
+
   return (
     <div className={css.searchField}>
-      <label className={css.label} htmlFor="teachers-search">
+      <label className={css.label} htmlFor={searchId}>
         Search
       </label>
 
@@ -24,7 +27,7 @@ function TeacherSearch({ value, onChange }: Props) {
         <Search className={css.searchIcon} aria-hidden="true" />
 
         <input
-          id="teachers-search"
+          id={searchId}
           type="search"
           value={value}
           className={css.searchInput}
